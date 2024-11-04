@@ -7,4 +7,6 @@ optimizer = true
 optimizer_runs = 100000
 
 remappings = [
+    "ethgild/=lib/ethgild/src/",
+    "rain.factory/=lib/ethgild/lib/rain.factory/src/",
 ]

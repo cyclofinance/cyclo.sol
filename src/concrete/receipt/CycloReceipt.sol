@@ -2,7 +2,7 @@
 // SPDX-FileCopyrightText: Copyright (c) 2020 thedavidmeister
 pragma solidity =0.8.25;
 
-import {Receipt} from "./Receipt.sol";
+import {Receipt} from "ethgild/concrete/receipt/Receipt.sol";
 import {Base64Upgradeable as Base64} from "openzeppelin-contracts-upgradeable/contracts/utils/Base64Upgradeable.sol";
 import {
     LibFixedPointDecimalArithmeticOpenZeppelin,
