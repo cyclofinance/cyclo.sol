@@ -7,28 +7,13 @@ on:
         required: true
         type: choice
         options:
-          - arbitrum
-          - arbitrum_sepolia
-          - avalanche
-          - base
-          - base_sepolia
-          - bsc
-          - ethereum
           - flare
-          - mumbai
-          - oasis_sapphire
-          - polygon
-          - sepolia
-          - songbird
-          - amoy
-          - epn
 
       suite:
         description: 'Suite to deploy'
         required: true
         type: choice
         options:
-          - ownable-oracle-vault
           - sceptre-staked-flare-price-vault
           - implementations
 
@@ -44,11 +29,6 @@ on:
 
       receipt-vault-symbol:
         description: 'Symbol of the share token for the deployed receipt vault.'
-        required: false
-        type: string
-
-      owner:
-        description: 'Owner of any ownable contracts deployed.'
         required: false
         type: string
 
