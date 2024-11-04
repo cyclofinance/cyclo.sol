@@ -11,12 +11,11 @@ import {
 import {VaultConfig} from "ethgild/abstract/ReceiptVault.sol";
 import {ICloneableFactoryV2} from "rain.factory/interface/ICloneableFactoryV2.sol";
 import {
-    OffchainAssetReceiptVault, ReceiptVaultConstructionConfig
+    OffchainAssetReceiptVault,
+    ReceiptVaultConstructionConfig
 } from "ethgild/concrete/vault/OffchainAssetReceiptVault.sol";
-// import {Receipt as ReceiptContract} from "src/concrete/receipt/Receipt.sol";
 import {SceptreStakedFlrOracle} from "ethgild/concrete/oracle/SceptreStakedFlrOracle.sol";
 import {TwoPriceOracleV2, TwoPriceOracleConfigV2} from "ethgild/concrete/oracle/TwoPriceOracleV2.sol";
-// import {IStakedFlr} from "rain.flare/interface/IStakedFlr.sol";
 import {FtsoV2LTSFeedOracle, FtsoV2LTSFeedOracleConfig} from "ethgild/concrete/oracle/FtsoV2LTSFeedOracle.sol";
 import {FLR_USD_FEED_ID} from "rain.flare/lib/lts/LibFtsoV2LTS.sol";
 import {IPriceOracleV2} from "ethgild/abstract/PriceOracleV2.sol";
@@ -45,19 +44,17 @@ contract Deploy is Script {
 
     function deployStakedFlrPriceVault(uint256 deploymentKey) internal {
         vm.startBroadcast(deploymentKey);
-        IPriceOracleV2 ftsoV2LTSFeedOracle = IPriceOracleV2(
-            new FtsoV2LTSFeedOracle(
-                FtsoV2LTSFeedOracleConfig({
-                    feedId: FLR_USD_FEED_ID,
-                    // 30 mins.
-                    staleAfter: 1800
-                })
-            )
+        IPriceOracleV2 ftsoV2LTSFeedOracle = new FtsoV2LTSFeedOracle(
+            FtsoV2LTSFeedOracleConfig({
+                feedId: FLR_USD_FEED_ID,
+                // 30 mins.
+                staleAfter: 1800
+            })
         );
-        IPriceOracleV2 stakedFlrOracle = IPriceOracleV2(new SceptreStakedFlrOracle());
-        IPriceOracleV2 twoPriceOracle = IPriceOracleV2(
-            new TwoPriceOracleV2(TwoPriceOracleConfigV2({base: ftsoV2LTSFeedOracle, quote: stakedFlrOracle}))
-        );
+
+        IPriceOracleV2 stakedFlrOracle = new SceptreStakedFlrOracle();
+        IPriceOracleV2 twoPriceOracle =
+            new TwoPriceOracleV2(TwoPriceOracleConfigV2({base: ftsoV2LTSFeedOracle, quote: stakedFlrOracle}));
 
         ICloneableFactoryV2(vm.envAddress("CLONE_FACTORY")).clone(
             vm.envAddress("ERC20_PRICE_ORACLE_VAULT_IMPLEMENTATION"),
