@@ -1,6 +1,3 @@
-[submodule "lib/solady"]
-	path = lib/solady
-	url = https://github.com/Vectorized/solady
 [submodule "lib/ethgild"]
 	path = lib/ethgild
 	url = https://github.com/gildlab/ethgild
