@@ -8,6 +8,7 @@ import {CycloReceipt, DATA_URI_BASE64_PREFIX, CYCLO_RECEIPT_SVG_URI} from "src/c
 
 contract CycloReceiptMetadataTest is Test {
     struct URIJson {
+        uint8 decimals;
         string description;
         string image;
         string name;
@@ -27,10 +28,11 @@ contract CycloReceiptMetadataTest is Test {
             mstore(uri, sub(uriLength, 29))
         }
 
-        bytes memory uriDecoded = Base64.decode(uri);
-        bytes memory uriJsonData = vm.parseJson(string(uriDecoded));
+        string memory uriDecoded = string(Base64.decode(uri));
+        bytes memory uriJsonData = vm.parseJson(uriDecoded);
 
         URIJson memory uriJson = abi.decode(uriJsonData, (URIJson));
+        assertEq(uriJson.decimals, 18);
         assertEq(
             uriJson.description,
             "1 of these receipts can be burned alongside 1 cysFLR to redeem 64.766839378238341968 sFLR. Reedem at https://cyclo.finance."
