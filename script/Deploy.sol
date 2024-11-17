@@ -6,14 +6,11 @@ import {Script} from "forge-std/Script.sol";
 import {CycloReceipt} from "src/concrete/receipt/CycloReceipt.sol";
 import {
     ERC20PriceOracleReceiptVault,
-    ERC20PriceOracleVaultConfig
+    ERC20PriceOracleVaultConfig,
+    ReceiptVaultConstructionConfig
 } from "ethgild/concrete/vault/ERC20PriceOracleReceiptVault.sol";
 import {VaultConfig} from "ethgild/abstract/ReceiptVault.sol";
 import {ICloneableFactoryV2} from "rain.factory/interface/ICloneableFactoryV2.sol";
-import {
-    OffchainAssetReceiptVault,
-    ReceiptVaultConstructionConfig
-} from "ethgild/concrete/vault/OffchainAssetReceiptVault.sol";
 import {SceptreStakedFlrOracle} from "ethgild/concrete/oracle/SceptreStakedFlrOracle.sol";
 import {TwoPriceOracleV2, TwoPriceOracleConfigV2} from "ethgild/concrete/oracle/TwoPriceOracleV2.sol";
 import {FtsoV2LTSFeedOracle, FtsoV2LTSFeedOracleConfig} from "ethgild/concrete/oracle/FtsoV2LTSFeedOracle.sol";
