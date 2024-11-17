@@ -7,9 +7,9 @@ import {CycloReceipt} from "src/concrete/receipt/CycloReceipt.sol";
 import {
     ERC20PriceOracleReceiptVault,
     ERC20PriceOracleVaultConfig,
-    ReceiptVaultConstructionConfig
+    ReceiptVaultConstructionConfig,
+    VaultConfig
 } from "ethgild/concrete/vault/ERC20PriceOracleReceiptVault.sol";
-import {VaultConfig} from "ethgild/abstract/ReceiptVault.sol";
 import {ICloneableFactoryV2} from "rain.factory/interface/ICloneableFactoryV2.sol";
 import {SceptreStakedFlrOracle} from "ethgild/concrete/oracle/SceptreStakedFlrOracle.sol";
 import {TwoPriceOracleV2, TwoPriceOracleConfigV2} from "ethgild/concrete/oracle/TwoPriceOracleV2.sol";
