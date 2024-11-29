@@ -6,6 +6,9 @@ solc = "0.8.25"
 optimizer = true
 optimizer_runs = 100000
 
+# pre push0 for maximum compatibility
+evm_version = "paris"
+
 remappings = [
     "ethgild/=lib/ethgild/src/",
     "rain.factory/=lib/ethgild/lib/rain.factory/src/",
