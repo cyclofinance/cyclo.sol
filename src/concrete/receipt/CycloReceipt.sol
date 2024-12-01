@@ -16,7 +16,7 @@ string constant CYCLO_RECEIPT_SVG_URI = "ipfs://bafybeidjgkxfpk7nujlnx7jwvjvmtcb
 
 contract CycloReceipt is Receipt {
     /// @inheritdoc ERC1155
-    function uri(uint256 id) external view virtual override returns (string memory) {
+    function uri(uint256 id) public view virtual override returns (string memory) {
         bytes memory json = bytes(
             string.concat(
                 "{\"decimals\":18,\"description\":\"1 of these receipts can be burned alongside 1 cysFLR to redeem ",
