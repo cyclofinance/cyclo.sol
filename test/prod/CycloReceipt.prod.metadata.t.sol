@@ -5,7 +5,7 @@ pragma solidity =0.8.25;
 import {Test} from "forge-std/Test.sol";
 
 import {PROD_FORK_URL, PROD_CYCLO_RECEIPT_ADDRESS} from "test/lib/LibCycloProd.sol";
-import {CycloReceiptMetadataTest} from "./CycloReceipt.metadata.t.sol";
+import {CycloReceiptMetadataTest} from "test/src/concrete/receipt/CycloReceipt.metadata.t.sol";
 
 contract CycloReceiptProdMetadataTest is CycloReceiptMetadataTest {
     function testProdCycloReceiptURI() external {
