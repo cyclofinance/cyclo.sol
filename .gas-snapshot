@@ -1,0 +1,3 @@
+CycloReceiptMetadataTest:testCycloReceiptName() (gas: 2702416)
+CycloReceiptMetadataTest:testCycloReceiptSymbol() (gas: 2702457)
+CycloReceiptMetadataTest:testCycloReceiptURI() (gas: 2762047)

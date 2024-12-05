@@ -4,7 +4,13 @@ pragma solidity =0.8.25;
 
 import {Test} from "forge-std/Test.sol";
 import {Base64} from "solady/utils/Base64.sol";
-import {CycloReceipt, DATA_URI_BASE64_PREFIX, CYCLO_RECEIPT_SVG_URI} from "src/concrete/receipt/CycloReceipt.sol";
+import {
+    CycloReceipt,
+    DATA_URI_BASE64_PREFIX,
+    CYCLO_RECEIPT_SVG_URI,
+    CYCLO_RECEIPT_NAME,
+    CYCLO_RECEIPT_SYMBOL
+} from "src/concrete/receipt/CycloReceipt.sol";
 
 contract CycloReceiptMetadataTest is Test {
     struct URIJson {
@@ -38,6 +44,16 @@ contract CycloReceiptMetadataTest is Test {
             "1 of these receipts can be burned alongside 1 cysFLR to redeem 64.766839378238341968 sFLR. Reedem at https://cyclo.finance."
         );
         assertEq(uriJson.image, CYCLO_RECEIPT_SVG_URI);
-        assertEq(uriJson.name, "Receipt for cyclo lock at 0.01544 USD per sFLR.");
+        assertEq(uriJson.name, "Receipt for Cyclo lock at 0.01544 USD per sFLR.");
+    }
+
+    function testCycloReceiptName() external {
+        CycloReceipt receipt = new CycloReceipt();
+        assertEq(receipt.name(), CYCLO_RECEIPT_NAME);
+    }
+
+    function testCycloReceiptSymbol() external {
+        CycloReceipt receipt = new CycloReceipt();
+        assertEq(receipt.symbol(), CYCLO_RECEIPT_SYMBOL);
     }
 }

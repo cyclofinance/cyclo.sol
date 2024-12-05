@@ -14,6 +14,12 @@ import {FIXED_POINT_ONE} from "rain.math.fixedpoint/lib/FixedPointDecimalConstan
 /// @dev The SVG of Cyclo logo is pinned on IPFS.
 string constant CYCLO_RECEIPT_SVG_URI = "ipfs://bafybeidjgkxfpk7nujlnx7jwvjvmtcbkfg53vnlc2cc6ftqfhapqkmtahq";
 
+/// @dev The name of Cyclo receipt is "cysFLR Receipt".
+string constant CYCLO_RECEIPT_NAME = "cysFLR Receipt";
+
+/// @dev The symbol of Cyclo receipt is "cysFLR RCPT".
+string constant CYCLO_RECEIPT_SYMBOL = "cysFLR RCPT";
+
 contract CycloReceipt is Receipt {
     /// @inheritdoc ERC1155
     function uri(uint256 id) public view virtual override returns (string memory) {
@@ -27,12 +33,22 @@ contract CycloReceipt is Receipt {
                 ),
                 " sFLR. Reedem at https://cyclo.finance.\",\"image\":\"",
                 CYCLO_RECEIPT_SVG_URI,
-                "\",\"name\":\"Receipt for cyclo lock at ",
+                "\",\"name\":\"Receipt for Cyclo lock at ",
                 LibFixedPointDecimalFormat.fixedPointToDecimalString(id),
                 " USD per sFLR.\"}"
             )
         );
 
         return string.concat(DATA_URI_BASE64_PREFIX, Base64.encode(json));
+    }
+
+    /// @inheritdoc Receipt
+    function name() public pure virtual override returns (string memory) {
+        return CYCLO_RECEIPT_NAME;
+    }
+
+    /// @inheritdoc Receipt
+    function symbol() public pure virtual override returns (string memory) {
+        return CYCLO_RECEIPT_SYMBOL;
     }
 }
