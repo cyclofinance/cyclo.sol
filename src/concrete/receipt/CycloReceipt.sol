@@ -10,6 +10,7 @@ import {
 } from "rain.math.fixedpoint/lib/LibFixedPointDecimalArithmeticOpenZeppelin.sol";
 import {LibFixedPointDecimalFormat} from "rain.math.fixedpoint/lib/format/LibFixedPointDecimalFormat.sol";
 import {FIXED_POINT_ONE} from "rain.math.fixedpoint/lib/FixedPointDecimalConstants.sol";
+import {ZeroReceiptId} from "../../error/ErrCycloReceipt.sol";
 
 /// @dev The SVG of Cyclo logo is pinned on IPFS.
 string constant CYCLO_RECEIPT_SVG_URI = "ipfs://bafybeidjgkxfpk7nujlnx7jwvjvmtcbkfg53vnlc2cc6ftqfhapqkmtahq";
@@ -23,13 +24,14 @@ string constant CYCLO_RECEIPT_SYMBOL = "cysFLR RCPT";
 contract CycloReceipt is Receipt {
     /// @inheritdoc ERC1155
     function uri(uint256 id) public view virtual override returns (string memory) {
+        if (id == 0) {
+            revert ZeroReceiptId();
+        }
         bytes memory json = bytes(
             string.concat(
                 "{\"decimals\":18,\"description\":\"1 of these receipts can be burned alongside 1 cysFLR to redeem ",
                 LibFixedPointDecimalFormat.fixedPointToDecimalString(
-                    id > 0
-                        ? LibFixedPointDecimalArithmeticOpenZeppelin.fixedPointDiv(FIXED_POINT_ONE, id, Math.Rounding.Down)
-                        : 0
+                    LibFixedPointDecimalArithmeticOpenZeppelin.fixedPointDiv(FIXED_POINT_ONE, id, Math.Rounding.Down)
                 ),
                 " sFLR. Reedem at https://cyclo.finance.\",\"image\":\"",
                 CYCLO_RECEIPT_SVG_URI,
