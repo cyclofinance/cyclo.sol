@@ -14,7 +14,7 @@ contract FtsoV2LTSFeedOracleProdTest is Test {
 
         uint256 price = IPriceOracleV2(payable(PROD_FTSO_V2_LTS_FEED_ORACLE_ADDRESS)).price();
 
-        assertEq(price, 31734400000000000);
+        assertEq(price, 32496900000000000);
     }
 
     fallback() external payable {}

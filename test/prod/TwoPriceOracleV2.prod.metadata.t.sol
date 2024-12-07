@@ -14,7 +14,7 @@ contract TwoPriceOracleV2ProdTest is Test {
 
         uint256 price = IPriceOracleV2(payable(PROD_TWO_PRICE_ORACLE_V2_ADDRESS)).price();
 
-        assertEq(price, 38380849692945697);
+        assertEq(price, 39303055949018110);
     }
 
     fallback() external payable {}
