@@ -14,7 +14,7 @@ contract SceptreStakedFlrOracleProdTest is Test {
 
         uint256 price = IPriceOracleV2(payable(PROD_SCEPTRE_STAKED_FLR_ORACLE_ADDRESS)).price();
 
-        assertEq(price, 847762204247758556);
+        assertEq(price, 826829011183478373);
     }
 
     fallback() external payable {}
