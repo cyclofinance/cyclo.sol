@@ -20,8 +20,8 @@ contract CycloReceiptMetadataTest is Test {
         string name;
     }
 
-    function testCycloReceiptURI() external {
-        CycloReceipt receipt = new CycloReceipt();
+    function checkCycloReceiptURI(address cycloReceipt) internal view {
+        CycloReceipt receipt = CycloReceipt(cycloReceipt);
 
         string memory uri = receipt.uri(0.01544e18);
         uint256 uriLength = bytes(uri).length;
@@ -47,13 +47,31 @@ contract CycloReceiptMetadataTest is Test {
         assertEq(uriJson.name, "Receipt for Cyclo lock at 0.01544 USD per sFLR.");
     }
 
+    function checkCycloReceiptName(address cycloReceipt) internal pure {
+        CycloReceipt receipt = CycloReceipt(cycloReceipt);
+        assertEq(receipt.name(), CYCLO_RECEIPT_NAME);
+    }
+
+    function checkCycloReceiptSymbol(address cycloReceipt) internal pure {
+        CycloReceipt receipt = CycloReceipt(cycloReceipt);
+        assertEq(receipt.symbol(), CYCLO_RECEIPT_SYMBOL);
+    }
+
+    function testCycloReceiptURI() external {
+        CycloReceipt receipt = new CycloReceipt();
+
+        checkCycloReceiptURI(address(receipt));
+    }
+
     function testCycloReceiptName() external {
         CycloReceipt receipt = new CycloReceipt();
-        assertEq(receipt.name(), CYCLO_RECEIPT_NAME);
+
+        checkCycloReceiptName(address(receipt));
     }
 
     function testCycloReceiptSymbol() external {
         CycloReceipt receipt = new CycloReceipt();
-        assertEq(receipt.symbol(), CYCLO_RECEIPT_SYMBOL);
+
+        checkCycloReceiptSymbol(address(receipt));
     }
 }
