@@ -14,3 +14,6 @@ remappings = [
     "rain.factory/=lib/ethgild/lib/rain.factory/src/",
     "rain.flare/=lib/ethgild/lib/rain.flare/src/",
 ]
+
+bytecode_hash = "none"
+cbor_metadata = false
