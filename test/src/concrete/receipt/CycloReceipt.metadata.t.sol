@@ -11,6 +11,7 @@ import {
     CYCLO_RECEIPT_NAME,
     CYCLO_RECEIPT_SYMBOL
 } from "src/concrete/receipt/CycloReceipt.sol";
+import {ZeroReceiptId} from "src/error/ErrCycloReceipt.sol";
 
 contract CycloReceiptMetadataTest is Test {
     struct URIJson {
@@ -18,6 +19,13 @@ contract CycloReceiptMetadataTest is Test {
         string description;
         string image;
         string name;
+    }
+
+    function checkCycloReceiptURIZeroId(address cycloReceipt) internal {
+        CycloReceipt receipt = CycloReceipt(cycloReceipt);
+
+        vm.expectRevert(abi.encodeWithSelector(ZeroReceiptId.selector));
+        receipt.uri(0);
     }
 
     function checkCycloReceiptURI(address cycloReceipt) internal view {
