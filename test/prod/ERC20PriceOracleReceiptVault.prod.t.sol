@@ -14,7 +14,7 @@ import {
     PROD_SCEPTRE_STAKED_FLR_ORACLE_ADDRESS,
     PROD_CYCLO_VAULT_IMPLEMENTATION_ADDRESS,
     PROD_CYCLO_VAULT_ADDRESS,
-    PROD_CYCLO_RECEIPT_IMPLMENTATIION_ADDRESS,
+    PROD_CYCLO_RECEIPT_IMPLMENTATION_ADDRESS,
     PROD_CLONE_FACTORY_ADDRESS,
     PROD_TWO_PRICE_ORACLE_V2_ADDRESS
 } from "test/lib/LibCycloProd.sol";
@@ -29,7 +29,7 @@ contract ERC20PriceOracleReceiptVaultProdTest is Test {
         ERC20PriceOracleReceiptVault fresh = new ERC20PriceOracleReceiptVault(
             ReceiptVaultConstructionConfig({
                 factory: ICloneableFactoryV2(PROD_CLONE_FACTORY_ADDRESS),
-                receiptImplementation: CycloReceipt(PROD_CYCLO_RECEIPT_IMPLMENTATIION_ADDRESS)
+                receiptImplementation: CycloReceipt(PROD_CYCLO_RECEIPT_IMPLMENTATION_ADDRESS)
             })
         );
 
