@@ -9,7 +9,8 @@ import {
     LibCycloProd,
     PROD_CYCLO_RECEIPT_ADDRESS,
     PROD_CYCLO_VAULT_ADDRESS,
-    PROD_CYCLO_RECEIPT_INITIAL_OWNER
+    PROD_CYCLO_RECEIPT_INITIAL_OWNER,
+    PROD_CYCLO_RECEIPT_IMPLMENTATIION_ADDRESS
 } from "test/lib/LibCycloProd.sol";
 
 contract CycloReceiptProdTest is Test {
@@ -26,6 +27,7 @@ contract CycloReceiptProdTest is Test {
         }
 
         assertEq(implementation.code, address(fresh).code);
+        assertEq(implementation, PROD_CYCLO_RECEIPT_IMPLMENTATIION_ADDRESS);
 
         bytes memory expectedProxyCode =
             abi.encodePacked(hex"363d3d373d3d3d363d73", implementation, hex"5af43d82803e903d91602b57fd5bf3");
