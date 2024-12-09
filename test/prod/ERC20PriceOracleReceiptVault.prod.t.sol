@@ -10,7 +10,6 @@ import {
 } from "ethgild/concrete/vault/ERC20PriceOracleReceiptVault.sol";
 import {
     LibCycloProd,
-    PROD_CYCLO_RECEIPT_INITIAL_OWNER,
     PROD_SCEPTRE_STAKED_FLR_ORACLE_ADDRESS,
     PROD_CYCLO_VAULT_IMPLEMENTATION_ADDRESS,
     PROD_CYCLO_VAULT_ADDRESS,

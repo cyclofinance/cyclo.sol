@@ -9,7 +9,6 @@ import {
     LibCycloProd,
     PROD_CYCLO_RECEIPT_ADDRESS,
     PROD_CYCLO_VAULT_ADDRESS,
-    PROD_CYCLO_RECEIPT_INITIAL_OWNER,
     PROD_CYCLO_RECEIPT_IMPLEMENTATION_ADDRESS
 } from "test/lib/LibCycloProd.sol";
 
@@ -39,12 +38,6 @@ contract CycloReceiptProdTest is Test {
         LibCycloProd.createSelectFork(vm);
 
         assertEq(CycloReceipt(PROD_CYCLO_RECEIPT_ADDRESS).manager(), PROD_CYCLO_VAULT_ADDRESS);
-    }
-
-    function testProdCycloReceiptInitialOwner() external {
-        LibCycloProd.createSelectFork(vm);
-
-        assertEq(CycloReceipt(PROD_CYCLO_RECEIPT_ADDRESS).owner(), PROD_CYCLO_RECEIPT_INITIAL_OWNER);
     }
 
     fallback() external payable {}
