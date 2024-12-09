@@ -9,7 +9,7 @@ import {CloneFactory} from "rain.factory/concrete/CloneFactory.sol";
 import {LibCycloProd, PROD_CLONE_FACTORY_ADDRESS} from "test/lib/LibCycloProd.sol";
 
 contract CloneFactoryProdTest is Test {
-    function testProdCycloReceiptBytecode() external {
+    function testProdCloneFactoryBytecode() external {
         LibCycloProd.createSelectFork(vm);
 
         CloneFactory fresh = new CloneFactory();

@@ -10,6 +10,7 @@ import {
     ReceiptVaultConstructionConfig,
     VaultConfig
 } from "ethgild/concrete/vault/ERC20PriceOracleReceiptVault.sol";
+import {CloneFactory} from "rain.factory/concrete/CloneFactory.sol";
 import {ICloneableFactoryV2} from "rain.factory/interface/ICloneableFactoryV2.sol";
 import {SceptreStakedFlrOracle} from "ethgild/concrete/oracle/SceptreStakedFlrOracle.sol";
 import {TwoPriceOracleV2, TwoPriceOracleConfigV2} from "ethgild/concrete/oracle/TwoPriceOracleV2.sol";
@@ -30,8 +31,10 @@ contract Deploy is Script {
 
         CycloReceipt cycloReceipt = new CycloReceipt();
 
+        CloneFactory cloneFactory = new CloneFactory();
+
         ReceiptVaultConstructionConfig memory receiptVaultConstructionConfig = ReceiptVaultConstructionConfig({
-            factory: ICloneableFactoryV2(vm.envAddress("CLONE_FACTORY")),
+            factory: ICloneableFactoryV2(cloneFactory),
             receiptImplementation: cycloReceipt
         });
         new ERC20PriceOracleReceiptVault(receiptVaultConstructionConfig);
