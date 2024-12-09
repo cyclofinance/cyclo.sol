@@ -20,7 +20,7 @@ contract TwoPriceOracleV2ProdTest is Test {
 
         uint256 price = IPriceOracleV2(payable(PROD_TWO_PRICE_ORACLE_V2_ADDRESS)).price();
 
-        assertEq(price, 39303055949018110);
+        assertEq(price, 35681817222460415);
     }
 
     function testProdCycleoFtsoV2LTSFeedOracleBytecode() external {
