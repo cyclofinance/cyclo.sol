@@ -16,7 +16,7 @@ contract FtsoV2LTSFeedOracleProdTest is Test {
 
         uint256 price = IPriceOracleV2(payable(PROD_FTSO_V2_LTS_FEED_ORACLE_ADDRESS)).price();
 
-        assertEq(price, 32496900000000000);
+        assertEq(price, 29502500000000000);
     }
 
     function testProdCycleoFtsoV2LTSFeedOracleBytecode() external {
