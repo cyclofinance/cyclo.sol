@@ -15,6 +15,7 @@ on:
         type: choice
         options:
           - sceptre-staked-flare-price-vault
+          - weth-price-vault
           - implementations
 
       receipt-vault-name:
