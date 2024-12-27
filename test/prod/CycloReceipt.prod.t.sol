@@ -6,15 +6,15 @@ import {Test} from "forge-std/Test.sol";
 
 import {CycloReceipt} from "src/concrete/receipt/CycloReceipt.sol";
 import {
-    LibCycloProd,
     PROD_CYCLO_RECEIPT_ADDRESS,
     PROD_CYCLO_VAULT_ADDRESS,
     PROD_CYCLO_RECEIPT_IMPLEMENTATION_ADDRESS
-} from "test/lib/LibCycloProd.sol";
+} from "src/lib/LibCycloProd.sol";
+import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
 
 contract CycloReceiptProdTest is Test {
     function testProdCycloReceiptBytecode() external {
-        LibCycloProd.createSelectFork(vm);
+        LibCycloTestProd.createSelectFork(vm);
 
         CycloReceipt fresh = new CycloReceipt();
 
@@ -35,7 +35,7 @@ contract CycloReceiptProdTest is Test {
     }
 
     function testProdCycloReceiptManager() external {
-        LibCycloProd.createSelectFork(vm);
+        LibCycloTestProd.createSelectFork(vm);
 
         assertEq(CycloReceipt(PROD_CYCLO_RECEIPT_ADDRESS).manager(), PROD_CYCLO_VAULT_ADDRESS);
     }

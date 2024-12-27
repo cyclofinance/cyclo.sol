@@ -5,18 +5,19 @@ pragma solidity =0.8.25;
 import {Test} from "forge-std/Test.sol";
 
 import {
-    LibCycloProd,
     PROD_TWO_PRICE_ORACLE_V2_ADDRESS,
     PROD_FTSO_V2_LTS_FEED_ORACLE_ADDRESS,
     PROD_SCEPTRE_STAKED_FLR_ORACLE_ADDRESS
-} from "test/lib/LibCycloProd.sol";
+} from "src/lib/LibCycloProd.sol";
+
+import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
 
 import {IPriceOracleV2} from "ethgild/interface/IPriceOracleV2.sol";
 import {TwoPriceOracleV2, TwoPriceOracleConfigV2} from "ethgild/concrete/oracle/TwoPriceOracleV2.sol";
 
 contract TwoPriceOracleV2ProdTest is Test {
     function testProdCycloTwoPriceOracleV2Price() external {
-        LibCycloProd.createSelectFork(vm);
+        LibCycloTestProd.createSelectFork(vm);
 
         uint256 price = IPriceOracleV2(payable(PROD_TWO_PRICE_ORACLE_V2_ADDRESS)).price();
 
@@ -24,7 +25,7 @@ contract TwoPriceOracleV2ProdTest is Test {
     }
 
     function testProdCycleoFtsoV2LTSFeedOracleBytecode() external {
-        LibCycloProd.createSelectFork(vm);
+        LibCycloTestProd.createSelectFork(vm);
 
         TwoPriceOracleV2 fresh = new TwoPriceOracleV2(
             TwoPriceOracleConfigV2({

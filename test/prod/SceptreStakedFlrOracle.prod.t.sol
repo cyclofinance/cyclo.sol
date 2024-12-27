@@ -4,14 +4,16 @@ pragma solidity =0.8.25;
 
 import {Test} from "forge-std/Test.sol";
 
-import {LibCycloProd, PROD_SCEPTRE_STAKED_FLR_ORACLE_ADDRESS} from "test/lib/LibCycloProd.sol";
+import {PROD_SCEPTRE_STAKED_FLR_ORACLE_ADDRESS} from "src/lib/LibCycloProd.sol";
+
+import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
 
 import {IPriceOracleV2} from "ethgild/interface/IPriceOracleV2.sol";
 import {SceptreStakedFlrOracle} from "ethgild/concrete/oracle/SceptreStakedFlrOracle.sol";
 
 contract SceptreStakedFlrOracleProdTest is Test {
     function testProdCycloSceptreStakedFlrOraclePrice() external {
-        LibCycloProd.createSelectFork(vm);
+        LibCycloTestProd.createSelectFork(vm);
 
         uint256 price = IPriceOracleV2(payable(PROD_SCEPTRE_STAKED_FLR_ORACLE_ADDRESS)).price();
 
@@ -19,7 +21,7 @@ contract SceptreStakedFlrOracleProdTest is Test {
     }
 
     function testProdCycloSceptreStakedFlrOracleBytecode() external {
-        LibCycloProd.createSelectFork(vm);
+        LibCycloTestProd.createSelectFork(vm);
 
         SceptreStakedFlrOracle fresh = new SceptreStakedFlrOracle();
 

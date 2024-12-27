@@ -1,10 +1,8 @@
 // SPDX-License-Identifier: LicenseRef-DCL-1.0
 // SPDX-FileCopyrightText: Copyright (c) 2020 Rain Open Source Software Ltd
-pragma solidity ^0.8.25;
+pragma solidity =0.8.25;
 
-import {Vm} from "forge-std/Test.sol";
-
-address constant PROD_CLONE_FACTORY_ADDRESS = 0x67fe33484cAF1a8D716b84b779569f79881788Ae;
+address constant PROD_CLONE_FACTORY_ADDRESS_V1 = 0x67fe33484cAF1a8D716b84b779569f79881788Ae;
 
 address constant PROD_CYCLO_VAULT_IMPLEMENTATION_ADDRESS = 0x35ea13bBEfF8115fb63E4164237922E491dd21BC;
 
@@ -14,16 +12,8 @@ address constant PROD_CYCLO_RECEIPT_IMPLEMENTATION_ADDRESS = 0x901E7A73F7389eA6e
 
 address constant PROD_CYCLO_RECEIPT_ADDRESS = 0xd387FC43E19a63036d8FCeD559E81f5dDeF7ef09;
 
-uint256 constant PROD_BLOCK_NUMBER = 34244440;
-
 address constant PROD_SCEPTRE_STAKED_FLR_ORACLE_ADDRESS = 0x0D8F6a13a76a216ef9E9a4bc388306E612AC2728;
 
 address constant PROD_FTSO_V2_LTS_FEED_ORACLE_ADDRESS = 0xA7A10eA8707886F98887C913233ad38d54f4796e;
 
 address constant PROD_TWO_PRICE_ORACLE_V2_ADDRESS = 0x0a408517bf87714c634b48e0C2534887996E1BC9;
-
-library LibCycloProd {
-    function createSelectFork(Vm vm) internal {
-        vm.createSelectFork(vm.envString("RPC_URL_FLARE_FORK"), PROD_BLOCK_NUMBER);
-    }
-}

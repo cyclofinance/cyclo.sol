@@ -18,6 +18,7 @@ import {FtsoV2LTSFeedOracle, FtsoV2LTSFeedOracleConfig} from "ethgild/concrete/o
 import {FLR_USD_FEED_ID, ETH_USD_FEED_ID} from "rain.flare/lib/lts/LibFtsoV2LTS.sol";
 import {IPriceOracleV2} from "ethgild/abstract/PriceOracleV2.sol";
 import {SFLR_CONTRACT} from "rain.flare/lib/sflr/LibSceptreStakedFlare.sol";
+import {PROD_CLONE_FACTORY_ADDRESS_V1} from "src/lib/LibCycloProd.sol";
 
 // 30 mins.
 uint256 constant DEFAULT_STALE_AFTER = 1800;
@@ -32,7 +33,7 @@ address constant FLARE_VAULT_IMPLEMENTATION_V1 = 0x35ea13bBEfF8115fb63E416423792
 
 address constant STARGATE_WETH_CONTRACT = 0x1502FA4be69d526124D453619276FacCab275d3D;
 
-string constant STARGATE_WETH_VAULT_NAME = "Cyclo WETH (cyWETH)";
+string constant STARGATE_WETH_VAULT_NAME = "Cyclo cyWETH";
 
 string constant STARGATE_WETH_VAULT_SYMBOL = "cyWETH";
 
