@@ -6,6 +6,9 @@ import {Vm} from "forge-std/Test.sol";
 
 uint256 constant PROD_TEST_BLOCK_NUMBER = 34244440;
 
+string constant PROD_CYSFLR_RECEIPT_SYMBOL = "cysFLR RCPT";
+string constant PROD_CYSFLR_RECEIPT_NAME = "cysFLR Receipt";
+
 library LibCycloTestProd {
     function createSelectFork(Vm vm) internal {
         vm.createSelectFork(vm.envString("RPC_URL_FLARE_FORK"), PROD_TEST_BLOCK_NUMBER);

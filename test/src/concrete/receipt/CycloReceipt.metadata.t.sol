@@ -7,10 +7,12 @@ import {Base64} from "solady/utils/Base64.sol";
 import {
     CycloReceipt,
     DATA_URI_BASE64_PREFIX,
-    CYCLO_RECEIPT_SVG_URI,
-    CYCLO_RECEIPT_NAME,
-    CYCLO_RECEIPT_SYMBOL
+    CYCLO_RECEIPT_SVG_URI
 } from "src/concrete/receipt/CycloReceipt.sol";
+import {
+    PROD_CYSFLR_RECEIPT_SYMBOL,
+    PROD_CYSFLR_RECEIPT_NAME
+} from "test/lib/LibCycloTestProd.sol";
 import {ZeroReceiptId} from "src/error/ErrCycloReceipt.sol";
 
 contract CycloReceiptMetadataTest is Test {
@@ -57,12 +59,12 @@ contract CycloReceiptMetadataTest is Test {
 
     function checkCycloReceiptName(address cycloReceipt) internal pure {
         CycloReceipt receipt = CycloReceipt(cycloReceipt);
-        assertEq(receipt.name(), CYCLO_RECEIPT_NAME);
+        assertEq(receipt.name(), PROD_CYSFLR_RECEIPT_NAME);
     }
 
     function checkCycloReceiptSymbol(address cycloReceipt) internal pure {
         CycloReceipt receipt = CycloReceipt(cycloReceipt);
-        assertEq(receipt.symbol(), CYCLO_RECEIPT_SYMBOL);
+        assertEq(receipt.symbol(), PROD_CYSFLR_RECEIPT_SYMBOL);
     }
 
     function testCycloReceiptURI() external {
