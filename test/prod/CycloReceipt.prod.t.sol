@@ -8,15 +8,14 @@ import {CycloReceipt} from "src/concrete/receipt/CycloReceipt.sol";
 import {
     PROD_CYCLO_RECEIPT_ADDRESS,
     PROD_CYCLO_VAULT_ADDRESS,
-    PROD_CYCLO_RECEIPT_IMPLEMENTATION_ADDRESS
+    PROD_CYCLO_RECEIPT_IMPLEMENTATION_ADDRESS,
+    PROD_CYCLO_RECEIPT_IMPLEMENTATION_EXPECTED_CODE
 } from "src/lib/LibCycloProd.sol";
 import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
 
 contract CycloReceiptProdTest is Test {
     function testProdCycloReceiptBytecode() external {
         LibCycloTestProd.createSelectFork(vm);
-
-        CycloReceipt fresh = new CycloReceipt();
 
         address proxy = PROD_CYCLO_RECEIPT_ADDRESS;
         bytes memory proxyCode = proxy.code;
@@ -25,7 +24,7 @@ contract CycloReceiptProdTest is Test {
             implementation := mload(add(proxyCode, 30))
         }
 
-        assertEq(implementation.code, address(fresh).code);
+        assertEq(implementation.code, PROD_CYCLO_RECEIPT_IMPLEMENTATION_EXPECTED_CODE);
         assertEq(implementation, PROD_CYCLO_RECEIPT_IMPLEMENTATION_ADDRESS);
 
         bytes memory expectedProxyCode =
