@@ -8,8 +8,10 @@ import {CycloReceipt, CYCLO_RECEIPT_SVG_URI} from "src/concrete/receipt/CycloRec
 import {DATA_URI_BASE64_PREFIX} from "ethgild/concrete/receipt/Receipt.sol";
 import {PROD_CYSFLR_RECEIPT_SYMBOL, PROD_CYSFLR_RECEIPT_NAME} from "test/lib/LibCycloTestProd.sol";
 import {ZeroReceiptId} from "ethgild/error/ErrReceipt.sol";
+import {CycloReceiptFactoryTest} from "test/abstract/CycloReceiptFactoryTest.sol";
+import {CycloVault, ReceiptVaultConstructionConfig} from "src/concrete/vault/CycloVault.sol";
 
-contract CycloReceiptMetadataTest is Test {
+contract CycloReceiptMetadataTest is CycloReceiptFactoryTest {
     struct URIJson {
         uint8 decimals;
         string description;
@@ -61,11 +63,17 @@ contract CycloReceiptMetadataTest is Test {
         assertEq(receipt.symbol(), PROD_CYSFLR_RECEIPT_SYMBOL);
     }
 
-    // function testCycloReceiptURI() external {
-    //     CycloReceipt receipt = new CycloReceipt();
+    function testCycloReceiptURI() external {
+        CycloVault vault = new CycloVault(ReceiptVaultConstructionConfig({
+            factory: iFactory,
+            receiptImplementation: iCycloReceiptImplementation
+        }));
+        // CycloReceipt receipt = CycloReceipt(
+        //     iFactory.clone(address(iCycloReceiptImplementation), abi.encode(address(vault)))
+        // );
 
-    //     checkCycloReceiptURI(address(receipt));
-    // }
+        checkCycloReceiptURI(vault.receipt());
+    }
 
     // function testCycloReceiptName() external {
     //     CycloReceipt receipt = new CycloReceipt();
