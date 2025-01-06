@@ -39,6 +39,14 @@ contract CycloReceiptProdTest is Test {
         assertEq(CycloReceipt(PROD_CYCLO_RECEIPT_ADDRESS).manager(), PROD_CYCLO_VAULT_ADDRESS);
     }
 
+    function testProdCycloReceiptIsInitialized() external {
+        LibCycloTestProd.createSelectFork(vm);
+
+        CycloReceipt receipt = CycloReceipt(PROD_CYCLO_RECEIPT_ADDRESS);
+        vm.expectRevert("Initializable: contract is already initialized");
+        receipt.initialize("");
+    }
+
     fallback() external payable {}
 
     receive() external payable {}

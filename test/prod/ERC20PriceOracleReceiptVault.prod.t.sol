@@ -71,6 +71,14 @@ contract ERC20PriceOracleReceiptVaultProdTest is Test {
         assertEq(ERC20PriceOracleReceiptVault(payable(PROD_CYCLO_VAULT_ADDRESS)).symbol(), "cysFLR");
     }
 
+    function testProdERC20PriceOracleReceiptIsInitialized() external {
+        LibCycloTestProd.createSelectFork(vm);
+
+        ERC20PriceOracleReceiptVault vault = ERC20PriceOracleReceiptVault(payable(PROD_CYCLO_VAULT_ADDRESS));
+        vm.expectRevert("Initializable: contract is already initialized");
+        vault.initialize("");
+    }
+
     fallback() external payable {}
 
     receive() external payable {}

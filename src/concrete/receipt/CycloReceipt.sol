@@ -15,7 +15,7 @@ string constant CYCLO_REDEEM_URL = "https://cyclo.finance";
 
 contract CycloReceipt is ERC20PriceOracleReceipt {
     function _redeemURL() internal pure virtual override returns (string memory) {
-        return CYCLO_RECEIPT_SVG_URI;
+        return CYCLO_REDEEM_URL;
     }
 
     function _brandName() internal pure virtual override returns (string memory) {
