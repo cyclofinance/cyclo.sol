@@ -33,10 +33,6 @@ address constant FLARE_VAULT_IMPLEMENTATION_V1 = 0x35ea13bBEfF8115fb63E416423792
 
 address constant STARGATE_WETH_CONTRACT = 0x1502FA4be69d526124D453619276FacCab275d3D;
 
-string constant STARGATE_WETH_VAULT_NAME = "Cyclo cyWETH";
-
-string constant STARGATE_WETH_VAULT_SYMBOL = "cyWETH";
-
 /// @title Deploy
 /// This is intended to be run on every commit by CI to a testnet such as mumbai,
 /// then cross chain deployed to whatever mainnet is required, by users.
@@ -52,7 +48,7 @@ contract Deploy is Script {
             factory: ICloneableFactoryV2(cloneFactory),
             receiptImplementation: cycloReceipt
         });
-        new ERC20PriceOracleReceiptVault(receiptVaultConstructionConfig);
+        new CycloVault(receiptVaultConstructionConfig);
 
         vm.stopBroadcast();
     }
