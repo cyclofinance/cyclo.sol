@@ -89,12 +89,7 @@ contract Deploy is Script {
 
         ICloneableFactoryV2(FLARE_CLONE_FACTORY_V1).clone(
             CYCLO_VAULT_IMPLEMENTATION_V1,
-            abi.encode(
-                CycloVaultConfig({
-                    priceOracle: ftsoV2LTSFeedOracle,
-                    asset: STARGATE_WETH_CONTRACT
-                })
-            )
+            abi.encode(CycloVaultConfig({priceOracle: ftsoV2LTSFeedOracle, asset: STARGATE_WETH_CONTRACT}))
         );
         vm.stopBroadcast();
     }
