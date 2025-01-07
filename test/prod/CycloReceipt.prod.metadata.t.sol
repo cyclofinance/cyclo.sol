@@ -10,7 +10,7 @@ contract CycloReceiptProdMetadataTest is CycloReceiptMetadataTest {
     function testProdCycloReceiptURI() external {
         LibCycloTestProd.createSelectFork(vm);
 
-        checkCycloReceiptURI(PROD_CYCLO_RECEIPT_ADDRESS);
+        checkCycloReceiptURIV1(PROD_CYCLO_RECEIPT_ADDRESS);
     }
 
     function testProdCycloReceiptName() external {

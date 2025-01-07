@@ -21,13 +21,6 @@ import {IERC20MetadataUpgradeable as IERC20Metadata} from
     "openzeppelin-contracts-upgradeable/contracts/token/ERC20/extensions/IERC20MetadataUpgradeable.sol";
 
 contract CycloReceiptMetadataTest is CycloReceiptFactoryTest {
-    struct URIJson {
-        uint8 decimals;
-        string description;
-        string image;
-        string name;
-    }
-
     function checkCycloReceiptURIZeroId(address cycloReceipt) internal {
         CycloReceipt receipt = CycloReceipt(cycloReceipt);
 
@@ -35,31 +28,34 @@ contract CycloReceiptMetadataTest is CycloReceiptFactoryTest {
         receipt.uri(0);
     }
 
-    function checkCycloReceiptURI(address cycloReceipt) internal view {
+    function checkCycloReceiptURIV1(address cycloReceipt) internal view {
         CycloReceipt receipt = CycloReceipt(cycloReceipt);
 
         string memory uri = receipt.uri(0.01544e18);
-        uint256 uriLength = bytes(uri).length;
-        assembly ("memory-safe") {
-            mstore(uri, 29)
-        }
-        assertEq(uri, DATA_URI_BASE64_PREFIX);
-        assembly ("memory-safe") {
-            uri := add(uri, 29)
-            mstore(uri, sub(uriLength, 29))
-        }
+        MetadataWithImage memory metadata = decodeMetadataURIWithImage(uri);
 
-        string memory uriDecoded = string(Base64.decode(uri));
-        bytes memory uriJsonData = vm.parseJson(uriDecoded);
-
-        URIJson memory uriJson = abi.decode(uriJsonData, (URIJson));
-        assertEq(uriJson.decimals, 18);
+        assertEq(metadata.decimals, 18);
         assertEq(
-            uriJson.description,
+            metadata.description,
+            "1 of these receipts can be burned alongside 1 cysFLR to redeem 64.766839378238341968 sFLR. Reedem at https://cyclo.finance."
+        );
+        assertEq(metadata.image, CYCLO_RECEIPT_SVG_URI);
+        assertEq(metadata.name, "Receipt for Cyclo lock at 0.01544 USD per sFLR.");
+    }
+
+    function checkCycloReceiptURIV2(address cycloReceipt) internal view {
+        CycloReceipt receipt = CycloReceipt(cycloReceipt);
+
+        string memory uri = receipt.uri(0.01544e18);
+        MetadataWithImage memory metadata = decodeMetadataURIWithImage(uri);
+
+        assertEq(metadata.decimals, 18);
+        assertEq(
+            metadata.description,
             "1 of these receipts can be burned alongside 1 cysFLR to redeem 64.766839378238341968 of sFLR. Redeem at https://cyclo.finance."
         );
-        assertEq(uriJson.image, CYCLO_RECEIPT_SVG_URI);
-        assertEq(uriJson.name, "Receipt for Cyclo lock at 0.01544 USD per sFLR.");
+        assertEq(metadata.image, CYCLO_RECEIPT_SVG_URI);
+        assertEq(metadata.name, "Receipt for Cyclo lock at 0.01544 USD per sFLR.");
     }
 
     function checkCycloReceiptName(address cycloReceipt) internal view {
@@ -89,18 +85,46 @@ contract CycloReceiptMetadataTest is CycloReceiptFactoryTest {
 
         vm.mockCall(address(SFLR_CONTRACT), abi.encodeWithSelector(IERC20Metadata.symbol.selector), abi.encode("sFLR"));
 
-        checkCycloReceiptURI(address(vault.receipt()));
+        checkCycloReceiptURIV2(address(vault.receipt()));
     }
 
-    // function testCycloReceiptName() external {
-    //     CycloReceipt receipt = new CycloReceipt();
+    function testCycloReceiptName() external {
+        CycloVault vault = CycloVault(
+            payable(
+                iFactory.clone(
+                    address(iCycloVaultImplementation),
+                    abi.encode(
+                        CycloVaultConfig({
+                            priceOracle: IPriceOracleV2(payable(PROD_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2_ADDRESS)),
+                            asset: address(SFLR_CONTRACT)
+                        })
+                    )
+                )
+            )
+        );
 
-    //     checkCycloReceiptName(address(receipt));
-    // }
+        vm.mockCall(address(SFLR_CONTRACT), abi.encodeWithSelector(IERC20Metadata.symbol.selector), abi.encode("sFLR"));
 
-    // function testCycloReceiptSymbol() external {
-    //     CycloReceipt receipt = new CycloReceipt();
+        checkCycloReceiptName(address(vault.receipt()));
+    }
 
-    //     checkCycloReceiptSymbol(address(receipt));
-    // }
+    function testCycloReceiptSymbol() external {
+        CycloVault vault = CycloVault(
+            payable(
+                iFactory.clone(
+                    address(iCycloVaultImplementation),
+                    abi.encode(
+                        CycloVaultConfig({
+                            priceOracle: IPriceOracleV2(payable(PROD_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2_ADDRESS)),
+                            asset: address(SFLR_CONTRACT)
+                        })
+                    )
+                )
+            )
+        );
+
+        vm.mockCall(address(SFLR_CONTRACT), abi.encodeWithSelector(IERC20Metadata.symbol.selector), abi.encode("sFLR"));
+
+        checkCycloReceiptSymbol(address(vault.receipt()));
+    }
 }
