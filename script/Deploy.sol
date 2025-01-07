@@ -19,6 +19,7 @@ import {FLR_USD_FEED_ID, ETH_USD_FEED_ID} from "rain.flare/lib/lts/LibFtsoV2LTS.
 import {IPriceOracleV2} from "ethgild/abstract/PriceOracleV2.sol";
 import {SFLR_CONTRACT} from "rain.flare/lib/sflr/LibSceptreStakedFlare.sol";
 import {PROD_CLONE_FACTORY_ADDRESS_V1} from "src/lib/LibCycloProd.sol";
+import {CycloVault, CycloVaultConfig} from "src/concrete/vault/CycloVault.sol";
 
 // 30 mins.
 uint256 constant DEFAULT_STALE_AFTER = 1800;
@@ -30,6 +31,7 @@ bytes32 constant DEPLOYMENT_SUITE_STARGATE_WETH_PRICE_VAULT = keccak256("stargat
 address constant FLARE_CLONE_FACTORY_V1 = 0x67fe33484cAF1a8D716b84b779569f79881788Ae;
 
 address constant FLARE_VAULT_IMPLEMENTATION_V1 = 0x35ea13bBEfF8115fb63E4164237922E491dd21BC;
+address constant CYCLO_VAULT_IMPLEMENTATION_V1 = 0x35ea13bBEfF8115fb63E4164237922E491dd21BC;
 
 address constant STARGATE_WETH_CONTRACT = 0x1502FA4be69d526124D453619276FacCab275d3D;
 
@@ -86,15 +88,11 @@ contract Deploy is Script {
         );
 
         ICloneableFactoryV2(FLARE_CLONE_FACTORY_V1).clone(
-            FLARE_VAULT_IMPLEMENTATION_V1,
+            CYCLO_VAULT_IMPLEMENTATION_V1,
             abi.encode(
-                ERC20PriceOracleVaultConfig({
+                CycloVaultConfig({
                     priceOracle: ftsoV2LTSFeedOracle,
-                    vaultConfig: VaultConfig({
-                        asset: STARGATE_WETH_CONTRACT,
-                        name: STARGATE_WETH_VAULT_NAME,
-                        symbol: STARGATE_WETH_VAULT_SYMBOL
-                    })
+                    asset: STARGATE_WETH_CONTRACT
                 })
             )
         );
