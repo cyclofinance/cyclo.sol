@@ -3,16 +3,25 @@
 pragma solidity =0.8.25;
 
 import {Test} from "forge-std/Test.sol";
-import {PROD_CYSFLR_RECEIPT_ADDRESS, PROD_CYSFLR_VAULT_ADDRESS} from "src/lib/LibCycloProd.sol";
+import {
+    PROD_FLARE_RECEIPT_CYSFLR,
+    PROD_FLARE_VAULT_CYSFLR,
+    PROD_FLARE_RECEIPT_CYWETH,
+    PROD_FLARE_VAULT_CYWETH
+} from "src/lib/LibCycloProdDeployment.sol";
 import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
 import {IReceiptV2} from "ethgild/interface/IReceiptV2.sol";
 
 contract CycloReceiptProdAccessTest is Test {
+    function checkAccess(address receiptAddress, address vaultAddress, string memory asset) internal view {
+        address manager = IReceiptV2(receiptAddress).manager();
+        assertEq(manager, vaultAddress, string.concat(asset, " manager should be vault"));
+    }
+
     function testProdCycloReceiptManager() external {
         LibCycloTestProd.createSelectFork(vm);
 
-        address manager = IReceiptV2(PROD_CYSFLR_RECEIPT_ADDRESS).manager();
-
-        assertEq(manager, PROD_CYSFLR_VAULT_ADDRESS);
+        checkAccess(PROD_FLARE_RECEIPT_CYSFLR, PROD_FLARE_VAULT_CYSFLR, "cysFLR");
+        checkAccess(PROD_FLARE_RECEIPT_CYWETH, PROD_FLARE_VAULT_CYWETH, "cyWETH");
     }
 }

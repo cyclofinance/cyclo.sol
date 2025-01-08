@@ -18,8 +18,13 @@ import {FtsoV2LTSFeedOracle, FtsoV2LTSFeedOracleConfig} from "ethgild/concrete/o
 import {FLR_USD_FEED_ID, ETH_USD_FEED_ID} from "rain.flare/lib/lts/LibFtsoV2LTS.sol";
 import {IPriceOracleV2} from "ethgild/abstract/PriceOracleV2.sol";
 import {SFLR_CONTRACT} from "rain.flare/lib/sflr/LibSceptreStakedFlare.sol";
-import {PROD_CLONE_FACTORY_ADDRESS_V1} from "src/lib/LibCycloProd.sol";
+import {
+    PROD_FLARE_CLONE_FACTORY_ADDRESS_V1,
+    PROD_FLARE_CLONE_FACTORY_ADDRESS_V2
+} from "src/lib/LibCycloProdCloneFactory.sol";
 import {CycloVault, CycloVaultConfig} from "src/concrete/vault/CycloVault.sol";
+import {FLARE_STARGATE_WETH} from "src/lib/LibCycloProdAssets.sol";
+import {PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1} from "src/lib/LibCycloProdDeployment.sol";
 
 // 30 mins.
 uint256 constant DEFAULT_STALE_AFTER = 1800;
@@ -27,13 +32,6 @@ uint256 constant DEFAULT_STALE_AFTER = 1800;
 bytes32 constant DEPLOYMENT_SUITE_IMPLEMENTATIONS = keccak256("implementations");
 bytes32 constant DEPLOYMENT_SUITE_STAKED_FLR_PRICE_VAULT = keccak256("sceptre-staked-flare-price-vault");
 bytes32 constant DEPLOYMENT_SUITE_STARGATE_WETH_PRICE_VAULT = keccak256("stargate-weth-price-vault");
-
-address constant FLARE_CLONE_FACTORY_V1 = 0x67fe33484cAF1a8D716b84b779569f79881788Ae;
-
-address constant FLARE_VAULT_IMPLEMENTATION_V1 = 0x35ea13bBEfF8115fb63E4164237922E491dd21BC;
-address constant CYCLO_VAULT_IMPLEMENTATION_V1 = 0x1D35c1392EF799253e61DaA143d055E6b3F1f8eA;
-
-address constant STARGATE_WETH_CONTRACT = 0x1502FA4be69d526124D453619276FacCab275d3D;
 
 /// @title Deploy
 /// This is intended to be run on every commit by CI to a testnet such as mumbai,
@@ -87,9 +85,9 @@ contract Deploy is Script {
             FtsoV2LTSFeedOracleConfig({feedId: ETH_USD_FEED_ID, staleAfter: DEFAULT_STALE_AFTER})
         );
 
-        ICloneableFactoryV2(FLARE_CLONE_FACTORY_V1).clone(
-            CYCLO_VAULT_IMPLEMENTATION_V1,
-            abi.encode(CycloVaultConfig({priceOracle: ftsoV2LTSFeedOracle, asset: STARGATE_WETH_CONTRACT}))
+        ICloneableFactoryV2(PROD_FLARE_CLONE_FACTORY_ADDRESS_V2).clone(
+            PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1,
+            abi.encode(CycloVaultConfig({priceOracle: ftsoV2LTSFeedOracle, asset: FLARE_STARGATE_WETH}))
         );
         vm.stopBroadcast();
     }
