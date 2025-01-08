@@ -8,10 +8,10 @@ import {CycloReceipt} from "src/concrete/receipt/CycloReceipt.sol";
 import {
     PROD_FLARE_RECEIPT_IMPLEMENTATION_CYSFLR,
     PROD_FLARE_VAULT_CYSFLR,
-    PROD_FLARE_RECEIPT_CYSFLR
+    PROD_FLARE_RECEIPT_CYSFLR,
+    PROD_FLARE_RECEIPT_IMPLEMENTATION_CYSFLR_CODEHASH
 } from "src/lib/LibCycloProdDeployment.sol";
 import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
-import {PROD_CYCLO_RECEIPT_IMPLEMENTATION_EXPECTED_CODE} from "src/lib/LibCycloProdBytecode.sol";
 
 contract CycloReceiptProdTest is Test {
     function testProdCycloReceiptBytecode() external {
@@ -24,7 +24,7 @@ contract CycloReceiptProdTest is Test {
             implementation := mload(add(proxyCode, 30))
         }
 
-        assertEq(implementation.code, PROD_CYCLO_RECEIPT_IMPLEMENTATION_EXPECTED_CODE);
+        assertEq(implementation.codehash, PROD_FLARE_RECEIPT_IMPLEMENTATION_CYSFLR_CODEHASH);
         assertEq(implementation, PROD_FLARE_RECEIPT_IMPLEMENTATION_CYSFLR);
 
         bytes memory expectedProxyCode =
