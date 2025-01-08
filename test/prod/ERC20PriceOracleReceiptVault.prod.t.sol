@@ -8,7 +8,6 @@ import {
     ERC20PriceOracleReceiptVault,
     ReceiptVaultConstructionConfig
 } from "ethgild/concrete/vault/ERC20PriceOracleReceiptVault.sol";
-import {PROD_CYCLO_CYSFLR_VAULT_EXPECTED_CODE} from "src/lib/LibCycloProdBytecode.sol";
 import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
 import {ICloneableFactoryV2} from "rain.factory/interface/ICloneableFactoryV2.sol";
 import {CycloReceipt} from "src/concrete/receipt/CycloReceipt.sol";
@@ -20,7 +19,8 @@ import {
 import {
     PROD_FLARE_RECEIPT_IMPLEMENTATION_CYSFLR,
     PROD_FLARE_VAULT_CYSFLR,
-    PROD_FLARE_VAULT_IMPLEMENTATION_CYSFLR
+    PROD_FLARE_VAULT_IMPLEMENTATION_CYSFLR,
+    PROD_FLARE_VAULT_IMPLEMENTATION_CYSFLR_CODEHASH
 } from "src/lib/LibCycloProdDeployment.sol";
 
 contract ERC20PriceOracleReceiptVaultProdTest is Test {
@@ -34,7 +34,7 @@ contract ERC20PriceOracleReceiptVaultProdTest is Test {
             implementation := mload(add(proxyCode, 30))
         }
 
-        assertEq(implementation.code, PROD_CYCLO_CYSFLR_VAULT_EXPECTED_CODE);
+        assertEq(implementation.codehash, PROD_FLARE_VAULT_IMPLEMENTATION_CYSFLR_CODEHASH);
         assertEq(implementation, PROD_FLARE_VAULT_IMPLEMENTATION_CYSFLR);
 
         bytes memory expectedProxyCode =
