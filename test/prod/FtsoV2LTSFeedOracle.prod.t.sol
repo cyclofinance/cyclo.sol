@@ -4,8 +4,10 @@ pragma solidity =0.8.25;
 
 import {Test} from "forge-std/Test.sol";
 
-import {PROD_FTSO_V2_LTS_FLR_USD_FEED_ORACLE_EXPECTED_CODE} from "src/lib/LibCycloProdBytecode.sol";
-import {PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE} from "src/lib/LibCycloProdOracle.sol";
+import {
+    PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE,
+    PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE_CODEHASH
+} from "src/lib/LibCycloProdOracle.sol";
 
 import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
 
@@ -25,7 +27,9 @@ contract FtsoV2LTSFeedOracleProdTest is Test {
     function testProdCycloFtsoV2LTSFeedOracleBytecode() external {
         LibCycloTestProd.createSelectFork(vm);
 
-        assertEq(PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE.code, PROD_FTSO_V2_LTS_FLR_USD_FEED_ORACLE_EXPECTED_CODE);
+        assertEq(
+            PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE.codehash, PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE_CODEHASH
+        );
     }
 
     fallback() external payable {}

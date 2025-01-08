@@ -4,9 +4,10 @@ pragma solidity =0.8.25;
 
 import {Test} from "forge-std/Test.sol";
 
-import {PROD_SCEPTRE_STAKED_FLR_ORACLE_EXPECTED_CODE} from "src/lib/LibCycloProdBytecode.sol";
-
-import {PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE} from "src/lib/LibCycloProdOracle.sol";
+import {
+    PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE,
+    PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE_CODEHASH
+} from "src/lib/LibCycloProdOracle.sol";
 
 import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
 
@@ -25,7 +26,7 @@ contract SceptreStakedFlrOracleProdTest is Test {
     function testProdCycloSceptreStakedFlrOracleBytecode() external {
         LibCycloTestProd.createSelectFork(vm);
 
-        assertEq(PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE.code, PROD_SCEPTRE_STAKED_FLR_ORACLE_EXPECTED_CODE);
+        assertEq(PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE.codehash, PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE_CODEHASH);
     }
 
     fallback() external payable {}
