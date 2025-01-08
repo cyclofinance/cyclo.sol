@@ -6,7 +6,7 @@ import {Test} from "forge-std/Test.sol";
 
 import {CycloReceipt} from "src/concrete/receipt/CycloReceipt.sol";
 import {
-    PROD_CYCLO_RECEIPT_ADDRESS,
+    PROD_CYSFLR_RECEIPT_ADDRESS,
     PROD_CYCLO_VAULT_ADDRESS,
     PROD_CYCLO_RECEIPT_IMPLEMENTATION_ADDRESS,
     PROD_CYCLO_RECEIPT_IMPLEMENTATION_EXPECTED_CODE
@@ -17,7 +17,7 @@ contract CycloReceiptProdTest is Test {
     function testProdCycloReceiptBytecode() external {
         LibCycloTestProd.createSelectFork(vm);
 
-        address proxy = PROD_CYCLO_RECEIPT_ADDRESS;
+        address proxy = PROD_CYSFLR_RECEIPT_ADDRESS;
         bytes memory proxyCode = proxy.code;
         address implementation;
         assembly {
@@ -36,13 +36,13 @@ contract CycloReceiptProdTest is Test {
     function testProdCycloReceiptManager() external {
         LibCycloTestProd.createSelectFork(vm);
 
-        assertEq(CycloReceipt(PROD_CYCLO_RECEIPT_ADDRESS).manager(), PROD_CYCLO_VAULT_ADDRESS);
+        assertEq(CycloReceipt(PROD_CYSFLR_RECEIPT_ADDRESS).manager(), PROD_CYCLO_VAULT_ADDRESS);
     }
 
     function testProdCycloReceiptIsInitialized() external {
         LibCycloTestProd.createSelectFork(vm);
 
-        CycloReceipt receipt = CycloReceipt(PROD_CYCLO_RECEIPT_ADDRESS);
+        CycloReceipt receipt = CycloReceipt(PROD_CYSFLR_RECEIPT_ADDRESS);
         vm.expectRevert("Initializable: contract is already initialized");
         receipt.initialize("");
     }
