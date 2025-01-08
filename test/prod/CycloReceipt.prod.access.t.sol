@@ -3,7 +3,7 @@
 pragma solidity =0.8.25;
 
 import {Test} from "forge-std/Test.sol";
-import {PROD_CYSFLR_RECEIPT_ADDRESS, PROD_CYCLO_VAULT_ADDRESS} from "src/lib/LibCycloProd.sol";
+import {PROD_CYSFLR_RECEIPT_ADDRESS, PROD_CYSFLR_VAULT_ADDRESS} from "src/lib/LibCycloProd.sol";
 import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
 import {IReceiptV2} from "ethgild/interface/IReceiptV2.sol";
 
@@ -13,6 +13,6 @@ contract CycloReceiptProdAccessTest is Test {
 
         address manager = IReceiptV2(PROD_CYSFLR_RECEIPT_ADDRESS).manager();
 
-        assertEq(manager, PROD_CYCLO_VAULT_ADDRESS);
+        assertEq(manager, PROD_CYSFLR_VAULT_ADDRESS);
     }
 }

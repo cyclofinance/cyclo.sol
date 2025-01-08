@@ -7,7 +7,7 @@ import {Test} from "forge-std/Test.sol";
 import {CycloReceipt} from "src/concrete/receipt/CycloReceipt.sol";
 import {
     PROD_CYSFLR_RECEIPT_ADDRESS,
-    PROD_CYCLO_VAULT_ADDRESS,
+    PROD_CYSFLR_VAULT_ADDRESS,
     PROD_CYCLO_RECEIPT_IMPLEMENTATION_ADDRESS,
     PROD_CYCLO_RECEIPT_IMPLEMENTATION_EXPECTED_CODE
 } from "src/lib/LibCycloProd.sol";
@@ -36,7 +36,7 @@ contract CycloReceiptProdTest is Test {
     function testProdCycloReceiptManager() external {
         LibCycloTestProd.createSelectFork(vm);
 
-        assertEq(CycloReceipt(PROD_CYSFLR_RECEIPT_ADDRESS).manager(), PROD_CYCLO_VAULT_ADDRESS);
+        assertEq(CycloReceipt(PROD_CYSFLR_RECEIPT_ADDRESS).manager(), PROD_CYSFLR_VAULT_ADDRESS);
     }
 
     function testProdCycloReceiptIsInitialized() external {

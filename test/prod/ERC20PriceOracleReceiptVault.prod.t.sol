@@ -11,7 +11,7 @@ import {
 import {
     PROD_SCEPTRE_STAKED_FLR_ORACLE_ADDRESS,
     PROD_CYCLO_CYSFLR_VAULT_IMPLEMENTATION_ADDRESS,
-    PROD_CYCLO_VAULT_ADDRESS,
+    PROD_CYSFLR_VAULT_ADDRESS,
     PROD_CYCLO_RECEIPT_IMPLEMENTATION_ADDRESS,
     PROD_CLONE_FACTORY_ADDRESS_V1,
     PROD_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2_ADDRESS,
@@ -26,7 +26,7 @@ contract ERC20PriceOracleReceiptVaultProdTest is Test {
     function testProdERC20PriceOracleReceiptVaultBytecode() external {
         LibCycloTestProd.createSelectFork(vm);
 
-        address proxy = PROD_CYCLO_VAULT_ADDRESS;
+        address proxy = PROD_CYSFLR_VAULT_ADDRESS;
         bytes memory proxyCode = proxy.code;
         address implementation;
         assembly {
@@ -46,7 +46,7 @@ contract ERC20PriceOracleReceiptVaultProdTest is Test {
         LibCycloTestProd.createSelectFork(vm);
 
         assertEq(
-            address(ERC20PriceOracleReceiptVault(payable(PROD_CYCLO_VAULT_ADDRESS)).priceOracle()),
+            address(ERC20PriceOracleReceiptVault(payable(PROD_CYSFLR_VAULT_ADDRESS)).priceOracle()),
             PROD_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2_ADDRESS
         );
     }
@@ -55,26 +55,26 @@ contract ERC20PriceOracleReceiptVaultProdTest is Test {
         LibCycloTestProd.createSelectFork(vm);
 
         assertEq(
-            address(ERC20PriceOracleReceiptVault(payable(PROD_CYCLO_VAULT_ADDRESS)).asset()), address(SFLR_CONTRACT)
+            address(ERC20PriceOracleReceiptVault(payable(PROD_CYSFLR_VAULT_ADDRESS)).asset()), address(SFLR_CONTRACT)
         );
     }
 
     function testProdERC20PriceOracleReceiptVaultName() external {
         LibCycloTestProd.createSelectFork(vm);
 
-        assertEq(ERC20PriceOracleReceiptVault(payable(PROD_CYCLO_VAULT_ADDRESS)).name(), "cysFLR");
+        assertEq(ERC20PriceOracleReceiptVault(payable(PROD_CYSFLR_VAULT_ADDRESS)).name(), "cysFLR");
     }
 
     function testProdERC20PriceOracleReceiptVaultSymbol() external {
         LibCycloTestProd.createSelectFork(vm);
 
-        assertEq(ERC20PriceOracleReceiptVault(payable(PROD_CYCLO_VAULT_ADDRESS)).symbol(), "cysFLR");
+        assertEq(ERC20PriceOracleReceiptVault(payable(PROD_CYSFLR_VAULT_ADDRESS)).symbol(), "cysFLR");
     }
 
     function testProdERC20PriceOracleReceiptIsInitialized() external {
         LibCycloTestProd.createSelectFork(vm);
 
-        ERC20PriceOracleReceiptVault vault = ERC20PriceOracleReceiptVault(payable(PROD_CYCLO_VAULT_ADDRESS));
+        ERC20PriceOracleReceiptVault vault = ERC20PriceOracleReceiptVault(payable(PROD_CYSFLR_VAULT_ADDRESS));
         vm.expectRevert("Initializable: contract is already initialized");
         vault.initialize("");
     }
