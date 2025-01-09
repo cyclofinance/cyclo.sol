@@ -19,9 +19,9 @@ import {FLR_USD_FEED_ID, ETH_USD_FEED_ID} from "rain.flare/lib/lts/LibFtsoV2LTS.
 import {IPriceOracleV2} from "ethgild/abstract/PriceOracleV2.sol";
 import {SFLR_CONTRACT} from "rain.flare/lib/sflr/LibSceptreStakedFlare.sol";
 import {
-    PROD_FLARE_CLONE_FACTORY_ADDRESS_V1,
-    PROD_FLARE_CLONE_FACTORY_ADDRESS_V2
-} from "src/lib/LibCycloProdCloneFactory.sol";
+    PROD_FLARE_CLONE_FACTORY_ADDRESS_LATEST,
+    PROD_FLARE_CLONE_FACTORY_CODEHASH_LATEST
+} from "./lib/LibCycloProdCloneFactory.sol";
 import {CycloVault, CycloVaultConfig} from "src/concrete/vault/CycloVault.sol";
 import {FLARE_STARGATE_WETH} from "src/lib/LibCycloProdAssets.sol";
 import {PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1} from "src/lib/LibCycloProdDeployment.sol";
@@ -29,6 +29,7 @@ import {PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1} from "src/lib/LibCycloProdDepl
 // 30 mins.
 uint256 constant DEFAULT_STALE_AFTER = 1800;
 
+bytes32 constant DEPLOYMENT_SUITE_FACTORY = keccak256("factory");
 bytes32 constant DEPLOYMENT_SUITE_IMPLEMENTATIONS = keccak256("implementations");
 bytes32 constant DEPLOYMENT_SUITE_STAKED_FLR_PRICE_VAULT = keccak256("sceptre-staked-flare-price-vault");
 bytes32 constant DEPLOYMENT_SUITE_STARGATE_WETH_PRICE_VAULT = keccak256("stargate-weth-price-vault");
@@ -37,15 +38,24 @@ bytes32 constant DEPLOYMENT_SUITE_STARGATE_WETH_PRICE_VAULT = keccak256("stargat
 /// This is intended to be run on every commit by CI to a testnet such as mumbai,
 /// then cross chain deployed to whatever mainnet is required, by users.
 contract Deploy is Script {
+    function deployFactory(uint256 deploymentKey) internal {
+        vm.startBroadcast(deploymentKey);
+
+        ICloneableFactoryV2 cloneFactory = new CloneFactory();
+        if (address(cloneFactory).codehash != PROD_FLARE_CLONE_FACTORY_CODEHASH_LATEST) {
+            revert("Factory codehash mismatch");
+        }
+
+        vm.stopBroadcast();
+    }
+
     function deployImplementations(uint256 deploymentKey) internal {
         vm.startBroadcast(deploymentKey);
 
         CycloReceipt cycloReceipt = new CycloReceipt();
 
-        CloneFactory cloneFactory = new CloneFactory();
-
         ReceiptVaultConstructionConfig memory receiptVaultConstructionConfig = ReceiptVaultConstructionConfig({
-            factory: ICloneableFactoryV2(cloneFactory),
+            factory: ICloneableFactoryV2(PROD_FLARE_CLONE_FACTORY_ADDRESS_LATEST),
             receiptImplementation: cycloReceipt
         });
         new CycloVault(receiptVaultConstructionConfig);
@@ -85,7 +95,7 @@ contract Deploy is Script {
             FtsoV2LTSFeedOracleConfig({feedId: ETH_USD_FEED_ID, staleAfter: DEFAULT_STALE_AFTER})
         );
 
-        ICloneableFactoryV2(PROD_FLARE_CLONE_FACTORY_ADDRESS_V2).clone(
+        ICloneableFactoryV2(PROD_FLARE_CLONE_FACTORY_ADDRESS_LATEST).clone(
             PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1,
             abi.encode(CycloVaultConfig({priceOracle: ftsoV2LTSFeedOracle, asset: FLARE_STARGATE_WETH}))
         );
@@ -96,7 +106,9 @@ contract Deploy is Script {
         uint256 deployerPrivateKey = vm.envUint("DEPLOYMENT_KEY");
         bytes32 suite = keccak256(bytes(vm.envString("DEPLOYMENT_SUITE")));
 
-        if (suite == DEPLOYMENT_SUITE_IMPLEMENTATIONS) {
+        if (suite == DEPLOYMENT_SUITE_FACTORY) {
+            deployFactory(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_IMPLEMENTATIONS) {
             deployImplementations(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_STAKED_FLR_PRICE_VAULT) {
             deployStakedFlrPriceVault(deployerPrivateKey);

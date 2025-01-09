@@ -17,6 +17,7 @@ on:
           - sceptre-staked-flare-price-vault
           - stargate-weth-price-vault
           - implementations
+          - factory
 
 jobs:
   deploy:
