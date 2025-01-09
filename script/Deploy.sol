@@ -2,7 +2,7 @@
 // SPDX-FileCopyrightText: Copyright (c) 2020 Rain Open Source Software Ltd
 pragma solidity =0.8.25;
 
-import {Script} from "forge-std/Script.sol";
+import {Script, console2} from "forge-std/Script.sol";
 import {CycloReceipt} from "src/concrete/receipt/CycloReceipt.sol";
 import {
     ERC20PriceOracleReceiptVault,
@@ -42,6 +42,7 @@ contract Deploy is Script {
         vm.startBroadcast(deploymentKey);
 
         ICloneableFactoryV2 cloneFactory = new CloneFactory();
+        console2.logBytes(abi.encodePacked(address(cloneFactory).codehash));
         if (address(cloneFactory).codehash != PROD_FLARE_CLONE_FACTORY_CODEHASH_LATEST) {
             revert("Factory codehash mismatch");
         }
