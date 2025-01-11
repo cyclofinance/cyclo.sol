@@ -3,12 +3,8 @@
 pragma solidity =0.8.25;
 
 import {Test} from "forge-std/Test.sol";
-import {
-    PROD_FLARE_RECEIPT_CYSFLR,
-    PROD_FLARE_VAULT_CYSFLR,
-    PROD_FLARE_RECEIPT_CYWETH,
-    PROD_FLARE_VAULT_CYWETH
-} from "src/lib/LibCycloProdDeployment.sol";
+import {PROD_FLARE_VAULT_CYSFLR, PROD_FLARE_VAULT_CYWETH} from "src/lib/LibCycloProdVault.sol";
+import {PROD_FLARE_RECEIPT_CYSFLR, PROD_FLARE_RECEIPT_CYWETH} from "src/lib/LibCycloProdReceipt.sol";
 import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
 import {IReceiptV2} from "ethgild/interface/IReceiptV2.sol";
 

@@ -2,7 +2,7 @@
 // SPDX-FileCopyrightText: Copyright (c) 2020 Rain Open Source Software Ltd
 pragma solidity =0.8.25;
 
-import {PROD_FLARE_RECEIPT_CYSFLR, PROD_FLARE_RECEIPT_CYWETH} from "src/lib/LibCycloProdDeployment.sol";
+import {PROD_FLARE_RECEIPT_CYSFLR, PROD_FLARE_RECEIPT_CYWETH} from "src/lib/LibCycloProdReceipt.sol";
 import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
 import {CycloReceiptMetadataTest} from "test/src/concrete/receipt/CycloReceipt.metadata.t.sol";
 

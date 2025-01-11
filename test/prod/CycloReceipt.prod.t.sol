@@ -5,16 +5,38 @@ pragma solidity =0.8.25;
 import {Test} from "forge-std/Test.sol";
 
 import {CycloReceipt} from "src/concrete/receipt/CycloReceipt.sol";
+import {PROD_FLARE_VAULT_CYSFLR} from "src/lib/LibCycloProdVault.sol";
 import {
     PROD_FLARE_RECEIPT_IMPLEMENTATION_CYSFLR,
-    PROD_FLARE_VAULT_CYSFLR,
     PROD_FLARE_RECEIPT_CYSFLR,
     PROD_FLARE_RECEIPT_IMPLEMENTATION_CYSFLR_CODEHASH,
-    PROD_FLARE_CYCLO_RECEIPT_CODEHASH_LATEST
-} from "src/lib/LibCycloProdDeployment.sol";
+    PROD_FLARE_CYCLO_RECEIPT_CODEHASH_LATEST,
+    PROD_FLARE_RECEIPT_CYWETH,
+    PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V1,
+    PROD_FLARE_CYCLO_RECEIPT_CODEHASH_V1
+} from "src/lib/LibCycloProdReceipt.sol";
 import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
+import {LibExtrospectERC1167Proxy} from "rain.extrospection/lib/LibExtrospectERC1167Proxy.sol";
 
 contract CycloReceiptProdTest is Test {
+    function checkProdCycloReceiptBytecode(
+        address proxy,
+        address expectedImplementation,
+        bytes32 expectedImplementationCodehash
+    ) internal view {
+        (bool isProxy, address implementation) = LibExtrospectERC1167Proxy.isERC1167Proxy(proxy.code);
+        assertTrue(isProxy);
+        assertEq(implementation, expectedImplementation);
+
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(expectedImplementation, expectedImplementationCodehash);
+    }
+
+    function checkProdCycloReceiptIsInitialized(address receipt) internal {
+        LibCycloTestProd.createSelectFork(vm);
+        vm.expectRevert("Initializable: contract is already initialized");
+        CycloReceipt(receipt).initialize("");
+    }
+
     function testProdCycloReceiptBytecode() external {
         CycloReceipt fresh = new CycloReceipt();
 
@@ -22,34 +44,22 @@ contract CycloReceiptProdTest is Test {
 
         LibCycloTestProd.createSelectFork(vm);
 
-        address proxy = PROD_FLARE_RECEIPT_CYSFLR;
-        bytes memory proxyCode = proxy.code;
-        address implementation;
-        assembly {
-            implementation := mload(add(proxyCode, 30))
-        }
-
-        assertEq(implementation.codehash, PROD_FLARE_RECEIPT_IMPLEMENTATION_CYSFLR_CODEHASH);
-        assertEq(implementation, PROD_FLARE_RECEIPT_IMPLEMENTATION_CYSFLR);
-
-        bytes memory expectedProxyCode =
-            abi.encodePacked(hex"363d3d373d3d3d363d73", implementation, hex"5af43d82803e903d91602b57fd5bf3");
-
-        assertEq(proxyCode, expectedProxyCode);
+        checkProdCycloReceiptBytecode(
+            PROD_FLARE_RECEIPT_CYSFLR,
+            PROD_FLARE_RECEIPT_IMPLEMENTATION_CYSFLR,
+            PROD_FLARE_RECEIPT_IMPLEMENTATION_CYSFLR_CODEHASH
+        );
+        checkProdCycloReceiptBytecode(
+            PROD_FLARE_RECEIPT_CYWETH, PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V1, PROD_FLARE_CYCLO_RECEIPT_CODEHASH_V1
+        );
     }
 
-    function testProdCycloReceiptManager() external {
-        LibCycloTestProd.createSelectFork(vm);
-
-        assertEq(CycloReceipt(PROD_FLARE_RECEIPT_CYSFLR).manager(), PROD_FLARE_VAULT_CYSFLR);
+    function testProdCycloReceiptIsInitializedCysFLR() external {
+        checkProdCycloReceiptIsInitialized(PROD_FLARE_RECEIPT_CYSFLR);
     }
 
-    function testProdCycloReceiptIsInitialized() external {
-        LibCycloTestProd.createSelectFork(vm);
-
-        CycloReceipt receipt = CycloReceipt(PROD_FLARE_RECEIPT_CYSFLR);
-        vm.expectRevert("Initializable: contract is already initialized");
-        receipt.initialize("");
+    function testProdCycloReceiptIsInitializedCYWETH() external {
+        checkProdCycloReceiptIsInitialized(PROD_FLARE_RECEIPT_CYWETH);
     }
 
     fallback() external payable {}

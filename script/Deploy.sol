@@ -24,10 +24,8 @@ import {
 } from "src/lib/LibCycloProdCloneFactory.sol";
 import {CycloVault, CycloVaultConfig} from "src/concrete/vault/CycloVault.sol";
 import {FLARE_STARGATE_WETH} from "src/lib/LibCycloProdAssets.sol";
-import {
-    PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1,
-    PROD_FLARE_CYCLO_RECEIPT_CODEHASH_LATEST
-} from "src/lib/LibCycloProdDeployment.sol";
+import {PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1} from "src/lib/LibCycloProdVault.sol";
+import {PROD_FLARE_CYCLO_RECEIPT_CODEHASH_LATEST} from "src/lib/LibCycloProdReceipt.sol";
 import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
 
 // 30 mins.

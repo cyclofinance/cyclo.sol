@@ -17,11 +17,11 @@ import {
     PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE
 } from "src/lib/LibCycloProdOracle.sol";
 import {
-    PROD_FLARE_RECEIPT_IMPLEMENTATION_CYSFLR,
     PROD_FLARE_VAULT_CYSFLR,
     PROD_FLARE_VAULT_IMPLEMENTATION_CYSFLR,
     PROD_FLARE_VAULT_IMPLEMENTATION_CYSFLR_CODEHASH
-} from "src/lib/LibCycloProdDeployment.sol";
+} from "src/lib/LibCycloProdVault.sol";
+import {PROD_FLARE_RECEIPT_IMPLEMENTATION_CYSFLR} from "src/lib/LibCycloProdReceipt.sol";
 
 contract ERC20PriceOracleReceiptVaultProdTest is Test {
     function testProdERC20PriceOracleReceiptVaultBytecode() external {
