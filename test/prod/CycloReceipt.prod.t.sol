@@ -9,12 +9,17 @@ import {
     PROD_FLARE_RECEIPT_IMPLEMENTATION_CYSFLR,
     PROD_FLARE_VAULT_CYSFLR,
     PROD_FLARE_RECEIPT_CYSFLR,
-    PROD_FLARE_RECEIPT_IMPLEMENTATION_CYSFLR_CODEHASH
+    PROD_FLARE_RECEIPT_IMPLEMENTATION_CYSFLR_CODEHASH,
+    PROD_FLARE_CYCLO_RECEIPT_CODEHASH_LATEST
 } from "src/lib/LibCycloProdDeployment.sol";
 import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
 
 contract CycloReceiptProdTest is Test {
     function testProdCycloReceiptBytecode() external {
+        CycloReceipt fresh = new CycloReceipt();
+
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(fresh), PROD_FLARE_CYCLO_RECEIPT_CODEHASH_LATEST);
+
         LibCycloTestProd.createSelectFork(vm);
 
         address proxy = PROD_FLARE_RECEIPT_CYSFLR;
