@@ -1,4 +1,4 @@
-CloneFactoryProdTest:testProdCloneFactoryBytecode() (gas: 10219)
+CloneFactoryProdTest:testProdCloneFactoryBytecode() (gas: 254052)
 CycloReceiptMetadataTest:testCycloReceiptName() (gas: 286572)
 CycloReceiptMetadataTest:testCycloReceiptSymbol() (gas: 286631)
 CycloReceiptMetadataTest:testCycloReceiptURI() (gas: 354089)

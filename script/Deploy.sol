@@ -21,10 +21,11 @@ import {SFLR_CONTRACT} from "rain.flare/lib/sflr/LibSceptreStakedFlare.sol";
 import {
     PROD_FLARE_CLONE_FACTORY_ADDRESS_LATEST,
     PROD_FLARE_CLONE_FACTORY_CODEHASH_LATEST
-} from "./lib/LibCycloProdCloneFactory.sol";
+} from "src/lib/LibCycloProdCloneFactory.sol";
 import {CycloVault, CycloVaultConfig} from "src/concrete/vault/CycloVault.sol";
 import {FLARE_STARGATE_WETH} from "src/lib/LibCycloProdAssets.sol";
 import {PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1} from "src/lib/LibCycloProdDeployment.sol";
+import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
 
 // 30 mins.
 uint256 constant DEFAULT_STALE_AFTER = 1800;
@@ -42,10 +43,8 @@ contract Deploy is Script {
         vm.startBroadcast(deploymentKey);
 
         ICloneableFactoryV2 cloneFactory = new CloneFactory();
-        console2.logBytes(abi.encodePacked(address(cloneFactory).codehash));
-        if (address(cloneFactory).codehash != PROD_FLARE_CLONE_FACTORY_CODEHASH_LATEST) {
-            revert("Factory codehash mismatch");
-        }
+
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(cloneFactory), PROD_FLARE_CLONE_FACTORY_CODEHASH_LATEST);
 
         vm.stopBroadcast();
     }
