@@ -33,7 +33,11 @@ import {
     PROD_FLARE_CYCLO_RECEIPT_CODEHASH_LATEST,
     PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_LATEST
 } from "src/lib/LibCycloProdReceipt.sol";
-import {PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE_CODEHASH} from "src/lib/LibCycloProdOracle.sol";
+import {
+    PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE_CODEHASH,
+    PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE,
+    PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE_CODEHASH
+} from "src/lib/LibCycloProdOracle.sol";
 import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
 
 // 30 mins.
@@ -120,7 +124,7 @@ contract Deploy is Script {
             FtsoV2LTSFeedOracleConfig({feedId: ETH_USD_FEED_ID, staleAfter: DEFAULT_STALE_AFTER})
         );
         LibCycloTestProd.checkCBORTrimmedBytecodeHash(
-            ftsoV2LTSFeedOracle, PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE_CODEHASH
+            address(payable(ftsoV2LTSFeedOracle)), PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE_CODEHASH
         );
         vm.stopBroadcast();
     }
@@ -131,7 +135,10 @@ contract Deploy is Script {
         ICloneableFactoryV2(PROD_FLARE_CLONE_FACTORY_ADDRESS_LATEST).clone(
             PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1,
             abi.encode(
-                CycloVaultConfig({priceOracle: PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE, asset: FLARE_STARGATE_WETH})
+                CycloVaultConfig({
+                    priceOracle: IPriceOracleV2(payable(PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE)),
+                    asset: FLARE_STARGATE_WETH
+                })
             )
         );
         vm.stopBroadcast();
