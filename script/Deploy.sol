@@ -26,6 +26,7 @@ import {CycloVault, CycloVaultConfig} from "src/concrete/vault/CycloVault.sol";
 import {FLARE_STARGATE_WETH} from "src/lib/LibCycloProdAssets.sol";
 import {PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1} from "src/lib/LibCycloProdVault.sol";
 import {PROD_FLARE_CYCLO_RECEIPT_CODEHASH_LATEST} from "src/lib/LibCycloProdReceipt.sol";
+import {PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE_CODEHASH} from "src/lib/LibCycloProdOracle.sol";
 import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
 
 // 30 mins.
@@ -68,11 +69,16 @@ contract Deploy is Script {
 
     function deployStakedFlrPriceVault(uint256 deploymentKey) internal {
         vm.startBroadcast(deploymentKey);
+
+        IPriceOracleV2 stakedFlrOracle = new SceptreStakedFlrOracle();
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(
+            address(stakedFlrOracle), PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE_CODEHASH
+        );
+
         IPriceOracleV2 ftsoV2LTSFeedOracle = new FtsoV2LTSFeedOracle(
             FtsoV2LTSFeedOracleConfig({feedId: FLR_USD_FEED_ID, staleAfter: DEFAULT_STALE_AFTER})
         );
 
-        IPriceOracleV2 stakedFlrOracle = new SceptreStakedFlrOracle();
         IPriceOracleV2 twoPriceOracle =
             new TwoPriceOracleV2(TwoPriceOracleConfigV2({base: ftsoV2LTSFeedOracle, quote: stakedFlrOracle}));
 

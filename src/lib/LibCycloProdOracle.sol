@@ -6,7 +6,7 @@ address constant PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE = 0x0D8F6a13a76a216ef9E9a4
 /// @dev Matches following code at deploy.
 /// SceptreStakedFlrOracle fresh = new SceptreStakedFlrOracle();
 bytes32 constant PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE_CODEHASH =
-    bytes32(0xa540caf937ff11518862c386712aea4f956d2a02af340deb4f0a54a9a7cbf241);
+    bytes32(0x88baf7bda4fb19c787270f66a6deb756d7a336e8e5f6ed737d592b20095b98db);
 
 address constant PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE = 0xA7A10eA8707886F98887C913233ad38d54f4796e;
 /// @dev Matches following code at deploy.
