@@ -51,16 +51,21 @@ contract Deploy is Script {
         vm.stopBroadcast();
     }
 
-    function deployImplementations(uint256 deploymentKey) internal {
+    function deployCycloReceiptImplementation(uint256 deploymentKey) internal {
         vm.startBroadcast(deploymentKey);
 
         CycloReceipt cycloReceipt = new CycloReceipt();
-
         LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(cycloReceipt), PROD_FLARE_CYCLO_RECEIPT_CODEHASH_LATEST);
+
+        vm.stopBroadcast();
+    }
+
+    function deployCycloVaultImplementation(uint256 deploymentKey) internal {
+        vm.startBroadcast(deploymentKey);
 
         ReceiptVaultConstructionConfig memory receiptVaultConstructionConfig = ReceiptVaultConstructionConfig({
             factory: ICloneableFactoryV2(PROD_FLARE_CLONE_FACTORY_ADDRESS_LATEST),
-            receiptImplementation: cycloReceipt
+            receiptImplementation: PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_LATEST
         });
         new CycloVault(receiptVaultConstructionConfig);
 
