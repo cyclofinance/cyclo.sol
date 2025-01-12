@@ -4,15 +4,8 @@ pragma solidity ^0.8.25;
 
 address constant PROD_FLARE_VAULT_IMPLEMENTATION_CYSFLR = 0x35ea13bBEfF8115fb63E4164237922E491dd21BC;
 
-/// @dev Matches following code at deploy.
-/// ERC20PriceOracleReceiptVault fresh = new ERC20PriceOracleReceiptVault(
-///     ReceiptVaultConstructionConfig({
-///         factory: ICloneableFactoryV2(PROD_CLONE_FACTORY_ADDRESS_V1),
-///         receiptImplementation: CycloReceipt(PROD_CYCLO_RECEIPT_IMPLEMENTATION_ADDRESS)
-///     })
-/// );
 bytes32 constant PROD_FLARE_VAULT_IMPLEMENTATION_CYSFLR_CODEHASH =
-    bytes32(0xfa0a43b059a0495e23517e71bbb526d66d11c4e10cbd591d791f02b4108fe2bf);
+    bytes32(0x1bebcf64366d676a30604e48b175eb49cf048ed211d3d96f73e47eb9ca00fb10);
 address constant PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1 = 0x1D35c1392EF799253e61DaA143d055E6b3F1f8eA;
 
 address constant PROD_FLARE_VAULT_CYSFLR = 0x19831cfB53A0dbeAD9866C43557C1D48DfF76567;

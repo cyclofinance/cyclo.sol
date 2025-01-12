@@ -6,6 +6,7 @@ import {Test} from "forge-std/Test.sol";
 
 import {
     PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE,
+    PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE,
     PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE_CODEHASH
 } from "src/lib/LibCycloProdOracle.sol";
 
@@ -20,8 +21,10 @@ contract FtsoV2LTSFeedOracleProdTest is Test {
         LibCycloTestProd.createSelectFork(vm);
 
         uint256 price = IPriceOracleV2(payable(PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE)).price();
+        assertEq(price, 0.0245759e18);
 
-        assertEq(price, 24791700000000000);
+        price = FtsoV2LTSFeedOracle(payable(PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE)).price();
+        assertEq(price, 3239.061e18);
     }
 
     function testProdCycloFtsoV2LTSFeedOracleBytecode() external {
