@@ -25,7 +25,10 @@ import {
 } from "src/lib/LibCycloProdCloneFactory.sol";
 import {CycloVault, CycloVaultConfig} from "src/concrete/vault/CycloVault.sol";
 import {FLARE_STARGATE_WETH} from "src/lib/LibCycloProdAssets.sol";
-import {PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1} from "src/lib/LibCycloProdVault.sol";
+import {
+    PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1,
+    PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1_CODEHASH
+} from "src/lib/LibCycloProdVault.sol";
 import {
     PROD_FLARE_CYCLO_RECEIPT_CODEHASH_LATEST,
     PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_LATEST
@@ -71,7 +74,10 @@ contract Deploy is Script {
             factory: ICloneableFactoryV2(PROD_FLARE_CLONE_FACTORY_ADDRESS_LATEST),
             receiptImplementation: IReceiptV2(PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_LATEST)
         });
-        new CycloVault(receiptVaultConstructionConfig);
+        CycloVault cycloVault = new CycloVault(receiptVaultConstructionConfig);
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(
+            address(cycloVault), PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1_CODEHASH
+        );
 
         vm.stopBroadcast();
     }
