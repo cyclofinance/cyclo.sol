@@ -132,7 +132,7 @@ contract Deploy is Script {
     function deployStargateWethPriceVault(uint256 deploymentKey) internal {
         vm.startBroadcast(deploymentKey);
 
-        ICloneableFactoryV2(PROD_FLARE_CLONE_FACTORY_ADDRESS_LATEST).clone(
+        address cyweth = ICloneableFactoryV2(PROD_FLARE_CLONE_FACTORY_ADDRESS_LATEST).clone(
             PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1,
             abi.encode(
                 CycloVaultConfig({
@@ -140,6 +140,10 @@ contract Deploy is Script {
                     asset: FLARE_STARGATE_WETH
                 })
             )
+        );
+
+        LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
+            cyweth, PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1, PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1_CODEHASH
         );
         vm.stopBroadcast();
     }
