@@ -33,7 +33,8 @@ import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
 uint256 constant DEFAULT_STALE_AFTER = 1800;
 
 bytes32 constant DEPLOYMENT_SUITE_FACTORY = keccak256("factory");
-bytes32 constant DEPLOYMENT_SUITE_IMPLEMENTATIONS = keccak256("implementations");
+bytes32 constant DEPLOYMENT_SUITE_CYCLO_RECEIPT_IMPLEMENTATION = keccak256("cyclo-receipt-implementation");
+bytes32 constant DEPLOYMENT_SUITE_CYCLO_VAULT_IMPLEMENTATION = keccak256("cyclo-vault-implementation");
 bytes32 constant DEPLOYMENT_SUITE_STAKED_FLR_PRICE_VAULT = keccak256("sceptre-staked-flare-price-vault");
 bytes32 constant DEPLOYMENT_SUITE_STARGATE_WETH_PRICE_VAULT = keccak256("stargate-weth-price-vault");
 
@@ -122,8 +123,10 @@ contract Deploy is Script {
 
         if (suite == DEPLOYMENT_SUITE_FACTORY) {
             deployFactory(deployerPrivateKey);
-        } else if (suite == DEPLOYMENT_SUITE_IMPLEMENTATIONS) {
-            deployImplementations(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_CYCLO_RECEIPT_IMPLEMENTATION) {
+            deployCycloReceiptImplementation(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_CYCLO_VAULT_IMPLEMENTATION) {
+            deployCycloVaultImplementation(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_STAKED_FLR_PRICE_VAULT) {
             deployStakedFlrPriceVault(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_STARGATE_WETH_PRICE_VAULT) {

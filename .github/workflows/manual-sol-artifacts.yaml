@@ -16,7 +16,8 @@ on:
         options:
           - sceptre-staked-flare-price-vault
           - stargate-weth-price-vault
-          - implementations
+          - cyclo-receipt-implementation
+          - cyclo-vault-implementation
           - factory
 
 jobs:
