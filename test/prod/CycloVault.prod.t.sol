@@ -25,11 +25,25 @@ import {
     PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1,
     PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1_CODEHASH
 } from "src/lib/LibCycloProdVault.sol";
-import {PROD_FLARE_RECEIPT_IMPLEMENTATION_CYSFLR} from "src/lib/LibCycloProdReceipt.sol";
-import {CycloVaultConfig} from "src/concrete/vault/CycloVault.sol";
+import {
+    PROD_FLARE_RECEIPT_IMPLEMENTATION_CYSFLR,
+    PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_LATEST
+} from "src/lib/LibCycloProdReceipt.sol";
+import {CycloVaultConfig, CycloVault} from "src/concrete/vault/CycloVault.sol";
+import {PROD_FLARE_CLONE_FACTORY_ADDRESS_LATEST} from "src/lib/LibCycloProdCloneFactory.sol";
+import {IReceiptV2} from "ethgild/abstract/ReceiptVault.sol";
 
-contract ERC20PriceOracleReceiptVaultProdTest is Test {
-    function testProdERC20PriceOracleReceiptVaultBytecode() external {
+contract CycloVaultProdTest is Test {
+    function testProdCycloVaultBytecode() external {
+        ReceiptVaultConstructionConfig memory receiptVaultConstructionConfig = ReceiptVaultConstructionConfig({
+            factory: ICloneableFactoryV2(PROD_FLARE_CLONE_FACTORY_ADDRESS_LATEST),
+            receiptImplementation: IReceiptV2(PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_LATEST)
+        });
+        CycloVault cycloVault = new CycloVault(receiptVaultConstructionConfig);
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(
+            address(cycloVault), PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1_CODEHASH
+        );
+
         LibCycloTestProd.createSelectFork(vm);
 
         LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
