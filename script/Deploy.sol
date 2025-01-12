@@ -8,7 +8,8 @@ import {
     ERC20PriceOracleReceiptVault,
     ERC20PriceOracleVaultConfig,
     ReceiptVaultConstructionConfig,
-    VaultConfig
+    VaultConfig,
+    IReceiptV2
 } from "ethgild/concrete/vault/ERC20PriceOracleReceiptVault.sol";
 import {CloneFactory} from "rain.factory/concrete/CloneFactory.sol";
 import {ICloneableFactoryV2} from "rain.factory/interface/ICloneableFactoryV2.sol";
@@ -25,7 +26,10 @@ import {
 import {CycloVault, CycloVaultConfig} from "src/concrete/vault/CycloVault.sol";
 import {FLARE_STARGATE_WETH} from "src/lib/LibCycloProdAssets.sol";
 import {PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1} from "src/lib/LibCycloProdVault.sol";
-import {PROD_FLARE_CYCLO_RECEIPT_CODEHASH_LATEST} from "src/lib/LibCycloProdReceipt.sol";
+import {
+    PROD_FLARE_CYCLO_RECEIPT_CODEHASH_LATEST,
+    PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_LATEST
+} from "src/lib/LibCycloProdReceipt.sol";
 import {PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE_CODEHASH} from "src/lib/LibCycloProdOracle.sol";
 import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
 
@@ -66,7 +70,7 @@ contract Deploy is Script {
 
         ReceiptVaultConstructionConfig memory receiptVaultConstructionConfig = ReceiptVaultConstructionConfig({
             factory: ICloneableFactoryV2(PROD_FLARE_CLONE_FACTORY_ADDRESS_LATEST),
-            receiptImplementation: PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_LATEST
+            receiptImplementation: IReceiptV2(PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_LATEST)
         });
         new CycloVault(receiptVaultConstructionConfig);
 
