@@ -43,6 +43,7 @@ bytes32 constant DEPLOYMENT_SUITE_FACTORY = keccak256("factory");
 bytes32 constant DEPLOYMENT_SUITE_CYCLO_RECEIPT_IMPLEMENTATION = keccak256("cyclo-receipt-implementation");
 bytes32 constant DEPLOYMENT_SUITE_CYCLO_VAULT_IMPLEMENTATION = keccak256("cyclo-vault-implementation");
 bytes32 constant DEPLOYMENT_SUITE_STAKED_FLR_PRICE_VAULT = keccak256("sceptre-staked-flare-price-vault");
+bytes32 constant DEPLOYMENT_SUITE_FTSO_V2_LTS_FEED_ORACLE_ETH_USD = keccak256("ftso-v2-lts-feed-oracle-eth-usd");
 bytes32 constant DEPLOYMENT_SUITE_STARGATE_WETH_PRICE_VAULT = keccak256("stargate-weth-price-vault");
 
 /// @title Deploy
@@ -113,15 +114,25 @@ contract Deploy is Script {
         vm.stopBroadcast();
     }
 
-    function deployStargateWethPriceVault(uint256 deploymentKey) internal {
+    function deployFTSOV2LTSFeedOracleETHUSD(uint256 deploymentKey) internal {
         vm.startBroadcast(deploymentKey);
         IPriceOracleV2 ftsoV2LTSFeedOracle = new FtsoV2LTSFeedOracle(
             FtsoV2LTSFeedOracleConfig({feedId: ETH_USD_FEED_ID, staleAfter: DEFAULT_STALE_AFTER})
         );
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(
+            ftsoV2LTSFeedOracle, PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE_CODEHASH
+        );
+        vm.stopBroadcast();
+    }
+
+    function deployStargateWethPriceVault(uint256 deploymentKey) internal {
+        vm.startBroadcast(deploymentKey);
 
         ICloneableFactoryV2(PROD_FLARE_CLONE_FACTORY_ADDRESS_LATEST).clone(
             PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1,
-            abi.encode(CycloVaultConfig({priceOracle: ftsoV2LTSFeedOracle, asset: FLARE_STARGATE_WETH}))
+            abi.encode(
+                CycloVaultConfig({priceOracle: PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE, asset: FLARE_STARGATE_WETH})
+            )
         );
         vm.stopBroadcast();
     }
@@ -138,6 +149,8 @@ contract Deploy is Script {
             deployCycloVaultImplementation(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_STAKED_FLR_PRICE_VAULT) {
             deployStakedFlrPriceVault(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_FTSO_V2_LTS_FEED_ORACLE_ETH_USD) {
+            deployFTSOV2LTSFeedOracleETHUSD(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_STARGATE_WETH_PRICE_VAULT) {
             deployStargateWethPriceVault(deployerPrivateKey);
         } else {

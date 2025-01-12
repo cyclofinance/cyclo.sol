@@ -7,7 +7,7 @@ import {LibExtrospectBytecode} from "rain.extrospection/lib/LibExtrospectBytecod
 import {LibExtrospectERC1167Proxy} from "rain.extrospection/lib/LibExtrospectERC1167Proxy.sol";
 import {ICloneableV2} from "rain.factory/interface/ICloneableV2.sol";
 
-uint256 constant PROD_TEST_BLOCK_NUMBER = 35959937;
+uint256 constant PROD_TEST_BLOCK_NUMBER = 35978536;
 
 string constant PROD_CYSFLR_RECEIPT_SYMBOL = "cysFLR RCPT";
 string constant PROD_CYSFLR_RECEIPT_NAME = "cysFLR Receipt";

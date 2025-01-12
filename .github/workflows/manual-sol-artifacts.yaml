@@ -15,6 +15,7 @@ on:
         type: choice
         options:
           - sceptre-staked-flare-price-vault
+          - ftso-v2-lts-feed-oracle-eth-usd
           - stargate-weth-price-vault
           - cyclo-receipt-implementation
           - cyclo-vault-implementation
