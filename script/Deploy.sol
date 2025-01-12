@@ -50,7 +50,6 @@ contract Deploy is Script {
         vm.startBroadcast(deploymentKey);
 
         ICloneableFactoryV2 cloneFactory = new CloneFactory();
-
         LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(cloneFactory), PROD_FLARE_CLONE_FACTORY_CODEHASH_LATEST);
 
         vm.stopBroadcast();
