@@ -6,8 +6,6 @@ pragma solidity ^0.8.25;
 uint256 constant PROD_ORACLE_DEFAULT_STALE_AFTER = 30 minutes;
 
 address constant PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE = 0x0D8F6a13a76a216ef9E9a4bc388306E612AC2728;
-/// @dev Matches following code at deploy.
-/// SceptreStakedFlrOracle fresh = new SceptreStakedFlrOracle();
 bytes32 constant PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE_CODEHASH =
     bytes32(0x88baf7bda4fb19c787270f66a6deb756d7a336e8e5f6ed737d592b20095b98db);
 

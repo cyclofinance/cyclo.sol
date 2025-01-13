@@ -23,6 +23,10 @@ contract SceptreStakedFlrOracleProdTest is Test {
     }
 
     function testProdCycloSceptreStakedFlrOracleBytecode() external {
+        SceptreStakedFlrOracle fresh = new SceptreStakedFlrOracle();
+
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(fresh), PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE_CODEHASH);
+
         LibCycloTestProd.createSelectFork(vm);
 
         LibCycloTestProd.checkCBORTrimmedBytecodeHash(
