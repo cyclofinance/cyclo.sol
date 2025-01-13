@@ -59,43 +59,40 @@ contract CycloVaultProdTest is Test {
         );
     }
 
-    function testProdERC20PriceOracleReceiptVaultPriceOracle() external {
+    function testProdCycloVaultPriceOracle() external {
         LibCycloTestProd.createSelectFork(vm);
 
         assertEq(
-            address(ERC20PriceOracleReceiptVault(payable(PROD_FLARE_VAULT_CYSFLR)).priceOracle()),
+            address(CycloVault(payable(PROD_FLARE_VAULT_CYSFLR)).priceOracle()),
             PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2
         );
         assertEq(
-            address(ERC20PriceOracleReceiptVault(payable(PROD_FLARE_VAULT_CYWETH)).priceOracle()),
+            address(CycloVault(payable(PROD_FLARE_VAULT_CYWETH)).priceOracle()),
             PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE
         );
     }
 
-    function testProdERC20PriceOracleReceiptVaultAsset() external {
+    function testProdCycloVaultAsset() external {
         LibCycloTestProd.createSelectFork(vm);
 
+        assertEq(address(CycloVault(payable(PROD_FLARE_VAULT_CYSFLR)).asset()), address(SFLR_CONTRACT));
         assertEq(
-            address(ERC20PriceOracleReceiptVault(payable(PROD_FLARE_VAULT_CYSFLR)).asset()), address(SFLR_CONTRACT)
-        );
-        assertEq(
-            address(ERC20PriceOracleReceiptVault(payable(PROD_FLARE_VAULT_CYWETH)).asset()),
-            0x1502FA4be69d526124D453619276FacCab275d3D
+            address(CycloVault(payable(PROD_FLARE_VAULT_CYWETH)).asset()), 0x1502FA4be69d526124D453619276FacCab275d3D
         );
     }
 
     function testProdCycloVaultName() external {
         LibCycloTestProd.createSelectFork(vm);
 
-        assertEq(ERC20PriceOracleReceiptVault(payable(PROD_FLARE_VAULT_CYSFLR)).name(), "cysFLR");
-        assertEq(ERC20PriceOracleReceiptVault(payable(PROD_FLARE_VAULT_CYWETH)).name(), "Cyclo cyWETH");
+        assertEq(CycloVault(payable(PROD_FLARE_VAULT_CYSFLR)).name(), "cysFLR");
+        assertEq(CycloVault(payable(PROD_FLARE_VAULT_CYWETH)).name(), "Cyclo cyWETH");
     }
 
     function testProdCycloVaultSymbol() external {
         LibCycloTestProd.createSelectFork(vm);
 
-        assertEq(ERC20PriceOracleReceiptVault(payable(PROD_FLARE_VAULT_CYSFLR)).symbol(), "cysFLR");
-        assertEq(ERC20PriceOracleReceiptVault(payable(PROD_FLARE_VAULT_CYWETH)).symbol(), "cyWETH");
+        assertEq(CycloVault(payable(PROD_FLARE_VAULT_CYSFLR)).symbol(), "cysFLR");
+        assertEq(CycloVault(payable(PROD_FLARE_VAULT_CYWETH)).symbol(), "cyWETH");
     }
 
     function testProdCycloVaultcysFLRIsInitialized() external {
