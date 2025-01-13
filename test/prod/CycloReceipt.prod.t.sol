@@ -10,7 +10,6 @@ import {
     PROD_FLARE_RECEIPT_IMPLEMENTATION_CYSFLR,
     PROD_FLARE_RECEIPT_CYSFLR,
     PROD_FLARE_RECEIPT_IMPLEMENTATION_CYSFLR_CODEHASH,
-    PROD_FLARE_CYCLO_RECEIPT_CODEHASH_LATEST,
     PROD_FLARE_RECEIPT_CYWETH,
     PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V1,
     PROD_FLARE_CYCLO_RECEIPT_CODEHASH_V1
@@ -21,7 +20,7 @@ contract CycloReceiptProdTest is Test {
     function testProdCycloReceiptBytecode() external {
         CycloReceipt fresh = new CycloReceipt();
 
-        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(fresh), PROD_FLARE_CYCLO_RECEIPT_CODEHASH_LATEST);
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(fresh), PROD_FLARE_CYCLO_RECEIPT_CODEHASH_V1);
 
         LibCycloTestProd.createSelectFork(vm);
 

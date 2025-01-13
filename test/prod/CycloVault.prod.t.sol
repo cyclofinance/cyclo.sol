@@ -27,17 +27,17 @@ import {
 } from "src/lib/LibCycloProdVault.sol";
 import {
     PROD_FLARE_RECEIPT_IMPLEMENTATION_CYSFLR,
-    PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_LATEST
+    PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V1
 } from "src/lib/LibCycloProdReceipt.sol";
 import {CycloVaultConfig, CycloVault} from "src/concrete/vault/CycloVault.sol";
-import {PROD_FLARE_CLONE_FACTORY_ADDRESS_LATEST} from "src/lib/LibCycloProdCloneFactory.sol";
+import {PROD_FLARE_CLONE_FACTORY_ADDRESS_V1} from "src/lib/LibCycloProdCloneFactory.sol";
 import {IReceiptV2} from "ethgild/abstract/ReceiptVault.sol";
 
 contract CycloVaultProdTest is Test {
     function testProdCycloVaultBytecode() external {
         ReceiptVaultConstructionConfig memory receiptVaultConstructionConfig = ReceiptVaultConstructionConfig({
-            factory: ICloneableFactoryV2(PROD_FLARE_CLONE_FACTORY_ADDRESS_LATEST),
-            receiptImplementation: IReceiptV2(PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_LATEST)
+            factory: ICloneableFactoryV2(PROD_FLARE_CLONE_FACTORY_ADDRESS_V1),
+            receiptImplementation: IReceiptV2(PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V1)
         });
         CycloVault cycloVault = new CycloVault(receiptVaultConstructionConfig);
         LibCycloTestProd.checkCBORTrimmedBytecodeHash(

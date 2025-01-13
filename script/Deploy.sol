@@ -20,23 +20,27 @@ import {FLR_USD_FEED_ID, ETH_USD_FEED_ID} from "rain.flare/lib/lts/LibFtsoV2LTS.
 import {IPriceOracleV2} from "ethgild/abstract/PriceOracleV2.sol";
 import {SFLR_CONTRACT} from "rain.flare/lib/sflr/LibSceptreStakedFlare.sol";
 import {
-    PROD_FLARE_CLONE_FACTORY_ADDRESS_LATEST,
-    PROD_FLARE_CLONE_FACTORY_CODEHASH_LATEST
+    PROD_FLARE_CLONE_FACTORY_ADDRESS_V1,
+    PROD_FLARE_CLONE_FACTORY_CODEHASH_V1
 } from "src/lib/LibCycloProdCloneFactory.sol";
 import {CycloVault, CycloVaultConfig} from "src/concrete/vault/CycloVault.sol";
 import {FLARE_STARGATE_WETH} from "src/lib/LibCycloProdAssets.sol";
 import {
     PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1,
-    PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1_CODEHASH
+    PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1_CODEHASH,
+    PROD_FLARE_VAULT_IMPLEMENTATION_CYSFLR
 } from "src/lib/LibCycloProdVault.sol";
 import {
-    PROD_FLARE_CYCLO_RECEIPT_CODEHASH_LATEST,
-    PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_LATEST
+    PROD_FLARE_CYCLO_RECEIPT_CODEHASH_V1,
+    PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V1
 } from "src/lib/LibCycloProdReceipt.sol";
 import {
     PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE_CODEHASH,
     PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE,
     PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE_CODEHASH,
+    PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE_CODEHASH,
+    PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2_CODEHASH,
+    PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2,
     PROD_ORACLE_DEFAULT_STALE_AFTER
 } from "src/lib/LibCycloProdOracle.sol";
 import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
@@ -44,6 +48,7 @@ import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
 bytes32 constant DEPLOYMENT_SUITE_FACTORY = keccak256("factory");
 bytes32 constant DEPLOYMENT_SUITE_CYCLO_RECEIPT_IMPLEMENTATION = keccak256("cyclo-receipt-implementation");
 bytes32 constant DEPLOYMENT_SUITE_CYCLO_VAULT_IMPLEMENTATION = keccak256("cyclo-vault-implementation");
+bytes32 constant DEPLOYMENT_SUITE_STAKED_FLR_ORACLE = keccak256("sceptre-staked-flare-oracle");
 bytes32 constant DEPLOYMENT_SUITE_STAKED_FLR_PRICE_VAULT = keccak256("sceptre-staked-flare-price-vault");
 bytes32 constant DEPLOYMENT_SUITE_FTSO_V2_LTS_FEED_ORACLE_ETH_USD = keccak256("ftso-v2-lts-feed-oracle-eth-usd");
 bytes32 constant DEPLOYMENT_SUITE_STARGATE_WETH_PRICE_VAULT = keccak256("stargate-weth-price-vault");
@@ -56,7 +61,7 @@ contract Deploy is Script {
         vm.startBroadcast(deploymentKey);
 
         ICloneableFactoryV2 cloneFactory = new CloneFactory();
-        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(cloneFactory), PROD_FLARE_CLONE_FACTORY_CODEHASH_LATEST);
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(cloneFactory), PROD_FLARE_CLONE_FACTORY_CODEHASH_V1);
 
         vm.stopBroadcast();
     }
@@ -65,7 +70,7 @@ contract Deploy is Script {
         vm.startBroadcast(deploymentKey);
 
         CycloReceipt cycloReceipt = new CycloReceipt();
-        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(cycloReceipt), PROD_FLARE_CYCLO_RECEIPT_CODEHASH_LATEST);
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(cycloReceipt), PROD_FLARE_CYCLO_RECEIPT_CODEHASH_V1);
 
         vm.stopBroadcast();
     }
@@ -74,8 +79,8 @@ contract Deploy is Script {
         vm.startBroadcast(deploymentKey);
 
         ReceiptVaultConstructionConfig memory receiptVaultConstructionConfig = ReceiptVaultConstructionConfig({
-            factory: ICloneableFactoryV2(PROD_FLARE_CLONE_FACTORY_ADDRESS_LATEST),
-            receiptImplementation: IReceiptV2(PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_LATEST)
+            factory: ICloneableFactoryV2(PROD_FLARE_CLONE_FACTORY_ADDRESS_V1),
+            receiptImplementation: IReceiptV2(PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V1)
         });
         CycloVault cycloVault = new CycloVault(receiptVaultConstructionConfig);
         LibCycloTestProd.checkCBORTrimmedBytecodeHash(
@@ -85,7 +90,7 @@ contract Deploy is Script {
         vm.stopBroadcast();
     }
 
-    function deployStakedFlrPriceVault(uint256 deploymentKey) internal {
+    function deployStakedFlrOracles(uint256 deploymentKey) internal {
         vm.startBroadcast(deploymentKey);
 
         IPriceOracleV2 stakedFlrOracle = new SceptreStakedFlrOracle();
@@ -96,20 +101,28 @@ contract Deploy is Script {
         IPriceOracleV2 ftsoV2LTSFeedOracle = new FtsoV2LTSFeedOracle(
             FtsoV2LTSFeedOracleConfig({feedId: FLR_USD_FEED_ID, staleAfter: PROD_ORACLE_DEFAULT_STALE_AFTER})
         );
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(
+            address(ftsoV2LTSFeedOracle), PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE_CODEHASH
+        );
 
         IPriceOracleV2 twoPriceOracle =
             new TwoPriceOracleV2(TwoPriceOracleConfigV2({base: ftsoV2LTSFeedOracle, quote: stakedFlrOracle}));
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(
+            address(twoPriceOracle), PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2_CODEHASH
+        );
 
-        ICloneableFactoryV2(vm.envAddress("CLONE_FACTORY")).clone(
-            vm.envAddress("ERC20_PRICE_ORACLE_VAULT_IMPLEMENTATION"),
+        vm.stopBroadcast();
+    }
+
+    function deployStakedFlrPriceVault(uint256 deploymentKey) internal {
+        vm.startBroadcast(deploymentKey);
+
+        ICloneableFactoryV2(PROD_FLARE_CLONE_FACTORY_ADDRESS_V1).clone(
+            PROD_FLARE_VAULT_IMPLEMENTATION_CYSFLR,
             abi.encode(
                 ERC20PriceOracleVaultConfig({
-                    priceOracle: twoPriceOracle,
-                    vaultConfig: VaultConfig({
-                        asset: address(SFLR_CONTRACT),
-                        name: vm.envString("RECEIPT_VAULT_NAME"),
-                        symbol: vm.envString("RECEIPT_VAULT_SYMBOL")
-                    })
+                    priceOracle: IPriceOracleV2(payable(PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2)),
+                    vaultConfig: VaultConfig({asset: address(SFLR_CONTRACT), name: "cysFLR", symbol: "cysFLR"})
                 })
             )
         );
@@ -130,7 +143,7 @@ contract Deploy is Script {
     function deployStargateWethPriceVault(uint256 deploymentKey) internal {
         vm.startBroadcast(deploymentKey);
 
-        address cyweth = ICloneableFactoryV2(PROD_FLARE_CLONE_FACTORY_ADDRESS_LATEST).clone(
+        address cyweth = ICloneableFactoryV2(PROD_FLARE_CLONE_FACTORY_ADDRESS_V1).clone(
             PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1,
             abi.encode(
                 CycloVaultConfig({
@@ -156,6 +169,8 @@ contract Deploy is Script {
             deployCycloReceiptImplementation(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_CYCLO_VAULT_IMPLEMENTATION) {
             deployCycloVaultImplementation(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_STAKED_FLR_ORACLE) {
+            deployStakedFlrOracles(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_STAKED_FLR_PRICE_VAULT) {
             deployStakedFlrPriceVault(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_FTSO_V2_LTS_FEED_ORACLE_ETH_USD) {

@@ -8,7 +8,8 @@ import {
     PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE,
     PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE,
     PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2,
-    PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2_CODEHASH
+    PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2_CODEHASH,
+    PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE
 } from "src/lib/LibCycloProdOracle.sol";
 
 import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
@@ -28,8 +29,18 @@ contract TwoPriceOracleV2ProdTest is Test {
     function testProdCycloTwoPriceOracleV2Bytecode() external {
         LibCycloTestProd.createSelectFork(vm);
 
-        assertEq(
-            PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2.codehash, PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2_CODEHASH
+        TwoPriceOracleV2 fresh = new TwoPriceOracleV2(
+            TwoPriceOracleConfigV2({
+                base: IPriceOracleV2(payable(PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE)),
+                quote: IPriceOracleV2(payable(PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE))
+            })
+        );
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(
+            address(fresh), PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2_CODEHASH
+        );
+
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(
+            PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2, PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2_CODEHASH
         );
     }
 
