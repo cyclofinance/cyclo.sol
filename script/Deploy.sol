@@ -41,14 +41,17 @@ import {
     PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE_CODEHASH,
     PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2_CODEHASH,
     PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2,
-    PROD_ORACLE_DEFAULT_STALE_AFTER
+    PROD_ORACLE_DEFAULT_STALE_AFTER,
+    PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE,
+    PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE
 } from "src/lib/LibCycloProdOracle.sol";
 import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
 
 bytes32 constant DEPLOYMENT_SUITE_FACTORY = keccak256("factory");
 bytes32 constant DEPLOYMENT_SUITE_CYCLO_RECEIPT_IMPLEMENTATION = keccak256("cyclo-receipt-implementation");
 bytes32 constant DEPLOYMENT_SUITE_CYCLO_VAULT_IMPLEMENTATION = keccak256("cyclo-vault-implementation");
-bytes32 constant DEPLOYMENT_SUITE_STAKED_FLR_ORACLE = keccak256("sceptre-staked-flare-oracle");
+bytes32 constant DEPLOYMENT_SUITE_STAKED_FLR_ORACLE_1 = keccak256("sceptre-staked-flare-oracle-1");
+bytes32 constant DEPLOYMENT_SUITE_STAKED_FLR_ORACLE_2 = keccak256("sceptre-staked-flare-oracle-2");
 bytes32 constant DEPLOYMENT_SUITE_STAKED_FLR_PRICE_VAULT = keccak256("sceptre-staked-flare-price-vault");
 bytes32 constant DEPLOYMENT_SUITE_FTSO_V2_LTS_FEED_ORACLE_ETH_USD = keccak256("ftso-v2-lts-feed-oracle-eth-usd");
 bytes32 constant DEPLOYMENT_SUITE_STARGATE_WETH_PRICE_VAULT = keccak256("stargate-weth-price-vault");
@@ -90,7 +93,7 @@ contract Deploy is Script {
         vm.stopBroadcast();
     }
 
-    function deployStakedFlrOracles(uint256 deploymentKey) internal {
+    function deployStakedFlrOracles1(uint256 deploymentKey) internal {
         vm.startBroadcast(deploymentKey);
 
         IPriceOracleV2 stakedFlrOracle = new SceptreStakedFlrOracle();
@@ -105,8 +108,18 @@ contract Deploy is Script {
             address(ftsoV2LTSFeedOracle), PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE_CODEHASH
         );
 
-        IPriceOracleV2 twoPriceOracle =
-            new TwoPriceOracleV2(TwoPriceOracleConfigV2({base: ftsoV2LTSFeedOracle, quote: stakedFlrOracle}));
+        vm.stopBroadcast();
+    }
+
+    function deployStakedFlrOracles2(uint256 deploymentKey) internal {
+        vm.startBroadcast(deploymentKey);
+
+        IPriceOracleV2 twoPriceOracle = new TwoPriceOracleV2(
+            TwoPriceOracleConfigV2({
+                base: IPriceOracleV2(payable(PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE)),
+                quote: IPriceOracleV2(payable(PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE))
+            })
+        );
         LibCycloTestProd.checkCBORTrimmedBytecodeHash(
             address(twoPriceOracle), PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2_CODEHASH
         );
@@ -169,8 +182,10 @@ contract Deploy is Script {
             deployCycloReceiptImplementation(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_CYCLO_VAULT_IMPLEMENTATION) {
             deployCycloVaultImplementation(deployerPrivateKey);
-        } else if (suite == DEPLOYMENT_SUITE_STAKED_FLR_ORACLE) {
-            deployStakedFlrOracles(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_STAKED_FLR_ORACLE_1) {
+            deployStakedFlrOracles1(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_STAKED_FLR_ORACLE_2) {
+            deployStakedFlrOracles2(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_STAKED_FLR_PRICE_VAULT) {
             deployStakedFlrPriceVault(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_FTSO_V2_LTS_FEED_ORACLE_ETH_USD) {

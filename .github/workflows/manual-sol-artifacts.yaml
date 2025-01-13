@@ -14,7 +14,8 @@ on:
         required: true
         type: choice
         options:
-          - sceptre-staked-flare-oracle
+          - sceptre-staked-flare-oracle-1
+          - sceptre-staked-flare-oracle-2
           - sceptre-staked-flare-price-vault
           - ftso-v2-lts-feed-oracle-eth-usd
           - stargate-weth-price-vault
