@@ -5,39 +5,43 @@ pragma solidity =0.8.25;
 import {Test} from "forge-std/Test.sol";
 
 import {CycloReceipt} from "src/concrete/receipt/CycloReceipt.sol";
+import {PROD_FLARE_VAULT_CYSFLR} from "src/lib/LibCycloProdVault.sol";
 import {
-    LibCycloProd,
-    PROD_CYCLO_RECEIPT_ADDRESS,
-    PROD_CYCLO_VAULT_ADDRESS,
-    PROD_CYCLO_RECEIPT_IMPLEMENTATION_ADDRESS
-} from "test/lib/LibCycloProd.sol";
+    PROD_FLARE_RECEIPT_IMPLEMENTATION_CYSFLR,
+    PROD_FLARE_RECEIPT_CYSFLR,
+    PROD_FLARE_RECEIPT_IMPLEMENTATION_CYSFLR_CODEHASH,
+    PROD_FLARE_RECEIPT_CYWETH,
+    PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V1,
+    PROD_FLARE_CYCLO_RECEIPT_CODEHASH_V1
+} from "src/lib/LibCycloProdReceipt.sol";
+import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
 
 contract CycloReceiptProdTest is Test {
     function testProdCycloReceiptBytecode() external {
-        LibCycloProd.createSelectFork(vm);
-
         CycloReceipt fresh = new CycloReceipt();
 
-        address proxy = PROD_CYCLO_RECEIPT_ADDRESS;
-        bytes memory proxyCode = proxy.code;
-        address implementation;
-        assembly {
-            implementation := mload(add(proxyCode, 30))
-        }
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(fresh), PROD_FLARE_CYCLO_RECEIPT_CODEHASH_V1);
 
-        assertEq(implementation.code, address(fresh).code);
-        assertEq(implementation, PROD_CYCLO_RECEIPT_IMPLEMENTATION_ADDRESS);
+        LibCycloTestProd.createSelectFork(vm);
 
-        bytes memory expectedProxyCode =
-            abi.encodePacked(hex"363d3d373d3d3d363d73", implementation, hex"5af43d82803e903d91602b57fd5bf3");
-
-        assertEq(proxyCode, expectedProxyCode);
+        LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
+            PROD_FLARE_RECEIPT_CYSFLR,
+            PROD_FLARE_RECEIPT_IMPLEMENTATION_CYSFLR,
+            PROD_FLARE_RECEIPT_IMPLEMENTATION_CYSFLR_CODEHASH
+        );
+        LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
+            PROD_FLARE_RECEIPT_CYWETH, PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V1, PROD_FLARE_CYCLO_RECEIPT_CODEHASH_V1
+        );
     }
 
-    function testProdCycloReceiptManager() external {
-        LibCycloProd.createSelectFork(vm);
+    function testProdCycloReceiptIsInitializedCysFLR() external {
+        LibCycloTestProd.createSelectFork(vm);
+        LibCycloTestProd.checkIsInitialized(vm, PROD_FLARE_RECEIPT_CYSFLR);
+    }
 
-        assertEq(CycloReceipt(PROD_CYCLO_RECEIPT_ADDRESS).manager(), PROD_CYCLO_VAULT_ADDRESS);
+    function testProdCycloReceiptIsInitializedCYWETH() external {
+        LibCycloTestProd.createSelectFork(vm);
+        LibCycloTestProd.checkIsInitialized(vm, PROD_FLARE_RECEIPT_CYWETH);
     }
 
     fallback() external payable {}

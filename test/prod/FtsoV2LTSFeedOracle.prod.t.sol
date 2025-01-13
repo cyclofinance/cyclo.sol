@@ -4,28 +4,54 @@ pragma solidity =0.8.25;
 
 import {Test} from "forge-std/Test.sol";
 
-import {LibCycloProd, PROD_FTSO_V2_LTS_FEED_ORACLE_ADDRESS} from "test/lib/LibCycloProd.sol";
+import {
+    PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE,
+    PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE,
+    PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE_CODEHASH,
+    PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE_CODEHASH,
+    PROD_ORACLE_DEFAULT_STALE_AFTER
+} from "src/lib/LibCycloProdOracle.sol";
+
+import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
 
 import {IPriceOracleV2} from "ethgild/interface/IPriceOracleV2.sol";
 import {FtsoV2LTSFeedOracle, FtsoV2LTSFeedOracleConfig} from "ethgild/concrete/oracle/FtsoV2LTSFeedOracle.sol";
-import {FLR_USD_FEED_ID} from "rain.flare/lib/lts/LibFtsoV2LTS.sol";
+import {FLR_USD_FEED_ID, ETH_USD_FEED_ID} from "rain.flare/lib/lts/LibFtsoV2LTS.sol";
 
 contract FtsoV2LTSFeedOracleProdTest is Test {
     function testProdCycloFtsoV2LTSFeedOraclePrice() external {
-        LibCycloProd.createSelectFork(vm);
+        LibCycloTestProd.createSelectFork(vm);
 
-        uint256 price = IPriceOracleV2(payable(PROD_FTSO_V2_LTS_FEED_ORACLE_ADDRESS)).price();
+        uint256 price = IPriceOracleV2(payable(PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE)).price();
+        assertEq(price, 0.0243876e18);
 
-        assertEq(price, 29396200000000000);
+        price = FtsoV2LTSFeedOracle(payable(PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE)).price();
+        assertEq(price, 3280.12e18);
     }
 
-    function testProdCycleoFtsoV2LTSFeedOracleBytecode() external {
-        LibCycloProd.createSelectFork(vm);
+    function testProdCycloFtsoV2LTSFeedOracleBytecode() external {
+        FtsoV2LTSFeedOracle flrusd = new FtsoV2LTSFeedOracle(
+            FtsoV2LTSFeedOracleConfig({feedId: FLR_USD_FEED_ID, staleAfter: PROD_ORACLE_DEFAULT_STALE_AFTER})
+        );
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(
+            address(flrusd), PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE_CODEHASH
+        );
 
-        FtsoV2LTSFeedOracle fresh =
-            new FtsoV2LTSFeedOracle(FtsoV2LTSFeedOracleConfig({feedId: FLR_USD_FEED_ID, staleAfter: 30 minutes}));
+        FtsoV2LTSFeedOracle ethusd = new FtsoV2LTSFeedOracle(
+            FtsoV2LTSFeedOracleConfig({feedId: ETH_USD_FEED_ID, staleAfter: PROD_ORACLE_DEFAULT_STALE_AFTER})
+        );
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(
+            address(ethusd), PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE_CODEHASH
+        );
 
-        assertEq(PROD_FTSO_V2_LTS_FEED_ORACLE_ADDRESS.code, address(fresh).code);
+        LibCycloTestProd.createSelectFork(vm);
+
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(
+            PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE, PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE_CODEHASH
+        );
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(
+            PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE, PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE_CODEHASH
+        );
     }
 
     fallback() external payable {}

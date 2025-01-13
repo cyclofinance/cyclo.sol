@@ -6,14 +6,22 @@ import {Test} from "forge-std/Test.sol";
 
 import {CloneFactory} from "rain.factory/concrete/CloneFactory.sol";
 
-import {LibCycloProd, PROD_CLONE_FACTORY_ADDRESS} from "test/lib/LibCycloProd.sol";
+import {
+    PROD_FLARE_CLONE_FACTORY_ADDRESS_V1,
+    PROD_FLARE_CLONE_FACTORY_CODEHASH_V1
+} from "src/lib/LibCycloProdCloneFactory.sol";
+import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
 
 contract CloneFactoryProdTest is Test {
     function testProdCloneFactoryBytecode() external {
-        LibCycloProd.createSelectFork(vm);
-
         CloneFactory fresh = new CloneFactory();
 
-        assertEq(address(fresh).code, PROD_CLONE_FACTORY_ADDRESS.code);
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(fresh), PROD_FLARE_CLONE_FACTORY_CODEHASH_V1);
+
+        LibCycloTestProd.createSelectFork(vm);
+
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(
+            PROD_FLARE_CLONE_FACTORY_ADDRESS_V1, PROD_FLARE_CLONE_FACTORY_CODEHASH_V1
+        );
     }
 }

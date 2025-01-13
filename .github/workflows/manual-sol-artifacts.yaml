@@ -14,18 +14,14 @@ on:
         required: true
         type: choice
         options:
+          - sceptre-staked-flare-oracle-1
+          - sceptre-staked-flare-oracle-2
           - sceptre-staked-flare-price-vault
-          - implementations
-
-      receipt-vault-name:
-        description: 'Name of the share token for the deployed receipt vault.'
-        required: false
-        type: string
-
-      receipt-vault-symbol:
-        description: 'Symbol of the share token for the deployed receipt vault.'
-        required: false
-        type: string
+          - ftso-v2-lts-feed-oracle-eth-usd
+          - stargate-weth-price-vault
+          - cyclo-receipt-implementation
+          - cyclo-vault-implementation
+          - factory
 
 jobs:
   deploy:

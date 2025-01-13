@@ -4,26 +4,34 @@ pragma solidity =0.8.25;
 
 import {Test} from "forge-std/Test.sol";
 
-import {LibCycloProd, PROD_SCEPTRE_STAKED_FLR_ORACLE_ADDRESS} from "test/lib/LibCycloProd.sol";
+import {
+    PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE,
+    PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE_CODEHASH
+} from "src/lib/LibCycloProdOracle.sol";
+
+import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
 
 import {IPriceOracleV2} from "ethgild/interface/IPriceOracleV2.sol";
 import {SceptreStakedFlrOracle} from "ethgild/concrete/oracle/SceptreStakedFlrOracle.sol";
 
 contract SceptreStakedFlrOracleProdTest is Test {
     function testProdCycloSceptreStakedFlrOraclePrice() external {
-        LibCycloProd.createSelectFork(vm);
+        LibCycloTestProd.createSelectFork(vm);
 
-        uint256 price = IPriceOracleV2(payable(PROD_SCEPTRE_STAKED_FLR_ORACLE_ADDRESS)).price();
-
-        assertEq(price, 826820414748124896);
+        uint256 price = IPriceOracleV2(payable(PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE)).price();
+        assertEq(price, 0.801064212264043593e18);
     }
 
     function testProdCycloSceptreStakedFlrOracleBytecode() external {
-        LibCycloProd.createSelectFork(vm);
-
         SceptreStakedFlrOracle fresh = new SceptreStakedFlrOracle();
 
-        assertEq(PROD_SCEPTRE_STAKED_FLR_ORACLE_ADDRESS.code, address(fresh).code);
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(fresh), PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE_CODEHASH);
+
+        LibCycloTestProd.createSelectFork(vm);
+
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(
+            PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE, PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE_CODEHASH
+        );
     }
 
     fallback() external payable {}
