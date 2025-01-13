@@ -2,6 +2,9 @@
 // SPDX-FileCopyrightText: Copyright (c) 2020 Rain Open Source Software Ltd
 pragma solidity ^0.8.25;
 
+// 30 mins.
+uint256 constant PROD_ORACLE_DEFAULT_STALE_AFTER = 30 minutes;
+
 address constant PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE = 0x0D8F6a13a76a216ef9E9a4bc388306E612AC2728;
 /// @dev Matches following code at deploy.
 /// SceptreStakedFlrOracle fresh = new SceptreStakedFlrOracle();

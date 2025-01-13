@@ -2,7 +2,7 @@
 // SPDX-FileCopyrightText: Copyright (c) 2020 Rain Open Source Software Ltd
 pragma solidity =0.8.25;
 
-import {Script, console2} from "forge-std/Script.sol";
+import {Script} from "forge-std/Script.sol";
 import {CycloReceipt} from "src/concrete/receipt/CycloReceipt.sol";
 import {
     ERC20PriceOracleReceiptVault,
@@ -36,12 +36,10 @@ import {
 import {
     PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE_CODEHASH,
     PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE,
-    PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE_CODEHASH
+    PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE_CODEHASH,
+    PROD_ORACLE_DEFAULT_STALE_AFTER
 } from "src/lib/LibCycloProdOracle.sol";
 import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
-
-// 30 mins.
-uint256 constant DEFAULT_STALE_AFTER = 1800;
 
 bytes32 constant DEPLOYMENT_SUITE_FACTORY = keccak256("factory");
 bytes32 constant DEPLOYMENT_SUITE_CYCLO_RECEIPT_IMPLEMENTATION = keccak256("cyclo-receipt-implementation");
@@ -96,7 +94,7 @@ contract Deploy is Script {
         );
 
         IPriceOracleV2 ftsoV2LTSFeedOracle = new FtsoV2LTSFeedOracle(
-            FtsoV2LTSFeedOracleConfig({feedId: FLR_USD_FEED_ID, staleAfter: DEFAULT_STALE_AFTER})
+            FtsoV2LTSFeedOracleConfig({feedId: FLR_USD_FEED_ID, staleAfter: PROD_ORACLE_DEFAULT_STALE_AFTER})
         );
 
         IPriceOracleV2 twoPriceOracle =
@@ -121,7 +119,7 @@ contract Deploy is Script {
     function deployFTSOV2LTSFeedOracleETHUSD(uint256 deploymentKey) internal {
         vm.startBroadcast(deploymentKey);
         IPriceOracleV2 ftsoV2LTSFeedOracle = new FtsoV2LTSFeedOracle(
-            FtsoV2LTSFeedOracleConfig({feedId: ETH_USD_FEED_ID, staleAfter: DEFAULT_STALE_AFTER})
+            FtsoV2LTSFeedOracleConfig({feedId: ETH_USD_FEED_ID, staleAfter: PROD_ORACLE_DEFAULT_STALE_AFTER})
         );
         LibCycloTestProd.checkCBORTrimmedBytecodeHash(
             address(payable(ftsoV2LTSFeedOracle)), PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE_CODEHASH
