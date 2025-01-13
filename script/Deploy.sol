@@ -57,9 +57,6 @@ bytes32 constant DEPLOYMENT_SUITE_STAKED_FLR_PRICE_VAULT = keccak256("sceptre-st
 bytes32 constant DEPLOYMENT_SUITE_FTSO_V2_LTS_FEED_ORACLE_ETH_USD = keccak256("ftso-v2-lts-feed-oracle-eth-usd");
 bytes32 constant DEPLOYMENT_SUITE_STARGATE_WETH_PRICE_VAULT = keccak256("stargate-weth-price-vault");
 
-/// @title Deploy
-/// This is intended to be run on every commit by CI to a testnet such as mumbai,
-/// then cross chain deployed to whatever mainnet is required, by users.
 contract Deploy is Script {
     function deployFactory(uint256 deploymentKey) internal {
         vm.startBroadcast(deploymentKey);
