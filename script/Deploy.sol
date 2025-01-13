@@ -28,7 +28,8 @@ import {FLARE_STARGATE_WETH} from "src/lib/LibCycloProdAssets.sol";
 import {
     PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1,
     PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1_CODEHASH,
-    PROD_FLARE_VAULT_IMPLEMENTATION_CYSFLR
+    PROD_FLARE_VAULT_IMPLEMENTATION_CYSFLR,
+    PROD_FLARE_VAULT_IMPLEMENTATION_CYSFLR_CODEHASH
 } from "src/lib/LibCycloProdVault.sol";
 import {
     PROD_FLARE_CYCLO_RECEIPT_CODEHASH_V1,
@@ -130,7 +131,7 @@ contract Deploy is Script {
     function deployStakedFlrPriceVault(uint256 deploymentKey) internal {
         vm.startBroadcast(deploymentKey);
 
-        ICloneableFactoryV2(PROD_FLARE_CLONE_FACTORY_ADDRESS_V1).clone(
+        address cysflr = ICloneableFactoryV2(PROD_FLARE_CLONE_FACTORY_ADDRESS_V1).clone(
             PROD_FLARE_VAULT_IMPLEMENTATION_CYSFLR,
             abi.encode(
                 ERC20PriceOracleVaultConfig({
@@ -139,6 +140,10 @@ contract Deploy is Script {
                 })
             )
         );
+        LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
+            cysflr, PROD_FLARE_VAULT_IMPLEMENTATION_CYSFLR, PROD_FLARE_VAULT_IMPLEMENTATION_CYSFLR_CODEHASH
+        );
+
         vm.stopBroadcast();
     }
 
