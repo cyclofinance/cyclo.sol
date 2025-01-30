@@ -95,9 +95,20 @@ contract CycloVaultProdTest is Test {
         assertEq(CycloVault(payable(PROD_FLARE_VAULT_CYWETH)).symbol(), "cyWETH");
     }
 
+    function testProdCycloVaultcysFLRImplementationIsInitialized() external {
+        LibCycloTestProd.createSelectFork(vm);
+        LibCycloTestProd.checkIsInitialized(vm, PROD_FLARE_VAULT_IMPLEMENTATION_CYSFLR);
+    }
+
     function testProdCycloVaultcysFLRIsInitialized() external {
         LibCycloTestProd.createSelectFork(vm);
         LibCycloTestProd.checkIsInitialized(vm, PROD_FLARE_VAULT_CYSFLR);
+    }
+
+    function testProdCycloVaultcyWETHImplementationIsInitialized() external {
+        CycloVaultConfig memory config;
+        LibCycloTestProd.createSelectFork(vm);
+        LibCycloTestProd.checkIsInitialized(vm, PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1, abi.encode(config));
     }
 
     function testProdCycloVaultcyWETHIsInitialized() external {
