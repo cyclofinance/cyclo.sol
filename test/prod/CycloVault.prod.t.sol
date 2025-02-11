@@ -8,7 +8,7 @@ import {
     ERC20PriceOracleReceiptVault,
     ReceiptVaultConstructionConfig
 } from "ethgild/concrete/vault/ERC20PriceOracleReceiptVault.sol";
-import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
+import {LibCycloTestProd, ALICE} from "test/lib/LibCycloTestProd.sol";
 import {ICloneableFactoryV2} from "rain.factory/interface/ICloneableFactoryV2.sol";
 import {CycloReceipt} from "src/concrete/receipt/CycloReceipt.sol";
 import {SFLR_CONTRACT} from "rain.flare/lib/sflr/LibSceptreStakedFlare.sol";
@@ -32,6 +32,8 @@ import {
 import {CycloVaultConfig, CycloVault} from "src/concrete/vault/CycloVault.sol";
 import {PROD_FLARE_CLONE_FACTORY_ADDRESS_V1} from "src/lib/LibCycloProdCloneFactory.sol";
 import {IReceiptV2} from "ethgild/abstract/ReceiptVault.sol";
+import {IERC20Upgradeable as IERC20} from
+    "openzeppelin-contracts-upgradeable/contracts/token/ERC20/IERC20Upgradeable.sol";
 
 contract CycloVaultProdTest is Test {
     function testProdCycloVaultBytecode() external {
@@ -93,6 +95,18 @@ contract CycloVaultProdTest is Test {
 
         assertEq(CycloVault(payable(PROD_FLARE_VAULT_CYSFLR)).symbol(), "cysFLR");
         assertEq(CycloVault(payable(PROD_FLARE_VAULT_CYWETH)).symbol(), "cyWETH");
+    }
+
+    /// forge-config: default.fuzz.runs = 1
+    function testProdCycloVaultCanDeposit(uint256 deposit) external {
+        deposit = bound(deposit, 1, type(uint128).max);
+        LibCycloTestProd.createSelectFork(vm);
+
+        deal(CycloVault(payable(PROD_FLARE_VAULT_CYSFLR)).asset(), ALICE, deposit);
+        LibCycloTestProd.checkDeposit(vm, PROD_FLARE_VAULT_CYSFLR, deposit);
+
+        deal(CycloVault(payable(PROD_FLARE_VAULT_CYWETH)).asset(), ALICE, deposit);
+        LibCycloTestProd.checkDeposit(vm, PROD_FLARE_VAULT_CYWETH, deposit);
     }
 
     function testProdCycloVaultcysFLRIsInitialized() external {

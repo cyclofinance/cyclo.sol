@@ -2,15 +2,21 @@
 // SPDX-FileCopyrightText: Copyright (c) 2020 Rain Open Source Software Ltd
 pragma solidity ^0.8.25;
 
-import {Vm, console2} from "forge-std/Test.sol";
+import {Vm} from "forge-std/StdCheats.sol";
+import {console2} from "forge-std/Test.sol";
 import {LibExtrospectBytecode} from "rain.extrospection/lib/LibExtrospectBytecode.sol";
 import {LibExtrospectERC1167Proxy} from "rain.extrospection/lib/LibExtrospectERC1167Proxy.sol";
 import {ICloneableV2} from "rain.factory/interface/ICloneableV2.sol";
+import {CycloVaultConfig, CycloVault} from "src/concrete/vault/CycloVault.sol";
+import {IERC20Upgradeable as IERC20} from
+    "openzeppelin-contracts-upgradeable/contracts/token/ERC20/IERC20Upgradeable.sol";
 
 uint256 constant PROD_TEST_BLOCK_NUMBER = 36029161;
 
 string constant PROD_CYSFLR_RECEIPT_SYMBOL = "cysFLR RCPT";
 string constant PROD_CYSFLR_RECEIPT_NAME = "cysFLR Receipt";
+
+address constant ALICE = address(uint160(uint256(keccak256("ALICE"))));
 
 library LibCycloTestProd {
     function createSelectFork(Vm vm) internal {
@@ -47,5 +53,12 @@ library LibCycloTestProd {
 
     function checkIsInitialized(Vm vm, address proxy) internal {
         checkIsInitialized(vm, proxy, "");
+    }
+
+    function checkDeposit(Vm vm, address proxy, uint256 deposit) internal {
+        IERC20 asset = IERC20(CycloVault(payable(proxy)).asset());
+        vm.startPrank(ALICE);
+        asset.approve(proxy, deposit);
+        uint256 shares = CycloVault(payable(proxy)).deposit(deposit, ALICE, 0, hex"");
     }
 }
