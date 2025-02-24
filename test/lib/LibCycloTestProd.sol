@@ -2,15 +2,21 @@
 // SPDX-FileCopyrightText: Copyright (c) 2020 Rain Open Source Software Ltd
 pragma solidity ^0.8.25;
 
-import {Vm, console2} from "forge-std/Test.sol";
+import {Vm} from "forge-std/StdCheats.sol";
+import {console2} from "forge-std/Test.sol";
 import {LibExtrospectBytecode} from "rain.extrospection/lib/LibExtrospectBytecode.sol";
 import {LibExtrospectERC1167Proxy} from "rain.extrospection/lib/LibExtrospectERC1167Proxy.sol";
 import {ICloneableV2} from "rain.factory/interface/ICloneableV2.sol";
+import {CycloVaultConfig, CycloVault} from "src/concrete/vault/CycloVault.sol";
+import {IERC20Upgradeable as IERC20} from
+    "openzeppelin-contracts-upgradeable/contracts/token/ERC20/IERC20Upgradeable.sol";
 
 uint256 constant PROD_TEST_BLOCK_NUMBER = 36029161;
 
 string constant PROD_CYSFLR_RECEIPT_SYMBOL = "cysFLR RCPT";
 string constant PROD_CYSFLR_RECEIPT_NAME = "cysFLR Receipt";
+
+address constant ALICE = address(uint160(uint256(keccak256("ALICE"))));
 
 library LibCycloTestProd {
     function createSelectFork(Vm vm) internal {
@@ -47,5 +53,36 @@ library LibCycloTestProd {
 
     function checkIsInitialized(Vm vm, address proxy) internal {
         checkIsInitialized(vm, proxy, "");
+    }
+
+    function checkDeposit(Vm vm, address proxy, uint256 deposit) internal {
+        CycloVault vault = CycloVault(payable(proxy));
+        IERC20 asset = IERC20(vault.asset());
+        vm.startPrank(ALICE);
+        asset.approve(proxy, deposit);
+        uint256 assetBalanceBefore = asset.balanceOf(proxy);
+        uint256 expectedShares = vault.previewDeposit(deposit, 0);
+        vm.assume(expectedShares > 0);
+        uint256 shares = vault.deposit(deposit, ALICE, 0, hex"");
+        require(shares == expectedShares, "shares mismatch");
+        require(asset.balanceOf(proxy) == assetBalanceBefore + deposit, "asset balance mismatch");
+        require(asset.balanceOf(ALICE) == 0, "ALICE asset balance mismatch");
+        vm.stopPrank();
+    }
+
+    function checkMint(Vm vm, address proxy, uint256 shares, uint256 expectedAssets) internal {
+        CycloVault vault = CycloVault(payable(proxy));
+
+        IERC20 asset = IERC20(vault.asset());
+
+        vm.startPrank(ALICE);
+        asset.approve(proxy, expectedAssets);
+        uint256 assetBalanceBefore = asset.balanceOf(proxy);
+        uint256 sharesBalanceBefore = vault.balanceOf(ALICE);
+        uint256 assets = vault.mint(shares, ALICE, 0, hex"");
+        require(assets == expectedAssets, "assets mismatch");
+        require(asset.balanceOf(proxy) == assetBalanceBefore + expectedAssets, "asset balance mismatch");
+        require(vault.balanceOf(ALICE) == sharesBalanceBefore + shares, "ALICE shares balance mismatch");
+        vm.stopPrank();
     }
 }
