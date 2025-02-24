@@ -109,6 +109,18 @@ contract CycloVaultProdTest is Test {
         LibCycloTestProd.checkDeposit(vm, PROD_FLARE_VAULT_CYWETH, deposit);
     }
 
+    /// forge-config: default.fuzz.runs = 1
+    function testMintFlareFork(uint256 shares) public {
+        shares = bound(shares, 1, type(uint128).max);
+        LibCycloTestProd.createSelectFork(vm);
+
+        CycloVault vault = CycloVault(payable(PROD_FLARE_VAULT_CYSFLR));
+
+        uint256 assets = vault.previewMint(shares, 0);
+        deal(address(SFLR_CONTRACT), ALICE, assets);
+        LibCycloTestProd.checkMint(vm, PROD_FLARE_VAULT_CYSFLR, shares, assets);
+    }
+
     function testProdCycloVaultcysFLRIsInitialized() external {
         LibCycloTestProd.createSelectFork(vm);
         LibCycloTestProd.checkIsInitialized(vm, PROD_FLARE_VAULT_CYSFLR);

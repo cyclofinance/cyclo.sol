@@ -56,9 +56,33 @@ library LibCycloTestProd {
     }
 
     function checkDeposit(Vm vm, address proxy, uint256 deposit) internal {
-        IERC20 asset = IERC20(CycloVault(payable(proxy)).asset());
+        CycloVault vault = CycloVault(payable(proxy));
+        IERC20 asset = IERC20(vault.asset());
         vm.startPrank(ALICE);
         asset.approve(proxy, deposit);
-        uint256 shares = CycloVault(payable(proxy)).deposit(deposit, ALICE, 0, hex"");
+        uint256 assetBalanceBefore = asset.balanceOf(proxy);
+        uint256 expectedShares = vault.previewDeposit(deposit, 0);
+        vm.assume(expectedShares > 0);
+        uint256 shares = vault.deposit(deposit, ALICE, 0, hex"");
+        require(shares == expectedShares, "shares mismatch");
+        require(asset.balanceOf(proxy) == assetBalanceBefore + deposit, "asset balance mismatch");
+        require(asset.balanceOf(ALICE) == 0, "ALICE asset balance mismatch");
+        vm.stopPrank();
+    }
+
+    function checkMint(Vm vm, address proxy, uint256 shares, uint256 expectedAssets) internal {
+        CycloVault vault = CycloVault(payable(proxy));
+
+        IERC20 asset = IERC20(vault.asset());
+
+        vm.startPrank(ALICE);
+        asset.approve(proxy, expectedAssets);
+        uint256 assetBalanceBefore = asset.balanceOf(proxy);
+        uint256 sharesBalanceBefore = vault.balanceOf(ALICE);
+        uint256 assets = vault.mint(shares, ALICE, 0, hex"");
+        require(assets == expectedAssets, "assets mismatch");
+        require(asset.balanceOf(proxy) == assetBalanceBefore + expectedAssets, "asset balance mismatch");
+        require(vault.balanceOf(ALICE) == sharesBalanceBefore + shares, "ALICE shares balance mismatch");
+        vm.stopPrank();
     }
 }
