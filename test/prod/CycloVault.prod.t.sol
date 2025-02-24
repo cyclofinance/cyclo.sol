@@ -117,8 +117,14 @@ contract CycloVaultProdTest is Test {
         CycloVault vault = CycloVault(payable(PROD_FLARE_VAULT_CYSFLR));
 
         uint256 assets = vault.previewMint(shares, 0);
-        deal(address(SFLR_CONTRACT), ALICE, assets);
+        deal(vault.asset(), ALICE, assets);
         LibCycloTestProd.checkMint(vm, PROD_FLARE_VAULT_CYSFLR, shares, assets);
+
+        vault = CycloVault(payable(PROD_FLARE_VAULT_CYWETH));
+
+        assets = vault.previewMint(shares, 0);
+        deal(vault.asset(), ALICE, assets);
+        LibCycloTestProd.checkMint(vm, PROD_FLARE_VAULT_CYWETH, shares, assets);
     }
 
     function testProdCycloVaultcysFLRImplementationIsInitialized() external {
