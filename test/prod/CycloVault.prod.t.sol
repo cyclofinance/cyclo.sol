@@ -110,7 +110,7 @@ contract CycloVaultProdTest is Test {
     }
 
     /// forge-config: default.fuzz.runs = 1
-    function testMintFlareFork(uint256 shares) public {
+    function testProdCycloVaultCanMint(uint256 shares) public {
         shares = bound(shares, 1, type(uint128).max);
         LibCycloTestProd.createSelectFork(vm);
 
@@ -121,9 +121,20 @@ contract CycloVaultProdTest is Test {
         LibCycloTestProd.checkMint(vm, PROD_FLARE_VAULT_CYSFLR, shares, assets);
     }
 
+    function testProdCycloVaultcysFLRImplementationIsInitialized() external {
+        LibCycloTestProd.createSelectFork(vm);
+        LibCycloTestProd.checkIsInitialized(vm, PROD_FLARE_VAULT_IMPLEMENTATION_CYSFLR);
+    }
+
     function testProdCycloVaultcysFLRIsInitialized() external {
         LibCycloTestProd.createSelectFork(vm);
         LibCycloTestProd.checkIsInitialized(vm, PROD_FLARE_VAULT_CYSFLR);
+    }
+
+    function testProdCycloVaultcyWETHImplementationIsInitialized() external {
+        CycloVaultConfig memory config;
+        LibCycloTestProd.createSelectFork(vm);
+        LibCycloTestProd.checkIsInitialized(vm, PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1, abi.encode(config));
     }
 
     function testProdCycloVaultcyWETHIsInitialized() external {

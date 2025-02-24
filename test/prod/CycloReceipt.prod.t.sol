@@ -34,9 +34,19 @@ contract CycloReceiptProdTest is Test {
         );
     }
 
+    function testProdCysFLRImplementationIsInitialized() external {
+        LibCycloTestProd.createSelectFork(vm);
+        LibCycloTestProd.checkIsInitialized(vm, PROD_FLARE_RECEIPT_IMPLEMENTATION_CYSFLR);
+    }
+
     function testProdCycloReceiptIsInitializedCysFLR() external {
         LibCycloTestProd.createSelectFork(vm);
         LibCycloTestProd.checkIsInitialized(vm, PROD_FLARE_RECEIPT_CYSFLR);
+    }
+
+    function testProdCysWETHImplementationIsInitialized() external {
+        LibCycloTestProd.createSelectFork(vm);
+        LibCycloTestProd.checkIsInitialized(vm, PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V1);
     }
 
     function testProdCycloReceiptIsInitializedCYWETH() external {
