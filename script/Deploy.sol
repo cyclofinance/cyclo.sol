@@ -56,6 +56,7 @@ bytes32 constant DEPLOYMENT_SUITE_STAKED_FLR_ORACLE_2 = keccak256("sceptre-stake
 bytes32 constant DEPLOYMENT_SUITE_STAKED_FLR_PRICE_VAULT = keccak256("sceptre-staked-flare-price-vault");
 bytes32 constant DEPLOYMENT_SUITE_FTSO_V2_LTS_FEED_ORACLE_ETH_USD = keccak256("ftso-v2-lts-feed-oracle-eth-usd");
 bytes32 constant DEPLOYMENT_SUITE_STARGATE_WETH_PRICE_VAULT = keccak256("stargate-weth-price-vault");
+bytes32 constant DEPLOYMENT_SUITE_FLARE_FASSET_XRP = keccak256("flare-fasset-xrp");
 
 contract Deploy is Script {
     function deployFactory(uint256 deploymentKey) internal {
@@ -155,6 +156,17 @@ contract Deploy is Script {
         vm.stopBroadcast();
     }
 
+    function deployFTSOV2LTSFeedOracleXRPUSD(uint256 deploymentKey) internal {
+        vm.startBroadcast(deploymentKey);
+        IPriceOracleV2 ftsoV2LTSFeedOracle = new FtsoV2LTSFeedOracle(
+            FtsoV2LTSFeedOracleConfig({feedId: XRP_USD_FEED_ID, staleAfter: PROD_ORACLE_DEFAULT_STALE_AFTER})
+        );
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(
+            address(payable(ftsoV2LTSFeedOracle)), PROD_FLARE_FTSO_V2_LTS_XRP_USD_FEED_ORACLE_CODEHASH
+        );
+        vm.stopBroadcast();
+    }
+
     function deployStargateWethPriceVault(uint256 deploymentKey) internal {
         vm.startBroadcast(deploymentKey);
 
@@ -170,6 +182,25 @@ contract Deploy is Script {
 
         LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
             cyweth, PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1, PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1_CODEHASH
+        );
+        vm.stopBroadcast();
+    }
+
+    function deployFlareFassetXRP(uint256 deploymentKey) internal {
+        vm.startBroadcast(deploymentKey);
+
+        address cyxrp = ICloneableFactoryV2(PROD_FLARE_CLONE_FACTORY_ADDRESS_V1).clone(
+            PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1,
+            abi.encode(
+                CycloVaultConfig({
+                    priceOracle: IPriceOracleV2(payable(PROD_FLARE_FTSO_V2_LTS_XRP_USD_FEED_ORACLE)),
+                    asset: FLARE_FASSET_XRP
+                })
+            )
+        );
+
+        LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
+            cyxrp, PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1, PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1_CODEHASH
         );
         vm.stopBroadcast();
     }
@@ -194,6 +225,8 @@ contract Deploy is Script {
             deployFTSOV2LTSFeedOracleETHUSD(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_STARGATE_WETH_PRICE_VAULT) {
             deployStargateWethPriceVault(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_FLARE_FASSET_XRP) {
+            deployFlareFassetXRP(deployerPrivateKey);
         } else {
             revert("Unknown deployment suite");
         }
