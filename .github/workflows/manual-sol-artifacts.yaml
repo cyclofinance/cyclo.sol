@@ -20,6 +20,7 @@ on:
           - ftso-v2-lts-feed-oracle-eth-usd
           - ftso-v2-lts-feed-oracle-xrp-usd
           - stargate-weth-price-vault
+          - flare-fasset-xrp-price-vault
           - cyclo-receipt-implementation
           - cyclo-vault-implementation
           - factory
