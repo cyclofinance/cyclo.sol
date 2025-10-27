@@ -17,9 +17,12 @@ import {
     PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE,
     PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE
 } from "src/lib/LibCycloProdOracle.sol";
+import {FLARE_FASSET_XRP} from "src/lib/LibCycloProdAssets.sol";
+
 import {
     PROD_FLARE_VAULT_CYSFLR,
     PROD_FLARE_VAULT_CYWETH,
+    PROD_FLARE_VAULT_CYFXRP,
     PROD_FLARE_VAULT_IMPLEMENTATION_CYSFLR,
     PROD_FLARE_VAULT_IMPLEMENTATION_CYSFLR_CODEHASH,
     PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1,
@@ -34,6 +37,8 @@ import {PROD_FLARE_CLONE_FACTORY_ADDRESS_V1} from "src/lib/LibCycloProdCloneFact
 import {IReceiptV2} from "ethgild/abstract/ReceiptVault.sol";
 import {IERC20Upgradeable as IERC20} from
     "openzeppelin-contracts-upgradeable/contracts/token/ERC20/IERC20Upgradeable.sol";
+
+import {console2} from "forge-std/Test.sol";
 
 contract CycloVaultProdTest is Test {
     function testProdCycloVaultBytecode() external {
@@ -88,6 +93,8 @@ contract CycloVaultProdTest is Test {
 
         assertEq(CycloVault(payable(PROD_FLARE_VAULT_CYSFLR)).name(), "cysFLR");
         assertEq(CycloVault(payable(PROD_FLARE_VAULT_CYWETH)).name(), "Cyclo cyWETH");
+        assertEq(CycloVault(payable(PROD_FLARE_VAULT_CYFXRP)).name(), "Cyclo cyFXRP");
+
     }
 
     function testProdCycloVaultSymbol() external {
@@ -95,6 +102,7 @@ contract CycloVaultProdTest is Test {
 
         assertEq(CycloVault(payable(PROD_FLARE_VAULT_CYSFLR)).symbol(), "cysFLR");
         assertEq(CycloVault(payable(PROD_FLARE_VAULT_CYWETH)).symbol(), "cyWETH");
+        assertEq(CycloVault(payable(PROD_FLARE_VAULT_CYFXRP)).symbol(), "cyFXRP");
     }
 
     /// forge-config: default.fuzz.runs = 1
@@ -107,6 +115,9 @@ contract CycloVaultProdTest is Test {
 
         deal(CycloVault(payable(PROD_FLARE_VAULT_CYWETH)).asset(), ALICE, deposit);
         LibCycloTestProd.checkDeposit(vm, PROD_FLARE_VAULT_CYWETH, deposit);
+
+        deal(CycloVault(payable(PROD_FLARE_VAULT_CYFXRP)).asset(), ALICE, deposit);
+        LibCycloTestProd.checkDeposit(vm, PROD_FLARE_VAULT_CYFXRP, deposit);
     }
 
     /// forge-config: default.fuzz.runs = 1
