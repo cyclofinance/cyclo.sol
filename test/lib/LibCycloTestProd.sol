@@ -75,19 +75,23 @@ library LibCycloTestProd {
         checkDeposit(vm, proxy, deposit, DEFAULT_ALICE);
     }
 
-    function checkMint(Vm vm, address proxy, uint256 shares, uint256 expectedAssets) internal {
+    function checkMint(Vm vm, address proxy, uint256 shares, uint256 expectedAssets, address alice) internal {
         CycloVault vault = CycloVault(payable(proxy));
 
         IERC20 asset = IERC20(vault.asset());
 
-        vm.startPrank(DEFAULT_ALICE);
+        vm.startPrank(alice);
         asset.approve(proxy, expectedAssets);
         uint256 assetBalanceBefore = asset.balanceOf(proxy);
-        uint256 sharesBalanceBefore = vault.balanceOf(DEFAULT_ALICE);
-        uint256 assets = vault.mint(shares, DEFAULT_ALICE, 0, hex"");
+        uint256 sharesBalanceBefore = vault.balanceOf(alice);
+        uint256 assets = vault.mint(shares, alice, 0, hex"");
         require(assets == expectedAssets, "assets mismatch");
         require(asset.balanceOf(proxy) == assetBalanceBefore + expectedAssets, "asset balance mismatch");
-        require(vault.balanceOf(DEFAULT_ALICE) == sharesBalanceBefore + shares, "DEFAULT_ALICE shares balance mismatch");
+        require(vault.balanceOf(alice) == sharesBalanceBefore + shares, "alice shares balance mismatch");
         vm.stopPrank();
+    }
+
+    function checkMint(Vm vm, address proxy, uint256 shares, uint256 expectedAssets) internal {
+        checkMint(vm, proxy, shares, expectedAssets, DEFAULT_ALICE);
     }
 }

@@ -2,7 +2,11 @@
 // SPDX-FileCopyrightText: Copyright (c) 2020 Rain Open Source Software Ltd
 pragma solidity =0.8.25;
 
-import {PROD_FLARE_RECEIPT_CYSFLR, PROD_FLARE_RECEIPT_CYWETH} from "src/lib/LibCycloProdReceipt.sol";
+import {
+    PROD_FLARE_RECEIPT_CYSFLR,
+    PROD_FLARE_RECEIPT_CYWETH,
+    PROD_FLARE_RECEIPT_CYFXRP
+} from "src/lib/LibCycloProdReceipt.sol";
 import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
 import {CycloReceiptMetadataTest} from "test/src/concrete/receipt/CycloReceipt.metadata.t.sol";
 
@@ -12,6 +16,7 @@ contract CycloReceiptProdMetadataTest is CycloReceiptMetadataTest {
 
         checkCycloReceiptURIV1(PROD_FLARE_RECEIPT_CYSFLR);
         checkCycloReceiptURIV2(PROD_FLARE_RECEIPT_CYWETH, "WETH");
+        checkCycloReceiptURIV2(PROD_FLARE_RECEIPT_CYFXRP, "FXRP");
     }
 
     function testProdCycloReceiptName() external {
@@ -19,6 +24,7 @@ contract CycloReceiptProdMetadataTest is CycloReceiptMetadataTest {
 
         checkCycloReceiptNameV1(PROD_FLARE_RECEIPT_CYSFLR);
         checkCycloReceiptNameV2(PROD_FLARE_RECEIPT_CYWETH, "WETH");
+        checkCycloReceiptNameV2(PROD_FLARE_RECEIPT_CYFXRP, "FXRP");
     }
 
     function testProdCycloReceiptSymbol() external {
@@ -26,5 +32,6 @@ contract CycloReceiptProdMetadataTest is CycloReceiptMetadataTest {
 
         checkCycloReceiptSymbolV1(PROD_FLARE_RECEIPT_CYSFLR);
         checkCycloReceiptSymbolV2(PROD_FLARE_RECEIPT_CYWETH, "WETH");
+        checkCycloReceiptSymbolV2(PROD_FLARE_RECEIPT_CYFXRP, "FXRP");
     }
 }

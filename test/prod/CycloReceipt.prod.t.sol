@@ -9,6 +9,7 @@ import {PROD_FLARE_VAULT_CYSFLR} from "src/lib/LibCycloProdVault.sol";
 import {
     PROD_FLARE_RECEIPT_IMPLEMENTATION_CYSFLR,
     PROD_FLARE_RECEIPT_CYSFLR,
+    PROD_FLARE_RECEIPT_CYFXRP,
     PROD_FLARE_RECEIPT_IMPLEMENTATION_CYSFLR_CODEHASH,
     PROD_FLARE_RECEIPT_CYWETH,
     PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V1,
@@ -32,6 +33,9 @@ contract CycloReceiptProdTest is Test {
         LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
             PROD_FLARE_RECEIPT_CYWETH, PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V1, PROD_FLARE_CYCLO_RECEIPT_CODEHASH_V1
         );
+        LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
+            PROD_FLARE_RECEIPT_CYFXRP, PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V1, PROD_FLARE_CYCLO_RECEIPT_CODEHASH_V1
+        );
     }
 
     function testProdCysFLRImplementationIsInitialized() external {
@@ -52,6 +56,11 @@ contract CycloReceiptProdTest is Test {
     function testProdCycloReceiptIsInitializedCYWETH() external {
         LibCycloTestProd.createSelectFork(vm);
         LibCycloTestProd.checkIsInitialized(vm, PROD_FLARE_RECEIPT_CYWETH);
+    }
+
+    function testProdCycloReceiptIsInitializedCYFXRP() external {
+        LibCycloTestProd.createSelectFork(vm);
+        LibCycloTestProd.checkIsInitialized(vm, PROD_FLARE_RECEIPT_CYFXRP);
     }
 
     fallback() external payable {}
