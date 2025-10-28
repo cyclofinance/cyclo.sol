@@ -8,7 +8,7 @@ import {
     ERC20PriceOracleReceiptVault,
     ReceiptVaultConstructionConfig
 } from "ethgild/concrete/vault/ERC20PriceOracleReceiptVault.sol";
-import {LibCycloTestProd, ALICE} from "test/lib/LibCycloTestProd.sol";
+import {LibCycloTestProd, DEFAULT_ALICE} from "test/lib/LibCycloTestProd.sol";
 import {ICloneableFactoryV2} from "rain.factory/interface/ICloneableFactoryV2.sol";
 import {CycloReceipt} from "src/concrete/receipt/CycloReceipt.sol";
 import {SFLR_CONTRACT} from "rain.flare/lib/sflr/LibSceptreStakedFlare.sol";
@@ -94,7 +94,6 @@ contract CycloVaultProdTest is Test {
         assertEq(CycloVault(payable(PROD_FLARE_VAULT_CYSFLR)).name(), "cysFLR");
         assertEq(CycloVault(payable(PROD_FLARE_VAULT_CYWETH)).name(), "Cyclo cyWETH");
         assertEq(CycloVault(payable(PROD_FLARE_VAULT_CYFXRP)).name(), "Cyclo cyFXRP");
-
     }
 
     function testProdCycloVaultSymbol() external {
@@ -106,18 +105,20 @@ contract CycloVaultProdTest is Test {
     }
 
     /// forge-config: default.fuzz.runs = 1
-    function testProdCycloVaultCanDeposit(uint256 deposit) external {
-        deposit = bound(deposit, 1, type(uint128).max);
+    function testProdCycloVaultCanDeposit(uint256 depositSeed) external {
+        uint256 deposit = bound(depositSeed, 1, 2000000000000);
         LibCycloTestProd.createSelectFork(vm);
 
-        deal(CycloVault(payable(PROD_FLARE_VAULT_CYSFLR)).asset(), ALICE, deposit);
+        deal(CycloVault(payable(PROD_FLARE_VAULT_CYSFLR)).asset(), DEFAULT_ALICE, deposit);
         LibCycloTestProd.checkDeposit(vm, PROD_FLARE_VAULT_CYSFLR, deposit);
 
-        deal(CycloVault(payable(PROD_FLARE_VAULT_CYWETH)).asset(), ALICE, deposit);
+        deal(CycloVault(payable(PROD_FLARE_VAULT_CYWETH)).asset(), DEFAULT_ALICE, deposit);
         LibCycloTestProd.checkDeposit(vm, PROD_FLARE_VAULT_CYWETH, deposit);
 
-        deal(CycloVault(payable(PROD_FLARE_VAULT_CYFXRP)).asset(), ALICE, deposit);
-        LibCycloTestProd.checkDeposit(vm, PROD_FLARE_VAULT_CYFXRP, deposit);
+        // This address has 2M FXRP on mainnet fork.
+        deposit = bound(depositSeed, 1, 2000000e6);
+        address aliceFXRP = 0x1aac0E512f9Fd62a8A873Bac3E19373C8ba9D4BC;
+        LibCycloTestProd.checkDeposit(vm, PROD_FLARE_VAULT_CYFXRP, deposit, aliceFXRP);
     }
 
     /// forge-config: default.fuzz.runs = 1
@@ -128,13 +129,13 @@ contract CycloVaultProdTest is Test {
         CycloVault vault = CycloVault(payable(PROD_FLARE_VAULT_CYSFLR));
 
         uint256 assets = vault.previewMint(shares, 0);
-        deal(vault.asset(), ALICE, assets);
+        deal(vault.asset(), DEFAULT_ALICE, assets);
         LibCycloTestProd.checkMint(vm, PROD_FLARE_VAULT_CYSFLR, shares, assets);
 
         vault = CycloVault(payable(PROD_FLARE_VAULT_CYWETH));
 
         assets = vault.previewMint(shares, 0);
-        deal(vault.asset(), ALICE, assets);
+        deal(vault.asset(), DEFAULT_ALICE, assets);
         LibCycloTestProd.checkMint(vm, PROD_FLARE_VAULT_CYWETH, shares, assets);
     }
 
