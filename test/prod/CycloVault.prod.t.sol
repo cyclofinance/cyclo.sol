@@ -38,8 +38,6 @@ import {IReceiptV2} from "ethgild/abstract/ReceiptVault.sol";
 import {IERC20Upgradeable as IERC20} from
     "openzeppelin-contracts-upgradeable/contracts/token/ERC20/IERC20Upgradeable.sol";
 
-import {console2} from "forge-std/Test.sol";
-
 contract CycloVaultProdTest is Test {
     function testProdCycloVaultBytecode() external {
         ReceiptVaultConstructionConfig memory receiptVaultConstructionConfig = ReceiptVaultConstructionConfig({
