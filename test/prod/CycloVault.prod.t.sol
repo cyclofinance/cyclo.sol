@@ -114,8 +114,8 @@ contract CycloVaultProdTest is Test {
         LibCycloTestProd.checkDeposit(vm, PROD_FLARE_VAULT_CYWETH, deposit);
 
         // This address has 2M FXRP on mainnet fork.
-        deposit = bound(depositSeed, 1, 2000000e6);
         address aliceFXRP = 0x1aac0E512f9Fd62a8A873Bac3E19373C8ba9D4BC;
+        deposit = bound(depositSeed, 1, 2000000e6);
         LibCycloTestProd.checkDeposit(vm, PROD_FLARE_VAULT_CYFXRP, deposit, aliceFXRP);
     }
 
