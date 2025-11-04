@@ -12,7 +12,7 @@ import {
     PROD_FLARE_RECEIPT_CYFXRP
 } from "src/lib/LibCycloProdReceipt.sol";
 import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
-import {IReceiptV2} from "ethgild/interface/IReceiptV2.sol";
+import {IReceiptV2} from "ethgild/interface/deprecated/IReceiptV2.sol";
 
 contract CycloReceiptProdAccessTest is Test {
     function checkAccess(address receiptAddress, address vaultAddress, string memory asset) internal view {
