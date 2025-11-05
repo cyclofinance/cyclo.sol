@@ -27,7 +27,7 @@ address constant PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2 = 0x0a408517bf8771
 //forge-lint: disable-next-line(screaming-snake-case-const)
 bytes32 constant PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2_CODEHASH =
     bytes32(0xdc4a82f08e8d9dd9174fb1d14b65edb7b0ade713e926bd14d4933110c1b9c680);
-
+//forge-lint: disable-next-line(screaming-snake-case-const)
 bytes32 constant PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2_CODEHASH2 =
     bytes32(0xb168cdd0e0197278a2c98e99ccab3ff86b672cf23f8107579c16b8a09ca32d0c);
 
