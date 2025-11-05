@@ -26,6 +26,7 @@ import {CycloVault, CycloVaultConfig} from "src/concrete/vault/CycloVault.sol";
 import {FLARE_STARGATE_WETH, FLARE_FASSET_XRP} from "src/lib/LibCycloProdAssets.sol";
 import {
     PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1,
+    PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2,
     PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH,
     PROD_FLARE_VAULT_IMPLEMENTATION_CYSFLR,
     PROD_FLARE_VAULT_IMPLEMENTATION_CYSFLR_CODEHASH
@@ -198,7 +199,7 @@ contract Deploy is Script {
         vm.startBroadcast(deploymentKey);
 
         address cyxrp = ICloneableFactoryV2(PROD_FLARE_CLONE_FACTORY_ADDRESS_V1).clone(
-            PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1,
+            PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2,
             abi.encode(
                 CycloVaultConfig({
                     priceOracle: IPriceOracleV2(payable(PROD_FLARE_FTSO_V2_LTS_XRP_USD_FEED_ORACLE)),
@@ -208,7 +209,7 @@ contract Deploy is Script {
         );
 
         LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
-            cyxrp, PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1, PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH
+            cyxrp, PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2, PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH
         );
         vm.stopBroadcast();
     }

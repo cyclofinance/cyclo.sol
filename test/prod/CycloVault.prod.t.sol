@@ -25,10 +25,7 @@ import {
     PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1_CODEHASH,
     PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH
 } from "src/lib/LibCycloProdVault.sol";
-import {
-    PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V1,
-    PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V2
-} from "src/lib/LibCycloProdReceipt.sol";
+import {PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V2} from "src/lib/LibCycloProdReceipt.sol";
 import {CycloVaultConfig, CycloVault} from "src/concrete/vault/CycloVault.sol";
 import {PROD_FLARE_CLONE_FACTORY_ADDRESS_V1} from "src/lib/LibCycloProdCloneFactory.sol";
 import {IReceiptV3} from "ethgild/abstract/ReceiptVault.sol";
