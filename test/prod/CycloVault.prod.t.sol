@@ -23,7 +23,7 @@ import {
     PROD_FLARE_VAULT_IMPLEMENTATION_CYSFLR_CODEHASH,
     PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1,
     PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1_CODEHASH,
-    PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1_CODEHASH_2
+    PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH
 } from "src/lib/LibCycloProdVault.sol";
 import {PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V1} from "src/lib/LibCycloProdReceipt.sol";
 import {CycloVaultConfig, CycloVault} from "src/concrete/vault/CycloVault.sol";
@@ -41,7 +41,7 @@ contract CycloVaultProdTest is Test {
         });
         CycloVault cycloVault = new CycloVault(receiptVaultConstructionConfig);
         LibCycloTestProd.checkCBORTrimmedBytecodeHash(
-            address(cycloVault), PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1_CODEHASH_2
+            address(cycloVault), PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH
         );
 
         LibCycloTestProd.createSelectFork(vm);

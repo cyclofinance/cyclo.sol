@@ -26,13 +26,13 @@ import {CycloVault, CycloVaultConfig} from "src/concrete/vault/CycloVault.sol";
 import {FLARE_STARGATE_WETH, FLARE_FASSET_XRP} from "src/lib/LibCycloProdAssets.sol";
 import {
     PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1,
-    PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1_CODEHASH,
+    PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH,
     PROD_FLARE_VAULT_IMPLEMENTATION_CYSFLR,
     PROD_FLARE_VAULT_IMPLEMENTATION_CYSFLR_CODEHASH
 } from "src/lib/LibCycloProdVault.sol";
 import {
-    PROD_FLARE_CYCLO_RECEIPT_CODEHASH_V1_2,
-    PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V1
+    PROD_FLARE_CYCLO_RECEIPT_CODEHASH_V2,
+    PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V2
 } from "src/lib/LibCycloProdReceipt.sol";
 import {
     PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE_CODEHASH,
@@ -74,7 +74,7 @@ contract Deploy is Script {
         vm.startBroadcast(deploymentKey);
 
         CycloReceipt cycloReceipt = new CycloReceipt();
-        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(cycloReceipt), PROD_FLARE_CYCLO_RECEIPT_CODEHASH_V1_2);
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(cycloReceipt), PROD_FLARE_CYCLO_RECEIPT_CODEHASH_V2);
 
         vm.stopBroadcast();
     }
@@ -84,11 +84,11 @@ contract Deploy is Script {
 
         ReceiptVaultConstructionConfigV2 memory receiptVaultConstructionConfig = ReceiptVaultConstructionConfigV2({
             factory: ICloneableFactoryV2(PROD_FLARE_CLONE_FACTORY_ADDRESS_V1),
-            receiptImplementation: IReceiptV3(PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V1)
+            receiptImplementation: IReceiptV3(PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V2)
         });
         CycloVault cycloVault = new CycloVault(receiptVaultConstructionConfig);
         LibCycloTestProd.checkCBORTrimmedBytecodeHash(
-            address(cycloVault), PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1_CODEHASH
+            address(cycloVault), PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH
         );
 
         vm.stopBroadcast();
@@ -188,7 +188,7 @@ contract Deploy is Script {
         );
 
         LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
-            cyweth, PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1, PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1_CODEHASH
+            cyweth, PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1, PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH
         );
         vm.stopBroadcast();
     }
@@ -208,7 +208,7 @@ contract Deploy is Script {
         );
 
         LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
-            cyxrp, PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1, PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1_CODEHASH
+            cyxrp, PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1, PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH
         );
         vm.stopBroadcast();
     }

@@ -13,7 +13,7 @@ import {
     PROD_FLARE_RECEIPT_CYWETH,
     PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V1,
     PROD_FLARE_CYCLO_RECEIPT_CODEHASH_V1,
-    PROD_FLARE_CYCLO_RECEIPT_CODEHASH_V1_2
+    PROD_FLARE_CYCLO_RECEIPT_CODEHASH_V2
 } from "src/lib/LibCycloProdReceipt.sol";
 import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
 
@@ -21,7 +21,7 @@ contract CycloReceiptProdTest is Test {
     function testProdCycloReceiptBytecode() external {
         CycloReceipt fresh = new CycloReceipt();
 
-        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(fresh), PROD_FLARE_CYCLO_RECEIPT_CODEHASH_V1_2);
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(fresh), PROD_FLARE_CYCLO_RECEIPT_CODEHASH_V2);
 
         LibCycloTestProd.createSelectFork(vm);
 
