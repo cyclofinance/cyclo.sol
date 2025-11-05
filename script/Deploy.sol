@@ -31,7 +31,7 @@ import {
     PROD_FLARE_VAULT_IMPLEMENTATION_CYSFLR_CODEHASH
 } from "src/lib/LibCycloProdVault.sol";
 import {
-    PROD_FLARE_CYCLO_RECEIPT_CODEHASH_V1,
+    PROD_FLARE_CYCLO_RECEIPT_CODEHASH_V1_2,
     PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V1
 } from "src/lib/LibCycloProdReceipt.sol";
 import {
@@ -74,7 +74,7 @@ contract Deploy is Script {
         vm.startBroadcast(deploymentKey);
 
         CycloReceipt cycloReceipt = new CycloReceipt();
-        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(cycloReceipt), PROD_FLARE_CYCLO_RECEIPT_CODEHASH_V1);
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(cycloReceipt), PROD_FLARE_CYCLO_RECEIPT_CODEHASH_V1_2);
 
         vm.stopBroadcast();
     }
