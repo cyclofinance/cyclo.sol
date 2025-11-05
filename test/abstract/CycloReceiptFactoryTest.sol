@@ -4,7 +4,7 @@ pragma solidity ^0.8.25;
 
 import {ReceiptFactoryTest} from "ethgild/../test/abstract/ReceiptFactoryTest.sol";
 import {CycloReceipt} from "src/concrete/receipt/CycloReceipt.sol";
-import {CycloVault, ReceiptVaultConstructionConfig} from "src/concrete/vault/CycloVault.sol";
+import {CycloVault, ReceiptVaultConstructionConfigV2} from "src/concrete/vault/CycloVault.sol";
 
 contract CycloReceiptFactoryTest is ReceiptFactoryTest {
     CycloReceipt internal immutable iCycloReceiptImplementation;
@@ -13,7 +13,7 @@ contract CycloReceiptFactoryTest is ReceiptFactoryTest {
     constructor() {
         iCycloReceiptImplementation = new CycloReceipt();
         iCycloVaultImplementation = new CycloVault(
-            ReceiptVaultConstructionConfig({factory: iFactory, receiptImplementation: iCycloReceiptImplementation})
+            ReceiptVaultConstructionConfigV2({factory: I_FACTORY, receiptImplementation: iCycloReceiptImplementation})
         );
     }
 }

@@ -7,10 +7,11 @@ import {CycloReceipt} from "src/concrete/receipt/CycloReceipt.sol";
 import {
     ERC20PriceOracleReceiptVault,
     ERC20PriceOracleVaultConfig,
-    ReceiptVaultConstructionConfig,
+    ReceiptVaultConstructionConfigV2,
     VaultConfig
 } from "ethgild/concrete/vault/ERC20PriceOracleReceiptVault.sol";
-import {IReceiptV2} from "ethgild/abstract/ReceiptVault.sol";
+import {IReceiptV2} from "ethgild/interface/deprecated/IReceiptV2.sol";
+import {IReceiptV3} from "ethgild/interface/IReceiptV3.sol";
 import {CloneFactory} from "rain.factory/concrete/CloneFactory.sol";
 import {ICloneableFactoryV2} from "rain.factory/interface/ICloneableFactoryV2.sol";
 import {SceptreStakedFlrOracle} from "ethgild/concrete/oracle/SceptreStakedFlrOracle.sol";
@@ -83,9 +84,9 @@ contract Deploy is Script {
     function deployCycloVaultImplementation(uint256 deploymentKey) internal {
         vm.startBroadcast(deploymentKey);
 
-        ReceiptVaultConstructionConfig memory receiptVaultConstructionConfig = ReceiptVaultConstructionConfig({
+        ReceiptVaultConstructionConfigV2 memory receiptVaultConstructionConfig = ReceiptVaultConstructionConfigV2({
             factory: ICloneableFactoryV2(PROD_FLARE_CLONE_FACTORY_ADDRESS_V1),
-            receiptImplementation: IReceiptV2(PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V1)
+            receiptImplementation: IReceiptV3(PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V1)
         });
         CycloVault cycloVault = new CycloVault(receiptVaultConstructionConfig);
         LibCycloTestProd.checkCBORTrimmedBytecodeHash(

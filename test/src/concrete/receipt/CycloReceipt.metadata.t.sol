@@ -13,7 +13,7 @@ import {CycloReceiptFactoryTest} from "test/abstract/CycloReceiptFactoryTest.sol
 import {
     CycloVault,
     CycloVaultConfig,
-    ReceiptVaultConstructionConfig,
+    ReceiptVaultConstructionConfigV2,
     IPriceOracleV2
 } from "src/concrete/vault/CycloVault.sol";
 import {SFLR_CONTRACT} from "rain.flare/lib/sflr/LibSceptreStakedFlare.sol";
@@ -87,7 +87,7 @@ contract CycloReceiptMetadataTest is CycloReceiptFactoryTest {
     function testCycloReceiptURI() external {
         CycloVault vault = CycloVault(
             payable(
-                iFactory.clone(
+                I_FACTORY.clone(
                     address(iCycloVaultImplementation),
                     abi.encode(
                         CycloVaultConfig({
@@ -107,7 +107,7 @@ contract CycloReceiptMetadataTest is CycloReceiptFactoryTest {
     function testCycloReceiptName() external {
         CycloVault vault = CycloVault(
             payable(
-                iFactory.clone(
+                I_FACTORY.clone(
                     address(iCycloVaultImplementation),
                     abi.encode(
                         CycloVaultConfig({
@@ -127,7 +127,7 @@ contract CycloReceiptMetadataTest is CycloReceiptFactoryTest {
     function testCycloReceiptSymbol() external {
         CycloVault vault = CycloVault(
             payable(
-                iFactory.clone(
+                I_FACTORY.clone(
                     address(iCycloVaultImplementation),
                     abi.encode(
                         CycloVaultConfig({
