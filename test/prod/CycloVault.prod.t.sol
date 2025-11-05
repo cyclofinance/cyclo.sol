@@ -4,17 +4,12 @@ pragma solidity =0.8.25;
 
 import {Test} from "forge-std/Test.sol";
 
-import {
-    ERC20PriceOracleReceiptVault,
-    ReceiptVaultConstructionConfig
-} from "ethgild/concrete/vault/ERC20PriceOracleReceiptVault.sol";
+import {ReceiptVaultConstructionConfigV2} from "ethgild/concrete/vault/ERC20PriceOracleReceiptVault.sol";
 import {LibCycloTestProd, DEFAULT_ALICE} from "test/lib/LibCycloTestProd.sol";
 import {ICloneableFactoryV2} from "rain.factory/interface/ICloneableFactoryV2.sol";
-import {CycloReceipt} from "src/concrete/receipt/CycloReceipt.sol";
 import {SFLR_CONTRACT} from "rain.flare/lib/sflr/LibSceptreStakedFlare.sol";
 import {
     PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2,
-    PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE,
     PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE,
     PROD_FLARE_FTSO_V2_LTS_XRP_USD_FEED_ORACLE
 } from "src/lib/LibCycloProdOracle.sol";
@@ -27,30 +22,26 @@ import {
     PROD_FLARE_VAULT_IMPLEMENTATION_CYSFLR,
     PROD_FLARE_VAULT_IMPLEMENTATION_CYSFLR_CODEHASH,
     PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1,
-    PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1_CODEHASH
+    PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1_CODEHASH,
+    PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1_CODEHASH_2
 } from "src/lib/LibCycloProdVault.sol";
-import {
-    PROD_FLARE_RECEIPT_IMPLEMENTATION_CYSFLR,
-    PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V1
-} from "src/lib/LibCycloProdReceipt.sol";
+import {PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V1} from "src/lib/LibCycloProdReceipt.sol";
 import {CycloVaultConfig, CycloVault} from "src/concrete/vault/CycloVault.sol";
 import {PROD_FLARE_CLONE_FACTORY_ADDRESS_V1} from "src/lib/LibCycloProdCloneFactory.sol";
-import {IReceiptV2} from "ethgild/abstract/ReceiptVault.sol";
-import {IERC20Upgradeable as IERC20} from
-    "openzeppelin-contracts-upgradeable/contracts/token/ERC20/IERC20Upgradeable.sol";
+import {IReceiptV3} from "ethgild/abstract/ReceiptVault.sol";
 
 contract CycloVaultProdTest is Test {
     // This address has 2M FXRP on mainnet fork.
     address constant ALICE_FXRP = 0x1aac0E512f9Fd62a8A873Bac3E19373C8ba9D4BC;
 
     function testProdCycloVaultBytecode() external {
-        ReceiptVaultConstructionConfig memory receiptVaultConstructionConfig = ReceiptVaultConstructionConfig({
+        ReceiptVaultConstructionConfigV2 memory receiptVaultConstructionConfig = ReceiptVaultConstructionConfigV2({
             factory: ICloneableFactoryV2(PROD_FLARE_CLONE_FACTORY_ADDRESS_V1),
-            receiptImplementation: IReceiptV2(PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V1)
+            receiptImplementation: IReceiptV3(PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V1)
         });
         CycloVault cycloVault = new CycloVault(receiptVaultConstructionConfig);
         LibCycloTestProd.checkCBORTrimmedBytecodeHash(
-            address(cycloVault), PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1_CODEHASH
+            address(cycloVault), PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1_CODEHASH_2
         );
 
         LibCycloTestProd.createSelectFork(vm);

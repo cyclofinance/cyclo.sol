@@ -5,7 +5,6 @@ pragma solidity =0.8.25;
 import {Test} from "forge-std/Test.sol";
 
 import {CycloReceipt} from "src/concrete/receipt/CycloReceipt.sol";
-import {PROD_FLARE_VAULT_CYSFLR} from "src/lib/LibCycloProdVault.sol";
 import {
     PROD_FLARE_RECEIPT_IMPLEMENTATION_CYSFLR,
     PROD_FLARE_RECEIPT_CYSFLR,
@@ -13,7 +12,8 @@ import {
     PROD_FLARE_RECEIPT_IMPLEMENTATION_CYSFLR_CODEHASH,
     PROD_FLARE_RECEIPT_CYWETH,
     PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V1,
-    PROD_FLARE_CYCLO_RECEIPT_CODEHASH_V1
+    PROD_FLARE_CYCLO_RECEIPT_CODEHASH_V1,
+    PROD_FLARE_CYCLO_RECEIPT_CODEHASH_V1_2
 } from "src/lib/LibCycloProdReceipt.sol";
 import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
 
@@ -21,7 +21,7 @@ contract CycloReceiptProdTest is Test {
     function testProdCycloReceiptBytecode() external {
         CycloReceipt fresh = new CycloReceipt();
 
-        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(fresh), PROD_FLARE_CYCLO_RECEIPT_CODEHASH_V1);
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(fresh), PROD_FLARE_CYCLO_RECEIPT_CODEHASH_V1_2);
 
         LibCycloTestProd.createSelectFork(vm);
 

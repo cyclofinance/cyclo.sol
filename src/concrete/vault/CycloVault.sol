@@ -4,7 +4,7 @@ pragma solidity =0.8.25;
 
 import {
     ERC20PriceOracleReceiptVault,
-    ReceiptVaultConstructionConfig,
+    ReceiptVaultConstructionConfigV2,
     IPriceOracleV2,
     ERC20PriceOracleVaultConfig,
     VaultConfig
@@ -28,7 +28,7 @@ struct CycloVaultConfig {
 /// handled in a consistent way e.g. the name is "Cyclo <vault symbol>" and the
 /// symbol is "cy<asset symbol>".
 contract CycloVault is ERC20PriceOracleReceiptVault {
-    constructor(ReceiptVaultConstructionConfig memory config) ERC20PriceOracleReceiptVault(config) {}
+    constructor(ReceiptVaultConstructionConfigV2 memory config) ERC20PriceOracleReceiptVault(config) {}
 
     /// @inheritdoc ERC20PriceOracleReceiptVault
     function initialize(bytes memory data) public virtual override returns (bytes32) {
