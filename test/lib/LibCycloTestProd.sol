@@ -7,7 +7,7 @@ import {console2} from "forge-std/Test.sol";
 import {LibExtrospectBytecode} from "rain.extrospection/lib/LibExtrospectBytecode.sol";
 import {LibExtrospectERC1167Proxy} from "rain.extrospection/lib/LibExtrospectERC1167Proxy.sol";
 import {ICloneableV2} from "rain.factory/interface/ICloneableV2.sol";
-import {CycloVaultConfig, CycloVault} from "src/concrete/vault/CycloVault.sol";
+import {CycloVault} from "src/concrete/vault/CycloVault.sol";
 import {IERC20Upgradeable as IERC20} from
     "openzeppelin-contracts-upgradeable/contracts/token/ERC20/IERC20Upgradeable.sol";
 
@@ -23,6 +23,7 @@ library LibCycloTestProd {
         vm.createSelectFork(vm.envString("RPC_URL_FLARE_FORK"), PROD_TEST_BLOCK_NUMBER);
     }
 
+    //forge-lint: disable-next-line(mixed-case-function)
     function checkCBORTrimmedBytecodeHash(address account, bytes32 expected) internal view {
         bytes memory bytecode = account.code;
         bool didTrim = LibExtrospectBytecode.trimSolidityCBORMetadata(bytecode);
@@ -35,6 +36,7 @@ library LibCycloTestProd {
         }
     }
 
+    //forge-lint: disable-next-line(mixed-case-function)
     function checkCBORTrimmedBytecodeHashBy1167Proxy(
         address proxy,
         address expectedImplementation,

@@ -14,6 +14,7 @@ string constant CYCLO_BRAND_NAME = "Cyclo";
 string constant CYCLO_REDEEM_URL = "https://cyclo.finance";
 
 contract CycloReceipt is ERC20PriceOracleReceipt {
+    //forge-lint: disable-next-line(mixed-case-function)
     function _redeemURL() internal pure virtual override returns (string memory) {
         return CYCLO_REDEEM_URL;
     }
@@ -22,6 +23,7 @@ contract CycloReceipt is ERC20PriceOracleReceipt {
         return CYCLO_BRAND_NAME;
     }
 
+    //forge-lint: disable-next-line(mixed-case-function)
     function _receiptSVGURI() internal pure virtual override returns (string memory) {
         return CYCLO_RECEIPT_SVG_URI;
     }

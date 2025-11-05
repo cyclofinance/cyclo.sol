@@ -2,20 +2,12 @@
 // SPDX-FileCopyrightText: Copyright (c) 2020 Rain Open Source Software Ltd
 pragma solidity =0.8.25;
 
-import {Test} from "forge-std/Test.sol";
-import {Base64} from "solady/utils/Base64.sol";
 import {CycloReceipt, CYCLO_RECEIPT_SVG_URI} from "src/concrete/receipt/CycloReceipt.sol";
-import {DATA_URI_BASE64_PREFIX} from "ethgild/concrete/receipt/Receipt.sol";
 import {PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2} from "src/lib/LibCycloProdOracle.sol";
 import {PROD_CYSFLR_RECEIPT_SYMBOL, PROD_CYSFLR_RECEIPT_NAME} from "test/lib/LibCycloTestProd.sol";
 import {ZeroReceiptId} from "ethgild/error/ErrReceipt.sol";
 import {CycloReceiptFactoryTest} from "test/abstract/CycloReceiptFactoryTest.sol";
-import {
-    CycloVault,
-    CycloVaultConfig,
-    ReceiptVaultConstructionConfigV2,
-    IPriceOracleV2
-} from "src/concrete/vault/CycloVault.sol";
+import {CycloVault, CycloVaultConfig, IPriceOracleV2} from "src/concrete/vault/CycloVault.sol";
 import {SFLR_CONTRACT} from "rain.flare/lib/sflr/LibSceptreStakedFlare.sol";
 import {IERC20MetadataUpgradeable as IERC20Metadata} from
     "openzeppelin-contracts-upgradeable/contracts/token/ERC20/extensions/IERC20MetadataUpgradeable.sol";
@@ -88,7 +80,7 @@ contract CycloReceiptMetadataTest is CycloReceiptFactoryTest {
         CycloVault vault = CycloVault(
             payable(
                 I_FACTORY.clone(
-                    address(iCycloVaultImplementation),
+                    address(I_CYCLO_VAULT_IMPLEMENTATION),
                     abi.encode(
                         CycloVaultConfig({
                             priceOracle: IPriceOracleV2(payable(PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2)),
@@ -108,7 +100,7 @@ contract CycloReceiptMetadataTest is CycloReceiptFactoryTest {
         CycloVault vault = CycloVault(
             payable(
                 I_FACTORY.clone(
-                    address(iCycloVaultImplementation),
+                    address(I_CYCLO_VAULT_IMPLEMENTATION),
                     abi.encode(
                         CycloVaultConfig({
                             priceOracle: IPriceOracleV2(payable(PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2)),
@@ -128,7 +120,7 @@ contract CycloReceiptMetadataTest is CycloReceiptFactoryTest {
         CycloVault vault = CycloVault(
             payable(
                 I_FACTORY.clone(
-                    address(iCycloVaultImplementation),
+                    address(I_CYCLO_VAULT_IMPLEMENTATION),
                     abi.encode(
                         CycloVaultConfig({
                             priceOracle: IPriceOracleV2(payable(PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2)),

@@ -17,7 +17,9 @@ bytes32 constant PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE_CODEHASH =
 
 address constant PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE = 0x2B72F43EbFDb24d6aC6873937F25D5b17f1E160F;
 
+//forge-lint: disable-next-line(screaming-snake-case-const)
 address constant PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2 = 0x0a408517bf87714c634b48e0C2534887996E1BC9;
+//forge-lint: disable-next-line(screaming-snake-case-const)
 bytes32 constant PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2_CODEHASH =
     bytes32(0xdc4a82f08e8d9dd9174fb1d14b65edb7b0ade713e926bd14d4933110c1b9c680);
 

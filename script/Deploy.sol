@@ -5,12 +5,10 @@ pragma solidity =0.8.25;
 import {Script} from "forge-std/Script.sol";
 import {CycloReceipt} from "src/concrete/receipt/CycloReceipt.sol";
 import {
-    ERC20PriceOracleReceiptVault,
     ERC20PriceOracleVaultConfig,
     ReceiptVaultConstructionConfigV2,
     VaultConfig
 } from "ethgild/concrete/vault/ERC20PriceOracleReceiptVault.sol";
-import {IReceiptV2} from "ethgild/interface/deprecated/IReceiptV2.sol";
 import {IReceiptV3} from "ethgild/interface/IReceiptV3.sol";
 import {CloneFactory} from "rain.factory/concrete/CloneFactory.sol";
 import {ICloneableFactoryV2} from "rain.factory/interface/ICloneableFactoryV2.sol";
@@ -104,6 +102,7 @@ contract Deploy is Script {
             address(stakedFlrOracle), PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE_CODEHASH
         );
 
+        //forge-lint: disable-next-line(mixed-case-variable)
         IPriceOracleV2 ftsoV2LTSFeedOracle = new FtsoV2LTSFeedOracle(
             FtsoV2LTSFeedOracleConfig({feedId: FLR_USD_FEED_ID, staleAfter: PROD_ORACLE_DEFAULT_STALE_AFTER})
         );
@@ -149,8 +148,10 @@ contract Deploy is Script {
         vm.stopBroadcast();
     }
 
+    //forge-lint: disable-next-line(mixed-case-function)
     function deployFTSOV2LTSFeedOracleETHUSD(uint256 deploymentKey) internal {
         vm.startBroadcast(deploymentKey);
+        //forge-lint: disable-next-line(mixed-case-variable)
         IPriceOracleV2 ftsoV2LTSFeedOracle = new FtsoV2LTSFeedOracle(
             FtsoV2LTSFeedOracleConfig({feedId: ETH_USD_FEED_ID, staleAfter: PROD_ORACLE_DEFAULT_STALE_AFTER})
         );
@@ -160,8 +161,10 @@ contract Deploy is Script {
         vm.stopBroadcast();
     }
 
+    //forge-lint: disable-next-line(mixed-case-function)
     function deployFTSOV2LTSFeedOracleXRPUSD(uint256 deploymentKey) internal {
         vm.startBroadcast(deploymentKey);
+        //forge-lint: disable-next-line(mixed-case-variable)
         IPriceOracleV2 ftsoV2LTSFeedOracle = new FtsoV2LTSFeedOracle(
             FtsoV2LTSFeedOracleConfig({feedId: XRP_USD_FEED_ID, staleAfter: PROD_ORACLE_DEFAULT_STALE_AFTER})
         );
@@ -190,6 +193,7 @@ contract Deploy is Script {
         vm.stopBroadcast();
     }
 
+    //forge-lint: disable-next-line(mixed-case-function)
     function deployFlareFassetXRP(uint256 deploymentKey) internal {
         vm.startBroadcast(deploymentKey);
 
