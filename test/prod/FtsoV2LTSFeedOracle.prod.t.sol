@@ -11,6 +11,9 @@ import {
     PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE_CODEHASH,
     PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE_CODEHASH,
     PROD_FLARE_FTSO_V2_LTS_XRP_USD_FEED_ORACLE_CODEHASH,
+    PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE_CODEHASH2,
+    PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE_CODEHASH2,
+    PROD_FLARE_FTSO_V2_LTS_XRP_USD_FEED_ORACLE_CODEHASH2,
     PROD_ORACLE_DEFAULT_STALE_AFTER
 } from "src/lib/LibCycloProdOracle.sol";
 
@@ -39,21 +42,21 @@ contract FtsoV2LTSFeedOracleProdTest is Test {
             FtsoV2LTSFeedOracleConfig({feedId: FLR_USD_FEED_ID, staleAfter: PROD_ORACLE_DEFAULT_STALE_AFTER})
         );
         LibCycloTestProd.checkCBORTrimmedBytecodeHash(
-            address(flrusd), PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE_CODEHASH
+            address(flrusd), PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE_CODEHASH2
         );
 
         FtsoV2LTSFeedOracle ethusd = new FtsoV2LTSFeedOracle(
             FtsoV2LTSFeedOracleConfig({feedId: ETH_USD_FEED_ID, staleAfter: PROD_ORACLE_DEFAULT_STALE_AFTER})
         );
         LibCycloTestProd.checkCBORTrimmedBytecodeHash(
-            address(ethusd), PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE_CODEHASH
+            address(ethusd), PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE_CODEHASH2
         );
 
         FtsoV2LTSFeedOracle xrpusd = new FtsoV2LTSFeedOracle(
             FtsoV2LTSFeedOracleConfig({feedId: XRP_USD_FEED_ID, staleAfter: PROD_ORACLE_DEFAULT_STALE_AFTER})
         );
         LibCycloTestProd.checkCBORTrimmedBytecodeHash(
-            address(xrpusd), PROD_FLARE_FTSO_V2_LTS_XRP_USD_FEED_ORACLE_CODEHASH
+            address(xrpusd), PROD_FLARE_FTSO_V2_LTS_XRP_USD_FEED_ORACLE_CODEHASH2
         );
 
         LibCycloTestProd.createSelectFork(vm);

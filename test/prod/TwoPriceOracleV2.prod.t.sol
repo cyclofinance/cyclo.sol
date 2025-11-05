@@ -9,6 +9,7 @@ import {
     PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE,
     PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2,
     PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2_CODEHASH,
+    PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2_CODEHASH2,
     PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE
 } from "src/lib/LibCycloProdOracle.sol";
 
@@ -36,7 +37,7 @@ contract TwoPriceOracleV2ProdTest is Test {
             })
         );
         LibCycloTestProd.checkCBORTrimmedBytecodeHash(
-            address(fresh), PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2_CODEHASH
+            address(fresh), PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2_CODEHASH2
         );
 
         LibCycloTestProd.checkCBORTrimmedBytecodeHash(

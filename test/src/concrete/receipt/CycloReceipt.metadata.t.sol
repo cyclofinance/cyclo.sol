@@ -92,7 +92,7 @@ contract CycloReceiptMetadataTest is CycloReceiptFactoryTest {
         );
 
         vm.mockCall(address(SFLR_CONTRACT), abi.encodeWithSelector(IERC20Metadata.symbol.selector), abi.encode("sFLR"));
-
+        vm.mockCall(address(SFLR_CONTRACT), abi.encodeWithSelector(IERC20Metadata.decimals.selector), abi.encode(18));
         checkCycloReceiptURIV2(address(vault.receipt()), "sFLR");
     }
 
