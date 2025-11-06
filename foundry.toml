@@ -13,5 +13,8 @@ remappings = [
     "ethgild/=lib/ethgild/src/",
     "rain.factory/=lib/ethgild/lib/rain.factory/src/",
     "rain.flare/=lib/ethgild/lib/rain.flare/src/",
-    "rain.extrospection/=lib/rain.extrospection/src/"
+    "rain.extrospection/=lib/rain.extrospection/src/",
+    "rain.pyth/=lib/ethgild/lib/rain.pyth/src/",
+    "rain.intorastring/=lib/ethgild/lib/rain.pyth/lib/rain.interpreter/lib/rain.interpreter.interface/lib/rain.intorastring/src/",
+    "rain.math.float/=lib/ethgild/lib/rain.pyth/lib/rain.interpreter/lib/rain.interpreter.interface/lib/rain.math.float/src/",
 ]
