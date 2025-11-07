@@ -29,6 +29,7 @@ on:
           - factory
           - factory-arbitrum
           - pyth-oracle-weth-usd
+          - pyth-weth-price-vault
 
 jobs:
   deploy:
