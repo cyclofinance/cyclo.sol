@@ -20,20 +20,25 @@ import {IPriceOracleV2} from "ethgild/abstract/PriceOracleV2.sol";
 import {SFLR_CONTRACT} from "rain.flare/lib/sflr/LibSceptreStakedFlare.sol";
 import {
     PROD_FLARE_CLONE_FACTORY_ADDRESS_V1,
-    PROD_FLARE_CLONE_FACTORY_CODEHASH_V1
+    PROD_FLARE_CLONE_FACTORY_CODEHASH_V1,
+    PROD_ARBITRUM_CLONE_FACTORY_ADDRESS_V1,
+    PROD_ARBITRUM_CLONE_FACTORY_CODEHASH_V1
 } from "src/lib/LibCycloProdCloneFactory.sol";
 import {CycloVault, CycloVaultConfig} from "src/concrete/vault/CycloVault.sol";
-import {FLARE_STARGATE_WETH, FLARE_FASSET_XRP} from "src/lib/LibCycloProdAssets.sol";
+import {FLARE_STARGATE_WETH, FLARE_FASSET_XRP, ARBITRUM_WETH} from "src/lib/LibCycloProdAssets.sol";
 import {
     PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1,
     PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2,
     PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH,
+    PROD_ARBITRUM_CYCLO_VAULT_IMPLEMENTATION_V2,
+    PROD_ARBITRUM_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH,
     PROD_FLARE_VAULT_IMPLEMENTATION_CYSFLR,
     PROD_FLARE_VAULT_IMPLEMENTATION_CYSFLR_CODEHASH
 } from "src/lib/LibCycloProdVault.sol";
 import {
     PROD_FLARE_CYCLO_RECEIPT_CODEHASH_V2,
-    PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V2
+    PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V2,
+    PROD_ARBITRUM_CYCLO_RECEIPT_CODEHASH_V2
 } from "src/lib/LibCycloProdReceipt.sol";
 import {
     PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE_CODEHASH,
@@ -47,13 +52,15 @@ import {
     PROD_ORACLE_DEFAULT_STALE_AFTER,
     PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE,
     PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE,
-    PYTH_ORACLE_WETH_USD_ARBITRUM_CODEHASH
+    PYTH_ORACLE_WETH_USD_ARBITRUM_CODEHASH,
+    PROD_PYTH_ORACLE_WETH_USD_ARBITRUM
 } from "src/lib/LibCycloProdOracle.sol";
 import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
 import {LibPyth} from "rain.pyth/lib/pyth/LibPyth.sol";
 import {PythOracle, PythOracleConfig} from "ethgild/concrete/oracle/PythOracle.sol";
 
 bytes32 constant DEPLOYMENT_SUITE_FACTORY = keccak256("factory");
+bytes32 constant DEPLOYMENT_SUITE_FACTORY_ARBITRUM = keccak256("factory-arbitrum");
 bytes32 constant DEPLOYMENT_SUITE_CYCLO_RECEIPT_IMPLEMENTATION = keccak256("cyclo-receipt-implementation");
 bytes32 constant DEPLOYMENT_SUITE_CYCLO_VAULT_IMPLEMENTATION = keccak256("cyclo-vault-implementation");
 bytes32 constant DEPLOYMENT_SUITE_STAKED_FLR_ORACLE_1 = keccak256("sceptre-staked-flare-oracle-1");
@@ -64,6 +71,7 @@ bytes32 constant DEPLOYMENT_SUITE_FTSO_V2_LTS_FEED_ORACLE_XRP_USD = keccak256("f
 bytes32 constant DEPLOYMENT_SUITE_STARGATE_WETH_PRICE_VAULT = keccak256("stargate-weth-price-vault");
 bytes32 constant DEPLOYMENT_SUITE_FLARE_FASSET_XRP = keccak256("flare-fasset-xrp-price-vault");
 bytes32 constant DEPLOYMENT_SUITE_PYTH_ORACLE_WETH_USD = keccak256("pyth-oracle-weth-usd");
+bytes32 constant DEPLOYMENT_SUITE_PYTH_WETH_PRICE_VAULT = keccak256("pyth-weth-price-vault");
 
 contract Deploy is Script {
     function deployFactory(uint256 deploymentKey) internal {
@@ -75,11 +83,30 @@ contract Deploy is Script {
         vm.stopBroadcast();
     }
 
+    function deployFactoryArbitrum(uint256 deploymentKey) internal {
+        vm.startBroadcast(deploymentKey);
+
+        ICloneableFactoryV2 cloneFactory = new CloneFactory();
+        // Use the same codehash as Flare's clone factory
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(cloneFactory), PROD_ARBITRUM_CLONE_FACTORY_CODEHASH_V1);
+
+        vm.stopBroadcast();
+    }
+
     function deployCycloReceiptImplementation(uint256 deploymentKey) internal {
         vm.startBroadcast(deploymentKey);
 
         CycloReceipt cycloReceipt = new CycloReceipt();
         LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(cycloReceipt), PROD_FLARE_CYCLO_RECEIPT_CODEHASH_V2);
+
+        vm.stopBroadcast();
+    }
+
+    function deployCycloReceiptImplementationArbitrum(uint256 deploymentKey) internal {
+        vm.startBroadcast(deploymentKey);
+
+        CycloReceipt cycloReceipt = new CycloReceipt();
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(cycloReceipt), PROD_ARBITRUM_CYCLO_RECEIPT_CODEHASH_V2);
 
         vm.stopBroadcast();
     }
@@ -216,6 +243,25 @@ contract Deploy is Script {
         vm.stopBroadcast();
     }
 
+    function deployPythWethPriceVault(uint256 deploymentKey) internal {
+        vm.startBroadcast(deploymentKey);
+
+        address cyweth = ICloneableFactoryV2(PROD_ARBITRUM_CLONE_FACTORY_ADDRESS_V1).clone(
+            PROD_ARBITRUM_CYCLO_VAULT_IMPLEMENTATION_V2,
+            abi.encode(
+                CycloVaultConfig({
+                    priceOracle: IPriceOracleV2(payable(PROD_PYTH_ORACLE_WETH_USD_ARBITRUM)),
+                    asset: ARBITRUM_WETH
+                })
+            )
+        );
+
+        LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
+            cyweth, PROD_ARBITRUM_CYCLO_VAULT_IMPLEMENTATION_V2, PROD_ARBITRUM_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH
+        );
+        vm.stopBroadcast();
+    }
+
     //forge-lint: disable-next-line(mixed-case-function)
     function deployFlareFassetXRP(uint256 deploymentKey) internal {
         vm.startBroadcast(deploymentKey);
@@ -242,6 +288,8 @@ contract Deploy is Script {
 
         if (suite == DEPLOYMENT_SUITE_FACTORY) {
             deployFactory(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_FACTORY_ARBITRUM) {
+            deployFactoryArbitrum(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_CYCLO_RECEIPT_IMPLEMENTATION) {
             deployCycloReceiptImplementation(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_CYCLO_VAULT_IMPLEMENTATION) {
@@ -262,6 +310,8 @@ contract Deploy is Script {
             deployFlareFassetXRP(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_PYTH_ORACLE_WETH_USD) {
             deployPythOracleWETHUSDArbitrum(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_PYTH_WETH_PRICE_VAULT) {
+            deployPythWethPriceVault(deployerPrivateKey);
         } else {
             revert("Unknown deployment suite");
         }
