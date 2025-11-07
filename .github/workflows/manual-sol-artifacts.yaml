@@ -25,6 +25,7 @@ on:
           - cyclo-receipt-implementation
           - cyclo-vault-implementation
           - factory
+          - factory-arbitrum
           - pyth-oracle-weth-usd
 
 jobs:
