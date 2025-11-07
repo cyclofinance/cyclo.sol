@@ -8,6 +8,7 @@ on:
         type: choice
         options:
           - flare
+          - arbitrum
 
       suite:
         description: 'Suite to deploy'
@@ -24,6 +25,7 @@ on:
           - cyclo-receipt-implementation
           - cyclo-vault-implementation
           - factory
+          - pyth-oracle-weth-usd
 
 jobs:
   deploy:
