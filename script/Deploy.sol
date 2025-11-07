@@ -47,7 +47,7 @@ import {
     PROD_ORACLE_DEFAULT_STALE_AFTER,
     PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE,
     PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE,
-    PYTH_ORACLE_ETH_USD_ARBITRUM_CODEHASH
+    PYTH_ORACLE_WETH_USD_ARBITRUM_CODEHASH
 } from "src/lib/LibCycloProdOracle.sol";
 import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
 import {LibPyth} from "rain.pyth/lib/pyth/LibPyth.sol";
@@ -63,7 +63,7 @@ bytes32 constant DEPLOYMENT_SUITE_FTSO_V2_LTS_FEED_ORACLE_ETH_USD = keccak256("f
 bytes32 constant DEPLOYMENT_SUITE_FTSO_V2_LTS_FEED_ORACLE_XRP_USD = keccak256("ftso-v2-lts-feed-oracle-xrp-usd");
 bytes32 constant DEPLOYMENT_SUITE_STARGATE_WETH_PRICE_VAULT = keccak256("stargate-weth-price-vault");
 bytes32 constant DEPLOYMENT_SUITE_FLARE_FASSET_XRP = keccak256("flare-fasset-xrp-price-vault");
-bytes32 constant DEPLOYMENT_SUITE_PYTH_ORACLE_ETH_USD = keccak256("pyth-oracle-eth-usd");
+bytes32 constant DEPLOYMENT_SUITE_PYTH_ORACLE_WETH_USD = keccak256("pyth-oracle-weth-usd");
 
 contract Deploy is Script {
     function deployFactory(uint256 deploymentKey) internal {
@@ -180,19 +180,19 @@ contract Deploy is Script {
     }
 
     //forge-lint: disable-next-line(mixed-case-function)
-    function deployPythOracleETHUSDArbitrum(uint256 deploymentKey) internal {
+    function deployPythOracleWETHUSDArbitrum(uint256 deploymentKey) internal {
         vm.startBroadcast(deploymentKey);
 
         require(block.chainid == LibPyth.CHAIN_ID_ARBITRUM, "Chain is not Arbitrum");
 
         IPriceOracleV2 pythOracle = new PythOracle(
             PythOracleConfig({
-                priceFeedId: bytes32(0),
+                priceFeedId: LibPyth.PRICE_FEED_ID_CRYPTO_WETH_USD,
                 staleAfter: PROD_ORACLE_DEFAULT_STALE_AFTER,
                 pythContract: LibPyth.PRICE_FEED_CONTRACT_ARBITRUM
             })
         );
-        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(pythOracle), PYTH_ORACLE_ETH_USD_ARBITRUM_CODEHASH);
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(pythOracle), PYTH_ORACLE_WETH_USD_ARBITRUM_CODEHASH);
 
         vm.stopBroadcast();
     }
@@ -260,8 +260,8 @@ contract Deploy is Script {
             deployStargateWethPriceVault(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_FLARE_FASSET_XRP) {
             deployFlareFassetXRP(deployerPrivateKey);
-        } else if (suite == DEPLOYMENT_SUITE_PYTH_ORACLE_ETH_USD) {
-            deployPythOracleETHUSDArbitrum(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_PYTH_ORACLE_WETH_USD) {
+            deployPythOracleWETHUSDArbitrum(deployerPrivateKey);
         } else {
             revert("Unknown deployment suite");
         }
