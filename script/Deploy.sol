@@ -62,6 +62,8 @@ import {PythOracle, PythOracleConfig} from "ethgild/concrete/oracle/PythOracle.s
 bytes32 constant DEPLOYMENT_SUITE_FACTORY = keccak256("factory");
 bytes32 constant DEPLOYMENT_SUITE_FACTORY_ARBITRUM = keccak256("factory-arbitrum");
 bytes32 constant DEPLOYMENT_SUITE_CYCLO_RECEIPT_IMPLEMENTATION = keccak256("cyclo-receipt-implementation");
+bytes32 constant DEPLOYMENT_SUITE_CYCLO_RECEIPT_IMPLEMENTATION_ARBITRUM =
+    keccak256("cyclo-receipt-implementation-arbitrum");
 bytes32 constant DEPLOYMENT_SUITE_CYCLO_VAULT_IMPLEMENTATION = keccak256("cyclo-vault-implementation");
 bytes32 constant DEPLOYMENT_SUITE_STAKED_FLR_ORACLE_1 = keccak256("sceptre-staked-flare-oracle-1");
 bytes32 constant DEPLOYMENT_SUITE_STAKED_FLR_ORACLE_2 = keccak256("sceptre-staked-flare-oracle-2");
@@ -292,6 +294,8 @@ contract Deploy is Script {
             deployFactoryArbitrum(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_CYCLO_RECEIPT_IMPLEMENTATION) {
             deployCycloReceiptImplementation(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_CYCLO_RECEIPT_IMPLEMENTATION_ARBITRUM) {
+            deployCycloReceiptImplementationArbitrum(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_CYCLO_VAULT_IMPLEMENTATION) {
             deployCycloVaultImplementation(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_STAKED_FLR_ORACLE_1) {

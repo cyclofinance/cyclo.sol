@@ -23,6 +23,7 @@ on:
           - stargate-weth-price-vault
           - flare-fasset-xrp-price-vault
           - cyclo-receipt-implementation
+          - cyclo-receipt-implementation-arbitrum
           - cyclo-vault-implementation
           - factory
           - factory-arbitrum
