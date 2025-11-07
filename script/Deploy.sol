@@ -38,6 +38,7 @@ import {
 import {
     PROD_FLARE_CYCLO_RECEIPT_CODEHASH_V2,
     PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V2,
+    PROD_ARBITRUM_CYCLO_RECEIPT_IMPLEMENTATION_V2,
     PROD_ARBITRUM_CYCLO_RECEIPT_CODEHASH_V2
 } from "src/lib/LibCycloProdReceipt.sol";
 import {
@@ -65,6 +66,7 @@ bytes32 constant DEPLOYMENT_SUITE_CYCLO_RECEIPT_IMPLEMENTATION = keccak256("cycl
 bytes32 constant DEPLOYMENT_SUITE_CYCLO_RECEIPT_IMPLEMENTATION_ARBITRUM =
     keccak256("cyclo-receipt-implementation-arbitrum");
 bytes32 constant DEPLOYMENT_SUITE_CYCLO_VAULT_IMPLEMENTATION = keccak256("cyclo-vault-implementation");
+bytes32 constant DEPLOYMENT_SUITE_CYCLO_VAULT_IMPLEMENTATION_ARBITRUM = keccak256("cyclo-vault-implementation-arbitrum");
 bytes32 constant DEPLOYMENT_SUITE_STAKED_FLR_ORACLE_1 = keccak256("sceptre-staked-flare-oracle-1");
 bytes32 constant DEPLOYMENT_SUITE_STAKED_FLR_ORACLE_2 = keccak256("sceptre-staked-flare-oracle-2");
 bytes32 constant DEPLOYMENT_SUITE_STAKED_FLR_PRICE_VAULT = keccak256("sceptre-staked-flare-price-vault");
@@ -123,6 +125,21 @@ contract Deploy is Script {
         CycloVault cycloVault = new CycloVault(receiptVaultConstructionConfig);
         LibCycloTestProd.checkCBORTrimmedBytecodeHash(
             address(cycloVault), PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH
+        );
+
+        vm.stopBroadcast();
+    }
+
+    function deployCycloVaultImplementationArbitrum(uint256 deploymentKey) internal {
+        vm.startBroadcast(deploymentKey);
+
+        ReceiptVaultConstructionConfigV2 memory receiptVaultConstructionConfig = ReceiptVaultConstructionConfigV2({
+            factory: ICloneableFactoryV2(PROD_ARBITRUM_CLONE_FACTORY_ADDRESS_V1),
+            receiptImplementation: IReceiptV3(PROD_ARBITRUM_CYCLO_RECEIPT_IMPLEMENTATION_V2)
+        });
+        CycloVault cycloVault = new CycloVault(receiptVaultConstructionConfig);
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(
+            address(cycloVault), PROD_ARBITRUM_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH
         );
 
         vm.stopBroadcast();
@@ -298,6 +315,8 @@ contract Deploy is Script {
             deployCycloReceiptImplementationArbitrum(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_CYCLO_VAULT_IMPLEMENTATION) {
             deployCycloVaultImplementation(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_CYCLO_VAULT_IMPLEMENTATION_ARBITRUM) {
+            deployCycloVaultImplementationArbitrum(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_STAKED_FLR_ORACLE_1) {
             deployStakedFlrOracles1(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_STAKED_FLR_ORACLE_2) {

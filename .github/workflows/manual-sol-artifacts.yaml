@@ -25,6 +25,7 @@ on:
           - cyclo-receipt-implementation
           - cyclo-receipt-implementation-arbitrum
           - cyclo-vault-implementation
+          - cyclo-vault-implementation-arbitrum
           - factory
           - factory-arbitrum
           - pyth-oracle-weth-usd
