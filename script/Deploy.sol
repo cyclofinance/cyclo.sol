@@ -251,7 +251,9 @@ contract Deploy is Script {
             abi.encode(
                 CycloVaultConfig({
                     priceOracle: IPriceOracleV2(payable(PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE)),
-                    asset: FLARE_STARGATE_WETH
+                    asset: FLARE_STARGATE_WETH,
+                    oracleName: "",
+                    oracleSymbol: ""
                 })
             )
         );
@@ -270,7 +272,9 @@ contract Deploy is Script {
             abi.encode(
                 CycloVaultConfig({
                     priceOracle: IPriceOracleV2(payable(PROD_PYTH_ORACLE_WETH_USD_ARBITRUM)),
-                    asset: ARBITRUM_WETH
+                    asset: ARBITRUM_WETH,
+                    oracleName: "",
+                    oracleSymbol: ""
                 })
             )
         );
@@ -290,7 +294,9 @@ contract Deploy is Script {
             abi.encode(
                 CycloVaultConfig({
                     priceOracle: IPriceOracleV2(payable(PROD_FLARE_FTSO_V2_LTS_XRP_USD_FEED_ORACLE)),
-                    asset: FLARE_FASSET_XRP
+                    asset: FLARE_FASSET_XRP,
+                    oracleName: "",
+                    oracleSymbol: ""
                 })
             )
         );

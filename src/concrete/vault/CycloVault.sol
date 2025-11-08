@@ -12,27 +12,41 @@ import {
 import {ERC20} from "ethgild/abstract/ReceiptVault.sol";
 import {IERC20MetadataUpgradeable as IERC20Metadata} from
     "openzeppelin-contracts-upgradeable/contracts/token/ERC20/extensions/IERC20MetadataUpgradeable.sol";
+import {IntOrAString, LibIntOrAString} from "rain.intorastring/lib/LibIntOrAString.sol";
 
 /// @title CycloVaultConfig
 /// Configuration for the CycloVault contract initializer.
 /// @param priceOracle The price oracle to use for the vault.
 /// @param asset The asset that the vault will hold.
+/// @param oracleName The name to use in the vault's name metadata.
+/// @param oracleSymbol The symbol suffix to use in the vault's symbol metadata.
 struct CycloVaultConfig {
     IPriceOracleV2 priceOracle;
     address asset;
+    string oracleName;
+    string oracleSymbol;
 }
 
 /// @title CycloVault
 /// Extends and simplifies ERC20PriceOracleReceiptVault for Cyclo deployments.
 /// Ensures that for a given oracle and asset combination, the metadata is all
 /// handled in a consistent way e.g. the name is "Cyclo <vault symbol>" and the
-/// symbol is "cy<asset symbol>".
+/// symbol is "cy<asset symbol>" with an optional ".<oracle symbol>" disambiguator.
 contract CycloVault is ERC20PriceOracleReceiptVault {
+    using LibIntOrAString for IntOrAString;
+
+    /// @notice Oracle name used in metadata generation.
+    string internal oracleName;
+    /// @notice Oracle symbol used in metadata generation.
+    string internal oracleSymbol;
+
     constructor(ReceiptVaultConstructionConfigV2 memory config) ERC20PriceOracleReceiptVault(config) {}
 
     /// @inheritdoc ERC20PriceOracleReceiptVault
     function initialize(bytes memory data) public virtual override returns (bytes32) {
         CycloVaultConfig memory config = abi.decode(data, (CycloVaultConfig));
+        oracleName = config.oracleName;
+        oracleSymbol = config.oracleSymbol;
         return super.initialize(
             abi.encode(
                 ERC20PriceOracleVaultConfig({
@@ -50,11 +64,13 @@ contract CycloVault is ERC20PriceOracleReceiptVault {
 
     /// @inheritdoc ERC20
     function name() public view virtual override returns (string memory) {
-        return string.concat("Cyclo ", symbol());
+        return string.concat("Cyclo ", symbol(), " (", oracleName, " oracle)");
     }
 
     /// @inheritdoc ERC20
     function symbol() public view virtual override returns (string memory) {
-        return string.concat("cy", IERC20Metadata(asset()).symbol());
+        return string.concat(
+            "cy", IERC20Metadata(asset()).symbol(), bytes(oracleSymbol).length == 0 ? "" : ".", oracleSymbol
+        );
     }
 }
