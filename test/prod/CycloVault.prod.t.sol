@@ -28,20 +28,27 @@ import {
 import {PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V2} from "src/lib/LibCycloProdReceipt.sol";
 import {CycloVaultConfig, CycloVault} from "src/concrete/vault/CycloVault.sol";
 import {PROD_FLARE_CLONE_FACTORY_ADDRESS_V1} from "src/lib/LibCycloProdCloneFactory.sol";
+import {IERC20MetadataUpgradeable as IERC20Metadata} from
+    "openzeppelin-contracts-upgradeable/contracts/token/ERC20/extensions/IERC20MetadataUpgradeable.sol";
 import {IReceiptV3} from "ethgild/abstract/ReceiptVault.sol";
 
 contract CycloVaultProdTest is Test {
     // This address has 2M FXRP on mainnet fork.
     address constant ALICE_FXRP = 0x1aac0E512f9Fd62a8A873Bac3E19373C8ba9D4BC;
 
-    function testProdCycloVaultBytecode() external {
+    CycloVault internal sCycloVault;
+
+    constructor() {
         ReceiptVaultConstructionConfigV2 memory receiptVaultConstructionConfig = ReceiptVaultConstructionConfigV2({
             factory: ICloneableFactoryV2(PROD_FLARE_CLONE_FACTORY_ADDRESS_V1),
             receiptImplementation: IReceiptV3(PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V2)
         });
-        CycloVault cycloVault = new CycloVault(receiptVaultConstructionConfig);
+        sCycloVault = new CycloVault(receiptVaultConstructionConfig);
+    }
+
+    function testProdCycloVaultBytecode() external {
         LibCycloTestProd.checkCBORTrimmedBytecodeHash(
-            address(cycloVault), PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH
+            address(sCycloVault), PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH
         );
 
         LibCycloTestProd.createSelectFork(vm);
@@ -93,6 +100,9 @@ contract CycloVaultProdTest is Test {
     }
 
     function testProdCycloVaultName() external {
+        vm.mockCall(address(0), abi.encodeWithSelector(IERC20Metadata.symbol.selector), abi.encode("FOO"));
+        assertEq(CycloVault(payable(sCycloVault)).name(), "Cyclo cyFOO");
+
         LibCycloTestProd.createSelectFork(vm);
 
         assertEq(CycloVault(payable(PROD_FLARE_VAULT_CYSFLR)).name(), "cysFLR");
@@ -101,6 +111,9 @@ contract CycloVaultProdTest is Test {
     }
 
     function testProdCycloVaultSymbol() external {
+        vm.mockCall(address(0), abi.encodeWithSelector(IERC20Metadata.symbol.selector), abi.encode("FOO"));
+        assertEq(CycloVault(payable(sCycloVault)).symbol(), "cyFOO");
+
         LibCycloTestProd.createSelectFork(vm);
 
         assertEq(CycloVault(payable(PROD_FLARE_VAULT_CYSFLR)).symbol(), "cysFLR");
