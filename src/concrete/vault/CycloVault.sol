@@ -64,7 +64,9 @@ contract CycloVault is ERC20PriceOracleReceiptVault {
 
     /// @inheritdoc ERC20
     function name() public view virtual override returns (string memory) {
-        return string.concat("Cyclo ", symbol(), " (", oracleName, " oracle)");
+        return string.concat(
+            "Cyclo ", symbol(), bytes(oracleName).length == 0 ? "" : string.concat(" (", oracleName, " oracle)")
+        );
     }
 
     /// @inheritdoc ERC20
