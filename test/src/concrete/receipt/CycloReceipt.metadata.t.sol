@@ -84,7 +84,9 @@ contract CycloReceiptMetadataTest is CycloReceiptFactoryTest {
                     abi.encode(
                         CycloVaultConfig({
                             priceOracle: IPriceOracleV2(payable(PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2)),
-                            asset: address(SFLR_CONTRACT)
+                            asset: address(SFLR_CONTRACT),
+                            oracleName: "",
+                            oracleSymbol: ""
                         })
                     )
                 )
@@ -104,7 +106,9 @@ contract CycloReceiptMetadataTest is CycloReceiptFactoryTest {
                     abi.encode(
                         CycloVaultConfig({
                             priceOracle: IPriceOracleV2(payable(PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2)),
-                            asset: address(SFLR_CONTRACT)
+                            asset: address(SFLR_CONTRACT),
+                            oracleName: "",
+                            oracleSymbol: ""
                         })
                     )
                 )
@@ -124,7 +128,9 @@ contract CycloReceiptMetadataTest is CycloReceiptFactoryTest {
                     abi.encode(
                         CycloVaultConfig({
                             priceOracle: IPriceOracleV2(payable(PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2)),
-                            asset: address(SFLR_CONTRACT)
+                            asset: address(SFLR_CONTRACT),
+                            oracleName: "",
+                            oracleSymbol: ""
                         })
                     )
                 )
