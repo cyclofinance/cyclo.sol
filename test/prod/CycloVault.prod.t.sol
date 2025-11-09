@@ -31,7 +31,6 @@ import {PROD_FLARE_CLONE_FACTORY_ADDRESS_V1} from "src/lib/LibCycloProdCloneFact
 import {IERC20MetadataUpgradeable as IERC20Metadata} from
     "openzeppelin-contracts-upgradeable/contracts/token/ERC20/extensions/IERC20MetadataUpgradeable.sol";
 import {IReceiptV3} from "ethgild/abstract/ReceiptVault.sol";
-import {console2} from "forge-std/console2.sol";
 
 contract CycloVaultProdTest is Test {
     // This address has 2M FXRP on mainnet fork.
