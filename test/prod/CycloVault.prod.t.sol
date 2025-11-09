@@ -123,7 +123,7 @@ contract CycloVaultProdTest is Test {
 
         assertEq(CycloVault(payable(PROD_FLARE_VAULT_CYSFLR)).name(), "cysFLR");
         assertEq(CycloVault(payable(PROD_FLARE_VAULT_CYWETH)).name(), "Cyclo cyWETH");
-        assertEq(CycloVault(payable(PROD_FLARE_VAULT_CYFXRP)).name(), "Cyclo cyFXRP");
+        assertEq(CycloVault(payable(PROD_FLARE_VAULT_CYFXRP)).name(), "Cyclo cyFXRP.ftso (FTSO oracle)");
     }
 
     function testProdCycloVaultSymbol() external {
@@ -132,7 +132,7 @@ contract CycloVaultProdTest is Test {
 
         assertEq(CycloVault(payable(PROD_FLARE_VAULT_CYSFLR)).symbol(), "cysFLR");
         assertEq(CycloVault(payable(PROD_FLARE_VAULT_CYWETH)).symbol(), "cyWETH");
-        assertEq(CycloVault(payable(PROD_FLARE_VAULT_CYFXRP)).symbol(), "cyFXRP");
+        assertEq(CycloVault(payable(PROD_FLARE_VAULT_CYFXRP)).symbol(), "cyFXRP.ftso");
     }
 
     /// forge-config: default.fuzz.runs = 1
