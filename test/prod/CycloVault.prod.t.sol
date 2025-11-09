@@ -26,32 +26,56 @@ import {
     PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH
 } from "src/lib/LibCycloProdVault.sol";
 import {PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V2} from "src/lib/LibCycloProdReceipt.sol";
-import {CycloVaultConfig, CycloVault} from "src/concrete/vault/CycloVault.sol";
+import {CycloVaultConfig, CycloVault, IPriceOracleV2} from "src/concrete/vault/CycloVault.sol";
 import {PROD_FLARE_CLONE_FACTORY_ADDRESS_V1} from "src/lib/LibCycloProdCloneFactory.sol";
 import {IERC20MetadataUpgradeable as IERC20Metadata} from
     "openzeppelin-contracts-upgradeable/contracts/token/ERC20/extensions/IERC20MetadataUpgradeable.sol";
 import {IReceiptV3} from "ethgild/abstract/ReceiptVault.sol";
+import {console2} from "forge-std/console2.sol";
 
 contract CycloVaultProdTest is Test {
     // This address has 2M FXRP on mainnet fork.
     address constant ALICE_FXRP = 0x1aac0E512f9Fd62a8A873Bac3E19373C8ba9D4BC;
 
+    address constant ASSET = address(bytes20(keccak256(bytes("asset"))));
+    IPriceOracleV2 constant ORACLE = IPriceOracleV2(payable(address(bytes20(keccak256(bytes("oracle"))))));
+    string constant ORACLE_NAME = "TheOracle";
+    string constant ORACLE_SYMBOL = "to";
+
     CycloVault internal sCycloVault;
 
-    constructor() {
+    function setUp() external {
+        LibCycloTestProd.createSelectFork(vm);
+
         ReceiptVaultConstructionConfigV2 memory receiptVaultConstructionConfig = ReceiptVaultConstructionConfigV2({
             factory: ICloneableFactoryV2(PROD_FLARE_CLONE_FACTORY_ADDRESS_V1),
             receiptImplementation: IReceiptV3(PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V2)
         });
-        sCycloVault = new CycloVault(receiptVaultConstructionConfig);
+        CycloVault cycloVaultImplementation = new CycloVault(receiptVaultConstructionConfig);
+        console2.log(address(cycloVaultImplementation).code.length, "code");
+        console2.log(PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V2.code.length, "receipt");
+        sCycloVault = CycloVault(
+            payable(
+                ICloneableFactoryV2(PROD_FLARE_CLONE_FACTORY_ADDRESS_V1).clone(
+                    address(cycloVaultImplementation),
+                    abi.encode(
+                        CycloVaultConfig({
+                            priceOracle: ORACLE,
+                            asset: ASSET,
+                            oracleName: ORACLE_NAME,
+                            oracleSymbol: ORACLE_SYMBOL
+                        })
+                    )
+                )
+            )
+        );
+        assertEq(sCycloVault.asset(), ASSET);
     }
 
     function testProdCycloVaultBytecode() external {
         LibCycloTestProd.checkCBORTrimmedBytecodeHash(
             address(sCycloVault), PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH
         );
-
-        LibCycloTestProd.createSelectFork(vm);
 
         LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
             PROD_FLARE_VAULT_CYSFLR,
@@ -73,8 +97,6 @@ contract CycloVaultProdTest is Test {
     }
 
     function testProdCycloVaultPriceOracle() external {
-        LibCycloTestProd.createSelectFork(vm);
-
         assertEq(
             address(CycloVault(payable(PROD_FLARE_VAULT_CYSFLR)).priceOracle()),
             PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2
@@ -90,8 +112,6 @@ contract CycloVaultProdTest is Test {
     }
 
     function testProdCycloVaultAsset() external {
-        LibCycloTestProd.createSelectFork(vm);
-
         assertEq(address(CycloVault(payable(PROD_FLARE_VAULT_CYSFLR)).asset()), address(SFLR_CONTRACT));
         assertEq(
             address(CycloVault(payable(PROD_FLARE_VAULT_CYWETH)).asset()), 0x1502FA4be69d526124D453619276FacCab275d3D
@@ -100,10 +120,8 @@ contract CycloVaultProdTest is Test {
     }
 
     function testProdCycloVaultName() external {
-        vm.mockCall(address(0), abi.encodeWithSelector(IERC20Metadata.symbol.selector), abi.encode("FOO"));
-        assertEq(CycloVault(payable(sCycloVault)).name(), "Cyclo cyFOO");
-
-        LibCycloTestProd.createSelectFork(vm);
+        vm.mockCall(ASSET, abi.encodeWithSelector(IERC20Metadata.symbol.selector), abi.encode("FOO"));
+        assertEq(CycloVault(payable(sCycloVault)).name(), "Cyclo cyFOO.to (TheOracle oracle)");
 
         assertEq(CycloVault(payable(PROD_FLARE_VAULT_CYSFLR)).name(), "cysFLR");
         assertEq(CycloVault(payable(PROD_FLARE_VAULT_CYWETH)).name(), "Cyclo cyWETH");
@@ -111,10 +129,8 @@ contract CycloVaultProdTest is Test {
     }
 
     function testProdCycloVaultSymbol() external {
-        vm.mockCall(address(0), abi.encodeWithSelector(IERC20Metadata.symbol.selector), abi.encode("FOO"));
-        assertEq(CycloVault(payable(sCycloVault)).symbol(), "cyFOO");
-
-        LibCycloTestProd.createSelectFork(vm);
+        vm.mockCall(ASSET, abi.encodeWithSelector(IERC20Metadata.symbol.selector), abi.encode("FOO"));
+        assertEq(CycloVault(payable(sCycloVault)).symbol(), "cyFOO.to");
 
         assertEq(CycloVault(payable(PROD_FLARE_VAULT_CYSFLR)).symbol(), "cysFLR");
         assertEq(CycloVault(payable(PROD_FLARE_VAULT_CYWETH)).symbol(), "cyWETH");
@@ -124,7 +140,6 @@ contract CycloVaultProdTest is Test {
     /// forge-config: default.fuzz.runs = 1
     function testProdCycloVaultCanDeposit(uint256 depositSeed) external {
         uint256 deposit = bound(depositSeed, 1, 2000000000000);
-        LibCycloTestProd.createSelectFork(vm);
 
         deal(CycloVault(payable(PROD_FLARE_VAULT_CYSFLR)).asset(), DEFAULT_ALICE, deposit);
         LibCycloTestProd.checkDeposit(vm, PROD_FLARE_VAULT_CYSFLR, deposit);
@@ -139,7 +154,6 @@ contract CycloVaultProdTest is Test {
     /// forge-config: default.fuzz.runs = 1
     function testProdCycloVaultCanMint(uint256 sharesSeed) public {
         uint256 shares = bound(sharesSeed, 1, type(uint128).max);
-        LibCycloTestProd.createSelectFork(vm);
 
         CycloVault vault = CycloVault(payable(PROD_FLARE_VAULT_CYSFLR));
 
@@ -160,30 +174,25 @@ contract CycloVaultProdTest is Test {
     }
 
     function testProdCycloVaultcysFLRImplementationIsInitialized() external {
-        LibCycloTestProd.createSelectFork(vm);
         LibCycloTestProd.checkIsInitialized(vm, PROD_FLARE_VAULT_IMPLEMENTATION_CYSFLR);
     }
 
     function testProdCycloVaultcysFLRIsInitialized() external {
-        LibCycloTestProd.createSelectFork(vm);
         LibCycloTestProd.checkIsInitialized(vm, PROD_FLARE_VAULT_CYSFLR);
     }
 
     function testProdCycloVaultcyWETHImplementationIsInitialized() external {
         CycloVaultConfig memory config;
-        LibCycloTestProd.createSelectFork(vm);
         LibCycloTestProd.checkIsInitialized(vm, PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1, abi.encode(config));
     }
 
     function testProdCycloVaultcyWETHIsInitialized() external {
         CycloVaultConfig memory config;
-        LibCycloTestProd.createSelectFork(vm);
         LibCycloTestProd.checkIsInitialized(vm, PROD_FLARE_VAULT_CYWETH, abi.encode(config));
     }
 
     function testProdCycloVaultcyFXRPIsInitialized() external {
         CycloVaultConfig memory config;
-        LibCycloTestProd.createSelectFork(vm);
         LibCycloTestProd.checkIsInitialized(vm, PROD_FLARE_VAULT_CYFXRP, abi.encode(config));
     }
 

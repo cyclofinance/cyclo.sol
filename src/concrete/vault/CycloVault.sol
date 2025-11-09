@@ -13,6 +13,7 @@ import {ERC20} from "ethgild/abstract/ReceiptVault.sol";
 import {IERC20MetadataUpgradeable as IERC20Metadata} from
     "openzeppelin-contracts-upgradeable/contracts/token/ERC20/extensions/IERC20MetadataUpgradeable.sol";
 import {IntOrAString, LibIntOrAString} from "rain.intorastring/lib/LibIntOrAString.sol";
+import {console2} from "forge-std/console2.sol";
 
 /// @title CycloVaultConfig
 /// Configuration for the CycloVault contract initializer.
@@ -71,6 +72,7 @@ contract CycloVault is ERC20PriceOracleReceiptVault {
 
     /// @inheritdoc ERC20
     function symbol() public view virtual override returns (string memory) {
+        console2.log(asset(), "asset");
         return string.concat(
             "cy", IERC20Metadata(asset()).symbol(), bytes(oracleSymbol).length == 0 ? "" : ".", oracleSymbol
         );

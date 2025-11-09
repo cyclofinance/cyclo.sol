@@ -11,7 +11,7 @@ import {CycloVault} from "src/concrete/vault/CycloVault.sol";
 import {IERC20Upgradeable as IERC20} from
     "openzeppelin-contracts-upgradeable/contracts/token/ERC20/IERC20Upgradeable.sol";
 
-uint256 constant PROD_TEST_BLOCK_NUMBER = 49661969;
+uint256 constant PROD_TEST_BLOCK_NUMBER = 50341912;
 
 string constant PROD_CYSFLR_RECEIPT_SYMBOL = "cysFLR RCPT";
 string constant PROD_CYSFLR_RECEIPT_NAME = "cysFLR Receipt";
