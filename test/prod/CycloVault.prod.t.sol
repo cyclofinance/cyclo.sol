@@ -71,7 +71,7 @@ contract CycloVaultProdTest is Test {
         assertEq(sCycloVault.asset(), ASSET);
     }
 
-    function testProdCycloVaultBytecode() external {
+    function testProdCycloVaultBytecode() external view {
         LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
             address(sCycloVault), address(sCycloVaultImplementation), PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH
         );
@@ -95,7 +95,7 @@ contract CycloVaultProdTest is Test {
         );
     }
 
-    function testProdCycloVaultPriceOracle() external {
+    function testProdCycloVaultPriceOracle() external view {
         assertEq(
             address(CycloVault(payable(PROD_FLARE_VAULT_CYSFLR)).priceOracle()),
             PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2
@@ -110,7 +110,7 @@ contract CycloVaultProdTest is Test {
         );
     }
 
-    function testProdCycloVaultAsset() external {
+    function testProdCycloVaultAsset() external view {
         assertEq(address(CycloVault(payable(PROD_FLARE_VAULT_CYSFLR)).asset()), address(SFLR_CONTRACT));
         assertEq(
             address(CycloVault(payable(PROD_FLARE_VAULT_CYWETH)).asset()), 0x1502FA4be69d526124D453619276FacCab275d3D
