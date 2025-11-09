@@ -43,6 +43,7 @@ contract CycloVaultProdTest is Test {
     string constant ORACLE_SYMBOL = "to";
 
     CycloVault internal sCycloVault;
+    CycloVault internal sCycloVaultImplementation;
 
     function setUp() external {
         LibCycloTestProd.createSelectFork(vm);
@@ -51,13 +52,11 @@ contract CycloVaultProdTest is Test {
             factory: ICloneableFactoryV2(PROD_FLARE_CLONE_FACTORY_ADDRESS_V1),
             receiptImplementation: IReceiptV3(PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V2)
         });
-        CycloVault cycloVaultImplementation = new CycloVault(receiptVaultConstructionConfig);
-        console2.log(address(cycloVaultImplementation).code.length, "code");
-        console2.log(PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V2.code.length, "receipt");
+        sCycloVaultImplementation = new CycloVault(receiptVaultConstructionConfig);
         sCycloVault = CycloVault(
             payable(
                 ICloneableFactoryV2(PROD_FLARE_CLONE_FACTORY_ADDRESS_V1).clone(
-                    address(cycloVaultImplementation),
+                    address(sCycloVaultImplementation),
                     abi.encode(
                         CycloVaultConfig({
                             priceOracle: ORACLE,
@@ -73,8 +72,8 @@ contract CycloVaultProdTest is Test {
     }
 
     function testProdCycloVaultBytecode() external {
-        LibCycloTestProd.checkCBORTrimmedBytecodeHash(
-            address(sCycloVault), PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH
+        LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
+            address(sCycloVault), address(sCycloVaultImplementation), PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH
         );
 
         LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
