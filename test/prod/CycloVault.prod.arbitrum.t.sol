@@ -5,23 +5,10 @@ pragma solidity =0.8.25;
 import {CycloVaultTest} from "test/abstract/CycloVaultTest.sol";
 import {LibCycloTestProd, DEFAULT_ALICE, PROD_TEST_BLOCK_NUMBER_ARBITRUM} from "test/lib/LibCycloTestProd.sol";
 import {ICloneableFactoryV2} from "rain.factory/interface/ICloneableFactoryV2.sol";
-import {SFLR_CONTRACT} from "rain.flare/lib/sflr/LibSceptreStakedFlare.sol";
-import {
-    PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2,
-    PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE,
-    PROD_FLARE_FTSO_V2_LTS_XRP_USD_FEED_ORACLE,
-    PROD_PYTH_ORACLE_WETH_USD_ARBITRUM
-} from "src/lib/LibCycloProdOracle.sol";
+import {PROD_PYTH_ORACLE_WETH_USD_ARBITRUM} from "src/lib/LibCycloProdOracle.sol";
 import {ARBITRUM_WETH} from "src/lib/LibCycloProdAssets.sol";
 
 import {
-    PROD_FLARE_VAULT_CYSFLR,
-    PROD_FLARE_VAULT_CYWETH,
-    PROD_FLARE_VAULT_CYFXRP,
-    PROD_FLARE_VAULT_IMPLEMENTATION_CYSFLR,
-    PROD_FLARE_VAULT_IMPLEMENTATION_CYSFLR_CODEHASH,
-    PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1,
-    PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1_CODEHASH,
     PROD_ARBITRUM_CYCLO_VAULT_IMPLEMENTATION_V2,
     PROD_ARBITRUM_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH,
     PROD_ARBITRUM_VAULT_CYWETH_PYTH

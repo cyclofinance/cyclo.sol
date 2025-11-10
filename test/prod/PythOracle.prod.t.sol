@@ -5,15 +5,6 @@ pragma solidity =0.8.25;
 import {Test} from "forge-std/Test.sol";
 
 import {
-    PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE,
-    PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE,
-    PROD_FLARE_FTSO_V2_LTS_XRP_USD_FEED_ORACLE,
-    PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE_CODEHASH,
-    PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE_CODEHASH,
-    PROD_FLARE_FTSO_V2_LTS_XRP_USD_FEED_ORACLE_CODEHASH,
-    PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE_CODEHASH2,
-    PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE_CODEHASH2,
-    PROD_FLARE_FTSO_V2_LTS_XRP_USD_FEED_ORACLE_CODEHASH2,
     PROD_ORACLE_DEFAULT_STALE_AFTER,
     PROD_PYTH_ORACLE_WETH_USD_ARBITRUM,
     PYTH_ORACLE_WETH_USD_ARBITRUM_CODEHASH
@@ -23,8 +14,6 @@ import {LibPyth} from "rain.pyth/lib/pyth/LibPyth.sol";
 import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
 
 import {IPriceOracleV2} from "ethgild/interface/IPriceOracleV2.sol";
-import {FtsoV2LTSFeedOracle, FtsoV2LTSFeedOracleConfig} from "ethgild/concrete/oracle/FtsoV2LTSFeedOracle.sol";
-import {FLR_USD_FEED_ID, ETH_USD_FEED_ID, XRP_USD_FEED_ID} from "rain.flare/lib/lts/LibFtsoV2LTS.sol";
 
 contract PythOracleProdTest is Test {
     function testProdCycloPythOraclePrice() external {
