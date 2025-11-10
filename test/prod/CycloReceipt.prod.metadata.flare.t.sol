@@ -10,28 +10,28 @@ import {
 import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
 import {CycloReceiptMetadataTest} from "test/src/concrete/receipt/CycloReceipt.metadata.t.sol";
 
-contract CycloReceiptProdMetadataTest is CycloReceiptMetadataTest {
+contract CycloReceiptProdMetadataFlareTest is CycloReceiptMetadataTest {
     function testProdCycloReceiptURI() external {
-        LibCycloTestProd.createSelectFork(vm);
+        LibCycloTestProd.createSelectForkFlare(vm);
 
         checkCycloReceiptURIV1(PROD_FLARE_RECEIPT_CYSFLR);
-        checkCycloReceiptURIV2(PROD_FLARE_RECEIPT_CYWETH, "WETH");
-        checkCycloReceiptURIV2(PROD_FLARE_RECEIPT_CYFXRP, "FXRP");
+        checkCycloReceiptURIV2(PROD_FLARE_RECEIPT_CYWETH, "cyWETH", "WETH", 18);
+        checkCycloReceiptURIV2(PROD_FLARE_RECEIPT_CYFXRP, "cyFXRP.ftso", "FXRP", 6);
     }
 
     function testProdCycloReceiptName() external {
-        LibCycloTestProd.createSelectFork(vm);
+        LibCycloTestProd.createSelectForkFlare(vm);
 
         checkCycloReceiptNameV1(PROD_FLARE_RECEIPT_CYSFLR);
         checkCycloReceiptNameV2(PROD_FLARE_RECEIPT_CYWETH, "WETH");
-        checkCycloReceiptNameV2(PROD_FLARE_RECEIPT_CYFXRP, "FXRP");
+        checkCycloReceiptNameV2(PROD_FLARE_RECEIPT_CYFXRP, "FXRP.ftso");
     }
 
     function testProdCycloReceiptSymbol() external {
-        LibCycloTestProd.createSelectFork(vm);
+        LibCycloTestProd.createSelectForkFlare(vm);
 
         checkCycloReceiptSymbolV1(PROD_FLARE_RECEIPT_CYSFLR);
         checkCycloReceiptSymbolV2(PROD_FLARE_RECEIPT_CYWETH, "WETH");
-        checkCycloReceiptSymbolV2(PROD_FLARE_RECEIPT_CYFXRP, "FXRP");
+        checkCycloReceiptSymbolV2(PROD_FLARE_RECEIPT_CYFXRP, "FXRP.ftso");
     }
 }

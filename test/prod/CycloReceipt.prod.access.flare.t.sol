@@ -14,14 +14,14 @@ import {
 import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
 import {IReceiptV2} from "ethgild/interface/deprecated/IReceiptV2.sol";
 
-contract CycloReceiptProdAccessTest is Test {
+contract CycloReceiptProdAccessFlareTest is Test {
     function checkAccess(address receiptAddress, address vaultAddress, string memory asset) internal view {
         address manager = IReceiptV2(receiptAddress).manager();
         assertEq(manager, vaultAddress, string.concat(asset, " manager should be vault"));
     }
 
-    function testProdCycloReceiptManager() external {
-        LibCycloTestProd.createSelectFork(vm);
+    function testProdCycloReceiptManagerFlare() external {
+        LibCycloTestProd.createSelectForkFlare(vm);
 
         checkAccess(PROD_FLARE_RECEIPT_CYSFLR, PROD_FLARE_VAULT_CYSFLR, "cysFLR");
         checkAccess(PROD_FLARE_RECEIPT_CYWETH, PROD_FLARE_VAULT_CYWETH, "cyWETH");

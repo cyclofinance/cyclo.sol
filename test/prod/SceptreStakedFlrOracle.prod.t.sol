@@ -16,10 +16,10 @@ import {SceptreStakedFlrOracle} from "ethgild/concrete/oracle/SceptreStakedFlrOr
 
 contract SceptreStakedFlrOracleProdTest is Test {
     function testProdCycloSceptreStakedFlrOraclePrice() external {
-        LibCycloTestProd.createSelectFork(vm);
+        LibCycloTestProd.createSelectForkFlare(vm);
 
         uint256 price = IPriceOracleV2(payable(PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE)).price();
-        assertEq(price, 0.618475430949862711e18);
+        assertEq(price, 0.60556847749291435e18);
     }
 
     function testProdCycloSceptreStakedFlrOracleBytecode() external {
@@ -27,7 +27,7 @@ contract SceptreStakedFlrOracleProdTest is Test {
 
         LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(fresh), PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE_CODEHASH);
 
-        LibCycloTestProd.createSelectFork(vm);
+        LibCycloTestProd.createSelectForkFlare(vm);
 
         LibCycloTestProd.checkCBORTrimmedBytecodeHash(
             PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE, PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE_CODEHASH

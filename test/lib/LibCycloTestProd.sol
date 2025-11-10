@@ -11,7 +11,9 @@ import {CycloVault} from "src/concrete/vault/CycloVault.sol";
 import {IERC20Upgradeable as IERC20} from
     "openzeppelin-contracts-upgradeable/contracts/token/ERC20/IERC20Upgradeable.sol";
 
-uint256 constant PROD_TEST_BLOCK_NUMBER = 49661969;
+uint256 constant PROD_TEST_BLOCK_NUMBER_FLARE = 50346046;
+
+uint256 constant PROD_TEST_BLOCK_NUMBER_ARBITRUM = 398779858;
 
 string constant PROD_CYSFLR_RECEIPT_SYMBOL = "cysFLR RCPT";
 string constant PROD_CYSFLR_RECEIPT_NAME = "cysFLR Receipt";
@@ -19,8 +21,12 @@ string constant PROD_CYSFLR_RECEIPT_NAME = "cysFLR Receipt";
 address constant DEFAULT_ALICE = address(uint160(uint256(keccak256("ALICE"))));
 
 library LibCycloTestProd {
-    function createSelectFork(Vm vm) internal {
-        vm.createSelectFork(vm.envString("RPC_URL_FLARE_FORK"), PROD_TEST_BLOCK_NUMBER);
+    function createSelectForkFlare(Vm vm) internal {
+        vm.createSelectFork(vm.envString("RPC_URL_FLARE_FORK"), PROD_TEST_BLOCK_NUMBER_FLARE);
+    }
+
+    function createSelectForkArbitrum(Vm vm) internal {
+        vm.createSelectFork(vm.envString("RPC_URL_ARBITRUM_FORK"), PROD_TEST_BLOCK_NUMBER_ARBITRUM);
     }
 
     //forge-lint: disable-next-line(mixed-case-function)
