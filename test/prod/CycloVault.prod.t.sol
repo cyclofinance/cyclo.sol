@@ -2,10 +2,8 @@
 // SPDX-FileCopyrightText: Copyright (c) 2020 Rain Open Source Software Ltd
 pragma solidity =0.8.25;
 
-import {Test} from "forge-std/Test.sol";
-
-import {ReceiptVaultConstructionConfigV2} from "ethgild/concrete/vault/ERC20PriceOracleReceiptVault.sol";
-import {LibCycloTestProd, DEFAULT_ALICE} from "test/lib/LibCycloTestProd.sol";
+import {CycloVaultTest} from "test/abstract/CycloVaultTest.sol";
+import {LibCycloTestProd, DEFAULT_ALICE, PROD_TEST_BLOCK_NUMBER_FLARE} from "test/lib/LibCycloTestProd.sol";
 import {ICloneableFactoryV2} from "rain.factory/interface/ICloneableFactoryV2.sol";
 import {SFLR_CONTRACT} from "rain.flare/lib/sflr/LibSceptreStakedFlare.sol";
 import {
@@ -27,48 +25,30 @@ import {
     PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH
 } from "src/lib/LibCycloProdVault.sol";
 import {PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V2} from "src/lib/LibCycloProdReceipt.sol";
-import {CycloVaultConfig, CycloVault, IPriceOracleV2} from "src/concrete/vault/CycloVault.sol";
+import {CycloVaultConfig, CycloVault} from "src/concrete/vault/CycloVault.sol";
 import {PROD_FLARE_CLONE_FACTORY_ADDRESS_V1} from "src/lib/LibCycloProdCloneFactory.sol";
 import {IERC20MetadataUpgradeable as IERC20Metadata} from
     "openzeppelin-contracts-upgradeable/contracts/token/ERC20/extensions/IERC20MetadataUpgradeable.sol";
 import {IReceiptV3} from "ethgild/abstract/ReceiptVault.sol";
 
-contract CycloVaultProdTest is Test {
+contract CycloVaultProdTest is CycloVaultTest {
     // This address has 2M FXRP on mainnet fork.
     address constant ALICE_FXRP = 0x1aac0E512f9Fd62a8A873Bac3E19373C8ba9D4BC;
 
-    address constant ASSET = address(bytes20(keccak256(bytes("asset"))));
-    IPriceOracleV2 constant ORACLE = IPriceOracleV2(payable(address(bytes20(keccak256(bytes("oracle"))))));
-    string constant ORACLE_NAME = "TheOracle";
-    string constant ORACLE_SYMBOL = "to";
+    function _rpcEnvName() internal pure override returns (string memory) {
+        return "RPC_URL_FLARE_FORK";
+    }
 
-    CycloVault internal sCycloVault;
-    CycloVault internal sCycloVaultImplementation;
+    function _blockNumber() internal pure override returns (uint256) {
+        return PROD_TEST_BLOCK_NUMBER_FLARE;
+    }
 
-    function setUp() external {
-        LibCycloTestProd.createSelectFork(vm);
+    function _cloneFactory() internal pure override returns (ICloneableFactoryV2) {
+        return ICloneableFactoryV2(PROD_FLARE_CLONE_FACTORY_ADDRESS_V1);
+    }
 
-        ReceiptVaultConstructionConfigV2 memory receiptVaultConstructionConfig = ReceiptVaultConstructionConfigV2({
-            factory: ICloneableFactoryV2(PROD_FLARE_CLONE_FACTORY_ADDRESS_V1),
-            receiptImplementation: IReceiptV3(PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V2)
-        });
-        sCycloVaultImplementation = new CycloVault(receiptVaultConstructionConfig);
-        sCycloVault = CycloVault(
-            payable(
-                ICloneableFactoryV2(PROD_FLARE_CLONE_FACTORY_ADDRESS_V1).clone(
-                    address(sCycloVaultImplementation),
-                    abi.encode(
-                        CycloVaultConfig({
-                            priceOracle: ORACLE,
-                            asset: ASSET,
-                            oracleName: ORACLE_NAME,
-                            oracleSymbol: ORACLE_SYMBOL
-                        })
-                    )
-                )
-            )
-        );
-        assertEq(sCycloVault.asset(), ASSET);
+    function _receiptImplementation() internal pure override returns (IReceiptV3) {
+        return IReceiptV3(PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V2);
     }
 
     function testProdCycloVaultBytecode() external view {
