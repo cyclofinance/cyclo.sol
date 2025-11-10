@@ -24,7 +24,7 @@ contract CycloReceiptProdTest is Test {
 
         LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(fresh), PROD_FLARE_CYCLO_RECEIPT_CODEHASH_V2);
 
-        LibCycloTestProd.createSelectFork(vm);
+        LibCycloTestProd.createSelectForkFlare(vm);
 
         LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
             PROD_FLARE_RECEIPT_CYSFLR,
@@ -40,27 +40,27 @@ contract CycloReceiptProdTest is Test {
     }
 
     function testProdCysFLRImplementationIsInitialized() external {
-        LibCycloTestProd.createSelectFork(vm);
+        LibCycloTestProd.createSelectForkFlare(vm);
         LibCycloTestProd.checkIsInitialized(vm, PROD_FLARE_RECEIPT_IMPLEMENTATION_CYSFLR);
     }
 
     function testProdCycloReceiptIsInitializedCysFLR() external {
-        LibCycloTestProd.createSelectFork(vm);
+        LibCycloTestProd.createSelectForkFlare(vm);
         LibCycloTestProd.checkIsInitialized(vm, PROD_FLARE_RECEIPT_CYSFLR);
     }
 
     function testProdCysWETHImplementationIsInitialized() external {
-        LibCycloTestProd.createSelectFork(vm);
+        LibCycloTestProd.createSelectForkFlare(vm);
         LibCycloTestProd.checkIsInitialized(vm, PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V1);
     }
 
     function testProdCycloReceiptIsInitializedCYWETH() external {
-        LibCycloTestProd.createSelectFork(vm);
+        LibCycloTestProd.createSelectForkFlare(vm);
         LibCycloTestProd.checkIsInitialized(vm, PROD_FLARE_RECEIPT_CYWETH);
     }
 
     function testProdCycloReceiptIsInitializedCYFXRP() external {
-        LibCycloTestProd.createSelectFork(vm);
+        LibCycloTestProd.createSelectForkFlare(vm);
         LibCycloTestProd.checkIsInitialized(vm, PROD_FLARE_RECEIPT_CYFXRP);
     }
 

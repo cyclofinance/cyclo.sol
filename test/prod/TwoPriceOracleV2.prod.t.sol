@@ -20,7 +20,7 @@ import {TwoPriceOracleV2, TwoPriceOracleConfigV2} from "ethgild/concrete/oracle/
 
 contract TwoPriceOracleV2ProdTest is Test {
     function testProdCycloTwoPriceOracleV2Price() external {
-        LibCycloTestProd.createSelectFork(vm);
+        LibCycloTestProd.createSelectForkFlare(vm);
 
         uint256 price = IPriceOracleV2(payable(PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2)).price();
 
@@ -28,7 +28,7 @@ contract TwoPriceOracleV2ProdTest is Test {
     }
 
     function testProdCycloTwoPriceOracleV2Bytecode() external {
-        LibCycloTestProd.createSelectFork(vm);
+        LibCycloTestProd.createSelectForkFlare(vm);
 
         TwoPriceOracleV2 fresh = new TwoPriceOracleV2(
             TwoPriceOracleConfigV2({

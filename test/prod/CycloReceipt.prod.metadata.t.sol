@@ -12,7 +12,7 @@ import {CycloReceiptMetadataTest} from "test/src/concrete/receipt/CycloReceipt.m
 
 contract CycloReceiptProdMetadataTest is CycloReceiptMetadataTest {
     function testProdCycloReceiptURI() external {
-        LibCycloTestProd.createSelectFork(vm);
+        LibCycloTestProd.createSelectForkFlare(vm);
 
         checkCycloReceiptURIV1(PROD_FLARE_RECEIPT_CYSFLR);
         checkCycloReceiptURIV2(PROD_FLARE_RECEIPT_CYWETH, "cyWETH", "WETH", 18);
@@ -20,7 +20,7 @@ contract CycloReceiptProdMetadataTest is CycloReceiptMetadataTest {
     }
 
     function testProdCycloReceiptName() external {
-        LibCycloTestProd.createSelectFork(vm);
+        LibCycloTestProd.createSelectForkFlare(vm);
 
         checkCycloReceiptNameV1(PROD_FLARE_RECEIPT_CYSFLR);
         checkCycloReceiptNameV2(PROD_FLARE_RECEIPT_CYWETH, "WETH");
@@ -28,7 +28,7 @@ contract CycloReceiptProdMetadataTest is CycloReceiptMetadataTest {
     }
 
     function testProdCycloReceiptSymbol() external {
-        LibCycloTestProd.createSelectFork(vm);
+        LibCycloTestProd.createSelectForkFlare(vm);
 
         checkCycloReceiptSymbolV1(PROD_FLARE_RECEIPT_CYSFLR);
         checkCycloReceiptSymbolV2(PROD_FLARE_RECEIPT_CYWETH, "WETH");

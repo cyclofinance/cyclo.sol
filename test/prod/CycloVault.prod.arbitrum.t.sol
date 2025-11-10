@@ -34,9 +34,6 @@ import {IERC20MetadataUpgradeable as IERC20Metadata} from
 import {IReceiptV3} from "ethgild/abstract/ReceiptVault.sol";
 
 contract CycloVaultProdArbitrumTest is CycloVaultTest {
-    // // This address has 2M FXRP on mainnet fork.
-    // address constant ALICE_FXRP = 0x1aac0E512f9Fd62a8A873Bac3E19373C8ba9D4BC;
-
     function _rpcEnvName() internal pure override returns (string memory) {
         return "RPC_URL_ARBITRUM_FORK";
     }
@@ -106,9 +103,9 @@ contract CycloVaultProdArbitrumTest is CycloVaultTest {
 
         CycloVault vault = CycloVault(payable(PROD_ARBITRUM_VAULT_CYWETH_PYTH));
 
-        // uint256 assets = vault.previewMint(shares, 0);
-        // deal(vault.asset(), DEFAULT_ALICE, assets);
-        // LibCycloTestProd.checkMint(vm, PROD_ARBITRUM_VAULT_CYWETH_PYTH, shares, assets);
+        uint256 assets = vault.previewMint(shares, 0);
+        deal(vault.asset(), DEFAULT_ALICE, assets);
+        LibCycloTestProd.checkMint(vm, PROD_ARBITRUM_VAULT_CYWETH_PYTH, shares, assets);
     }
 
     function testProdCycloVaultcyWETHImplementationIsInitializedArbitrum() external {

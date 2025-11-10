@@ -14,7 +14,7 @@ import {IERC20Upgradeable as IERC20} from
 uint256 constant PROD_TEST_BLOCK_NUMBER = 50346046;
 uint256 constant PROD_TEST_BLOCK_NUMBER_FLARE = 50346046;
 
-uint256 constant PROD_TEST_BLOCK_NUMBER_ARBITRUM = 398812905;
+uint256 constant PROD_TEST_BLOCK_NUMBER_ARBITRUM = 398779858;
 
 string constant PROD_CYSFLR_RECEIPT_SYMBOL = "cysFLR RCPT";
 string constant PROD_CYSFLR_RECEIPT_NAME = "cysFLR Receipt";
@@ -22,8 +22,12 @@ string constant PROD_CYSFLR_RECEIPT_NAME = "cysFLR Receipt";
 address constant DEFAULT_ALICE = address(uint160(uint256(keccak256("ALICE"))));
 
 library LibCycloTestProd {
-    function createSelectFork(Vm vm) internal {
+    function createSelectForkFlare(Vm vm) internal {
         vm.createSelectFork(vm.envString("RPC_URL_FLARE_FORK"), PROD_TEST_BLOCK_NUMBER);
+    }
+
+    function createSelectForkArbitrum(Vm vm) internal {
+        vm.createSelectFork(vm.envString("RPC_URL_ARBITRUM_FORK"), PROD_TEST_BLOCK_NUMBER_ARBITRUM);
     }
 
     //forge-lint: disable-next-line(mixed-case-function)

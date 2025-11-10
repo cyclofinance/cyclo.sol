@@ -25,7 +25,7 @@ import {FLR_USD_FEED_ID, ETH_USD_FEED_ID, XRP_USD_FEED_ID} from "rain.flare/lib/
 
 contract FtsoV2LTSFeedOracleProdTest is Test {
     function testProdCycloFtsoV2LTSFeedOraclePrice() external {
-        LibCycloTestProd.createSelectFork(vm);
+        LibCycloTestProd.createSelectForkFlare(vm);
 
         uint256 price = IPriceOracleV2(payable(PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE)).price();
         assertEq(price, 0.0155368e18);
@@ -59,7 +59,7 @@ contract FtsoV2LTSFeedOracleProdTest is Test {
             address(xrpusd), PROD_FLARE_FTSO_V2_LTS_XRP_USD_FEED_ORACLE_CODEHASH2
         );
 
-        LibCycloTestProd.createSelectFork(vm);
+        LibCycloTestProd.createSelectForkFlare(vm);
 
         LibCycloTestProd.checkCBORTrimmedBytecodeHash(
             PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE, PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE_CODEHASH
