@@ -10,7 +10,7 @@ import {
 import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
 import {CycloReceiptMetadataTest} from "test/src/concrete/receipt/CycloReceipt.metadata.t.sol";
 
-contract CycloReceiptProdMetadataTest is CycloReceiptMetadataTest {
+contract CycloReceiptProdMetadataFlareTest is CycloReceiptMetadataTest {
     function testProdCycloReceiptURI() external {
         LibCycloTestProd.createSelectForkFlare(vm);
 
