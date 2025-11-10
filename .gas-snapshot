@@ -49,6 +49,8 @@ CycloVaultProdFlareTest:testProdCycloVaultcysFLRImplementationIsInitialized() (g
 CycloVaultProdFlareTest:testProdCycloVaultcysFLRIsInitialized() (gas: 12248)
 FtsoV2LTSFeedOracleProdTest:testProdCycloFtsoV2LTSFeedOracleBytecode() (gas: 1309705)
 FtsoV2LTSFeedOracleProdTest:testProdCycloFtsoV2LTSFeedOraclePrice() (gas: 166483)
+PythOracleProdTest:testProdCycloPythOracleBytecode() (gas: 559581)
+PythOracleProdTest:testProdCycloPythOraclePrice() (gas: 20552)
 SceptreStakedFlrOracleProdTest:testProdCycloSceptreStakedFlrOracleBytecode() (gas: 178922)
 SceptreStakedFlrOracleProdTest:testProdCycloSceptreStakedFlrOraclePrice() (gas: 22852)
 TwoPriceOracleV2ProdTest:testProdCycloTwoPriceOracleV2Bytecode() (gas: 472620)
