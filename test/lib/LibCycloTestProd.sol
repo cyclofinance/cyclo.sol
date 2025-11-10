@@ -14,6 +14,8 @@ import {IERC20Upgradeable as IERC20} from
 uint256 constant PROD_TEST_BLOCK_NUMBER = 50346046;
 uint256 constant PROD_TEST_BLOCK_NUMBER_FLARE = 50346046;
 
+uint256 constant PROD_TEST_BLOCK_NUMBER_ARBITRUM = 398812905;
+
 string constant PROD_CYSFLR_RECEIPT_SYMBOL = "cysFLR RCPT";
 string constant PROD_CYSFLR_RECEIPT_NAME = "cysFLR Receipt";
 

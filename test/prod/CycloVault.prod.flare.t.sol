@@ -31,7 +31,7 @@ import {IERC20MetadataUpgradeable as IERC20Metadata} from
     "openzeppelin-contracts-upgradeable/contracts/token/ERC20/extensions/IERC20MetadataUpgradeable.sol";
 import {IReceiptV3} from "ethgild/abstract/ReceiptVault.sol";
 
-contract CycloVaultProdTest is CycloVaultTest {
+contract CycloVaultProdFlareTest is CycloVaultTest {
     // This address has 2M FXRP on mainnet fork.
     address constant ALICE_FXRP = 0x1aac0E512f9Fd62a8A873Bac3E19373C8ba9D4BC;
 
