@@ -19,7 +19,7 @@ contract SceptreStakedFlrOracleProdTest is Test {
         LibCycloTestProd.createSelectFork(vm);
 
         uint256 price = IPriceOracleV2(payable(PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE)).price();
-        assertEq(price, 0.605568477564990863e18);
+        assertEq(price, 0.60556847749291435e18);
     }
 
     function testProdCycloSceptreStakedFlrOracleBytecode() external {

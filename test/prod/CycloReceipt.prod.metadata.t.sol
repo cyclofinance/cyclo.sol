@@ -15,8 +15,8 @@ contract CycloReceiptProdMetadataTest is CycloReceiptMetadataTest {
         LibCycloTestProd.createSelectFork(vm);
 
         checkCycloReceiptURIV1(PROD_FLARE_RECEIPT_CYSFLR);
-        checkCycloReceiptURIV2(PROD_FLARE_RECEIPT_CYWETH, "WETH", 18);
-        checkCycloReceiptURIV2(PROD_FLARE_RECEIPT_CYFXRP, "FXRP", 6);
+        checkCycloReceiptURIV2(PROD_FLARE_RECEIPT_CYWETH, "cyWETH", "WETH", 18);
+        checkCycloReceiptURIV2(PROD_FLARE_RECEIPT_CYFXRP, "cyFXRP.ftso", "FXRP", 6);
     }
 
     function testProdCycloReceiptName() external {

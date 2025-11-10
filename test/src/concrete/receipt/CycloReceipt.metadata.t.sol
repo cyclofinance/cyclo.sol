@@ -35,7 +35,12 @@ contract CycloReceiptMetadataTest is CycloReceiptFactoryTest {
         assertEq(metadata.name, "Receipt for Cyclo lock at 0.01544 USD per sFLR.");
     }
 
-    function checkCycloReceiptURIV2(address cycloReceipt, string memory assetSymbol, uint8 decimals) internal view {
+    function checkCycloReceiptURIV2(
+        address cycloReceipt,
+        string memory shareSymbol,
+        string memory assetSymbol,
+        uint8 decimals
+    ) internal view {
         CycloReceipt receipt = CycloReceipt(cycloReceipt);
 
         string memory uri = receipt.uri(0.01544e18);
@@ -45,8 +50,8 @@ contract CycloReceiptMetadataTest is CycloReceiptFactoryTest {
         assertEq(
             metadata.description,
             string.concat(
-                "1 of these receipts can be burned alongside 1 cy",
-                assetSymbol,
+                "1 of these receipts can be burned alongside 1 ",
+                shareSymbol,
                 " to redeem 64.766839378238341968 of ",
                 assetSymbol,
                 ". Redeem at https://cyclo.finance."
@@ -95,7 +100,7 @@ contract CycloReceiptMetadataTest is CycloReceiptFactoryTest {
 
         vm.mockCall(address(SFLR_CONTRACT), abi.encodeWithSelector(IERC20Metadata.symbol.selector), abi.encode("sFLR"));
         vm.mockCall(address(SFLR_CONTRACT), abi.encodeWithSelector(IERC20Metadata.decimals.selector), abi.encode(18));
-        checkCycloReceiptURIV2(address(vault.receipt()), "sFLR", 18);
+        checkCycloReceiptURIV2(address(vault.receipt()), "cysFLR", "sFLR", 18);
     }
 
     function testCycloReceiptName() external {

@@ -28,13 +28,13 @@ contract FtsoV2LTSFeedOracleProdTest is Test {
         LibCycloTestProd.createSelectFork(vm);
 
         uint256 price = IPriceOracleV2(payable(PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE)).price();
-        assertEq(price, 0.0152137e18);
+        assertEq(price, 0.0155368e18);
 
         price = FtsoV2LTSFeedOracle(payable(PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE)).price();
-        assertEq(price, 3386.903e18);
+        assertEq(price, 3448.196e18);
 
         price = FtsoV2LTSFeedOracle(payable(PROD_FLARE_FTSO_V2_LTS_XRP_USD_FEED_ORACLE)).price();
-        assertEq(price, 2.254826e18);
+        assertEq(price, 2.275932e18);
     }
 
     function testProdCycloFtsoV2LTSFeedOracleBytecode() external {
