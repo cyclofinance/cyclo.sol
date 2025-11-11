@@ -54,6 +54,7 @@ import {
     PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE,
     PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE,
     PYTH_ORACLE_WETH_USD_ARBITRUM_CODEHASH,
+    PYTH_ORACLE_WBTC_USD_ARBITRUM_CODEHASH,
     PROD_PYTH_ORACLE_WETH_USD_ARBITRUM
 } from "src/lib/LibCycloProdOracle.sol";
 import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
@@ -75,6 +76,7 @@ bytes32 constant DEPLOYMENT_SUITE_FTSO_V2_LTS_FEED_ORACLE_XRP_USD = keccak256("f
 bytes32 constant DEPLOYMENT_SUITE_STARGATE_WETH_PRICE_VAULT = keccak256("stargate-weth-price-vault");
 bytes32 constant DEPLOYMENT_SUITE_FLARE_FASSET_XRP = keccak256("flare-fasset-xrp-price-vault");
 bytes32 constant DEPLOYMENT_SUITE_PYTH_ORACLE_WETH_USD = keccak256("pyth-oracle-weth-usd");
+bytes32 constant DEPLOYMENT_SUITE_PYTH_ORACLE_WBTC_USD = keccak256("pyth-oracle-wbtc-usd");
 bytes32 constant DEPLOYMENT_SUITE_PYTH_WETH_PRICE_VAULT = keccak256("pyth-weth-price-vault");
 
 contract Deploy is Script {
@@ -243,6 +245,24 @@ contract Deploy is Script {
         vm.stopBroadcast();
     }
 
+    //forge-lint: disable-next-line(mixed-case-function)
+    function deployPythOracleWBTCUSDArbitrum(uint256 deploymentKey) internal {
+        vm.startBroadcast(deploymentKey);
+
+        require(block.chainid == LibPyth.CHAIN_ID_ARBITRUM, "Chain is not Arbitrum");
+
+        IPriceOracleV2 pythOracle = new PythOracle(
+            PythOracleConfig({
+                priceFeedId: LibPyth.PRICE_FEED_ID_CRYPTO_WBTC_USD,
+                staleAfter: PROD_ORACLE_DEFAULT_STALE_AFTER,
+                pythContract: LibPyth.PRICE_FEED_CONTRACT_ARBITRUM
+            })
+        );
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(pythOracle), PYTH_ORACLE_WBTC_USD_ARBITRUM_CODEHASH);
+
+        vm.stopBroadcast();
+    }
+
     function deployStargateWethPriceVault(uint256 deploymentKey) internal {
         vm.startBroadcast(deploymentKey);
 
@@ -339,6 +359,8 @@ contract Deploy is Script {
             deployFlareFassetXRP(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_PYTH_ORACLE_WETH_USD) {
             deployPythOracleWETHUSDArbitrum(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_PYTH_ORACLE_WBTC_USD) {
+            deployPythOracleWBTCUSDArbitrum(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_PYTH_WETH_PRICE_VAULT) {
             deployPythWethPriceVault(deployerPrivateKey);
         } else {
