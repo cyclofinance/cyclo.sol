@@ -25,7 +25,13 @@ import {
     PROD_ARBITRUM_CLONE_FACTORY_CODEHASH_V1
 } from "src/lib/LibCycloProdCloneFactory.sol";
 import {CycloVault, CycloVaultConfig} from "src/concrete/vault/CycloVault.sol";
-import {FLARE_STARGATE_WETH, FLARE_FASSET_XRP, ARBITRUM_WETH, ARBITRUM_WBTC} from "src/lib/LibCycloProdAssets.sol";
+import {
+    FLARE_STARGATE_WETH,
+    FLARE_FASSET_XRP,
+    ARBITRUM_WETH,
+    ARBITRUM_WBTC,
+    ARBITRUM_CBBTC
+} from "src/lib/LibCycloProdAssets.sol";
 import {
     PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1,
     PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2,
@@ -57,6 +63,7 @@ import {
     PYTH_ORACLE_WBTC_USD_ARBITRUM_CODEHASH,
     PROD_PYTH_ORACLE_WETH_USD_ARBITRUM,
     PROD_PYTH_ORACLE_WBTC_USD_ARBITRUM,
+    PROD_PYTH_ORACLE_CBBTC_USD_ARBITRUM,
     PYTH_ORACLE_NAME,
     PYTH_ORACLE_SYMBOL
 } from "src/lib/LibCycloProdOracle.sol";
@@ -326,6 +333,27 @@ contract Deploy is Script {
 
         LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
             cywbtc, PROD_ARBITRUM_CYCLO_VAULT_IMPLEMENTATION_V2, PROD_ARBITRUM_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH
+        );
+        vm.stopBroadcast();
+    }
+
+    function deployPythCbbtcPriceVault(uint256 deploymentKey) internal {
+        vm.startBroadcast(deploymentKey);
+
+        address cycbbtc = ICloneableFactoryV2(PROD_ARBITRUM_CLONE_FACTORY_ADDRESS_V1).clone(
+            PROD_ARBITRUM_CYCLO_VAULT_IMPLEMENTATION_V2,
+            abi.encode(
+                CycloVaultConfig({
+                    priceOracle: IPriceOracleV2(payable(PROD_PYTH_ORACLE_CBBTC_USD_ARBITRUM)),
+                    asset: ARBITRUM_CBBTC,
+                    oracleName: PYTH_ORACLE_NAME,
+                    oracleSymbol: PYTH_ORACLE_SYMBOL
+                })
+            )
+        );
+
+        LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
+            cycbbtc, PROD_ARBITRUM_CYCLO_VAULT_IMPLEMENTATION_V2, PROD_ARBITRUM_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH
         );
         vm.stopBroadcast();
     }
