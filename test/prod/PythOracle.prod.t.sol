@@ -7,7 +7,9 @@ import {Test} from "forge-std/Test.sol";
 import {
     PROD_ORACLE_DEFAULT_STALE_AFTER,
     PROD_PYTH_ORACLE_WETH_USD_ARBITRUM,
-    PYTH_ORACLE_WETH_USD_ARBITRUM_CODEHASH
+    PROD_PYTH_ORACLE_WBTC_USD_ARBITRUM,
+    PYTH_ORACLE_WETH_USD_ARBITRUM_CODEHASH,
+    PYTH_ORACLE_WBTC_USD_ARBITRUM_CODEHASH
 } from "src/lib/LibCycloProdOracle.sol";
 import {PythOracle, PythOracleConfig} from "ethgild/concrete/oracle/PythOracle.sol";
 import {LibPyth} from "rain.pyth/lib/pyth/LibPyth.sol";
@@ -20,7 +22,10 @@ contract PythOracleProdTest is Test {
         LibCycloTestProd.createSelectForkArbitrum(vm);
 
         uint256 price = IPriceOracleV2(payable(PROD_PYTH_ORACLE_WETH_USD_ARBITRUM)).price();
-        assertEq(price, 3585.93289535e18);
+        assertEq(price, 3560.53401745e18);
+
+        price = IPriceOracleV2(payable(PROD_PYTH_ORACLE_WBTC_USD_ARBITRUM)).price();
+        assertEq(price, 104917.39325687e18);
     }
 
     function testProdCycloPythOracleBytecode() external {
@@ -37,6 +42,9 @@ contract PythOracleProdTest is Test {
 
         LibCycloTestProd.checkCBORTrimmedBytecodeHash(
             PROD_PYTH_ORACLE_WETH_USD_ARBITRUM, PYTH_ORACLE_WETH_USD_ARBITRUM_CODEHASH
+        );
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(
+            PROD_PYTH_ORACLE_WBTC_USD_ARBITRUM, PYTH_ORACLE_WBTC_USD_ARBITRUM_CODEHASH
         );
     }
 
