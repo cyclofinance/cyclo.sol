@@ -12,13 +12,13 @@ import {
 } from "src/lib/LibCycloProdCloneFactory.sol";
 import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
 
-contract CloneFactoryProdTest is Test {
+contract CloneFactoryProdFlareTest is Test {
     function testProdCloneFactoryBytecode() external {
         CloneFactory fresh = new CloneFactory();
 
         LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(fresh), PROD_FLARE_CLONE_FACTORY_CODEHASH_V1);
 
-        LibCycloTestProd.createSelectFork(vm);
+        LibCycloTestProd.createSelectForkFlare(vm);
 
         LibCycloTestProd.checkCBORTrimmedBytecodeHash(
             PROD_FLARE_CLONE_FACTORY_ADDRESS_V1, PROD_FLARE_CLONE_FACTORY_CODEHASH_V1
