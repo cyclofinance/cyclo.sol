@@ -31,6 +31,7 @@ on:
           - pyth-oracle-weth-usd
           - pyth-oracle-wbtc-usd
           - pyth-weth-price-vault
+          - pyth-wbtc-price-vault
 
 jobs:
   deploy:
