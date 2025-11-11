@@ -46,7 +46,7 @@ bytes32 constant PYTH_ORACLE_WBTC_USD_ARBITRUM_CODEHASH =
     bytes32(0xa0c8e95567c7247baedd551d5a83e3a94448ae2cc855df4dfadb67a4760239cb);
 
 address constant PROD_PYTH_ORACLE_CBBTC_USD_ARBITRUM = address(0);
-bytes32 constant PYTH_ORACLE_CBBTC_USD_ARBITRUM_CODEHASH = bytes32(0);
+bytes32 constant PYTH_ORACLE_CBBTC_USD_ARBITRUM_CODEHASH = bytes32(0xde840e170b3fc3bbf67ed65ff04314244a42a209cbd9f1ae90848c0947ec6a2e);
 
 string constant PYTH_ORACLE_NAME = "Pyth";
 string constant PYTH_ORACLE_SYMBOL = "pyth";
