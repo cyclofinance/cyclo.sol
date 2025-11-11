@@ -25,7 +25,7 @@ import {
     PROD_ARBITRUM_CLONE_FACTORY_CODEHASH_V1
 } from "src/lib/LibCycloProdCloneFactory.sol";
 import {CycloVault, CycloVaultConfig} from "src/concrete/vault/CycloVault.sol";
-import {FLARE_STARGATE_WETH, FLARE_FASSET_XRP, ARBITRUM_WETH} from "src/lib/LibCycloProdAssets.sol";
+import {FLARE_STARGATE_WETH, FLARE_FASSET_XRP, ARBITRUM_WETH, ARBITRUM_WBTC} from "src/lib/LibCycloProdAssets.sol";
 import {
     PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1,
     PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2,
@@ -55,7 +55,10 @@ import {
     PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE,
     PYTH_ORACLE_WETH_USD_ARBITRUM_CODEHASH,
     PYTH_ORACLE_WBTC_USD_ARBITRUM_CODEHASH,
-    PROD_PYTH_ORACLE_WETH_USD_ARBITRUM
+    PROD_PYTH_ORACLE_WETH_USD_ARBITRUM,
+    PROD_PYTH_ORACLE_WBTC_USD_ARBITRUM,
+    PYTH_ORACLE_NAME,
+    PYTH_ORACLE_SYMBOL
 } from "src/lib/LibCycloProdOracle.sol";
 import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
 import {LibPyth} from "rain.pyth/lib/pyth/LibPyth.sol";
@@ -78,6 +81,7 @@ bytes32 constant DEPLOYMENT_SUITE_FLARE_FASSET_XRP = keccak256("flare-fasset-xrp
 bytes32 constant DEPLOYMENT_SUITE_PYTH_ORACLE_WETH_USD = keccak256("pyth-oracle-weth-usd");
 bytes32 constant DEPLOYMENT_SUITE_PYTH_ORACLE_WBTC_USD = keccak256("pyth-oracle-wbtc-usd");
 bytes32 constant DEPLOYMENT_SUITE_PYTH_WETH_PRICE_VAULT = keccak256("pyth-weth-price-vault");
+bytes32 constant DEPLOYMENT_SUITE_PYTH_WBTC_PRICE_VAULT = keccak256("pyth-wbtc-price-vault");
 
 contract Deploy is Script {
     function deployFactory(uint256 deploymentKey) internal {
@@ -293,14 +297,35 @@ contract Deploy is Script {
                 CycloVaultConfig({
                     priceOracle: IPriceOracleV2(payable(PROD_PYTH_ORACLE_WETH_USD_ARBITRUM)),
                     asset: ARBITRUM_WETH,
-                    oracleName: "Pyth",
-                    oracleSymbol: "pyth"
+                    oracleName: PYTH_ORACLE_NAME,
+                    oracleSymbol: PYTH_ORACLE_SYMBOL
                 })
             )
         );
 
         LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
             cyweth, PROD_ARBITRUM_CYCLO_VAULT_IMPLEMENTATION_V2, PROD_ARBITRUM_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH
+        );
+        vm.stopBroadcast();
+    }
+
+    function deployPythWbtcPriceVault(uint256 deploymentKey) internal {
+        vm.startBroadcast(deploymentKey);
+
+        address cywbtc = ICloneableFactoryV2(PROD_ARBITRUM_CLONE_FACTORY_ADDRESS_V1).clone(
+            PROD_ARBITRUM_CYCLO_VAULT_IMPLEMENTATION_V2,
+            abi.encode(
+                CycloVaultConfig({
+                    priceOracle: IPriceOracleV2(payable(PROD_PYTH_ORACLE_WBTC_USD_ARBITRUM)),
+                    asset: ARBITRUM_WBTC,
+                    oracleName: PYTH_ORACLE_NAME,
+                    oracleSymbol: PYTH_ORACLE_SYMBOL
+                })
+            )
+        );
+
+        LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
+            cywbtc, PROD_ARBITRUM_CYCLO_VAULT_IMPLEMENTATION_V2, PROD_ARBITRUM_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH
         );
         vm.stopBroadcast();
     }
@@ -363,6 +388,8 @@ contract Deploy is Script {
             deployPythOracleWBTCUSDArbitrum(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_PYTH_WETH_PRICE_VAULT) {
             deployPythWethPriceVault(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_PYTH_WBTC_PRICE_VAULT) {
+            deployPythWbtcPriceVault(deployerPrivateKey);
         } else {
             revert("Unknown deployment suite");
         }

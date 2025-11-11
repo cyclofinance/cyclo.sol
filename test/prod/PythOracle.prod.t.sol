@@ -14,7 +14,6 @@ import {
 import {PythOracle, PythOracleConfig} from "ethgild/concrete/oracle/PythOracle.sol";
 import {LibPyth} from "rain.pyth/lib/pyth/LibPyth.sol";
 import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
-
 import {IPriceOracleV2} from "ethgild/interface/IPriceOracleV2.sol";
 
 contract PythOracleProdTest is Test {
@@ -22,10 +21,10 @@ contract PythOracleProdTest is Test {
         LibCycloTestProd.createSelectForkArbitrum(vm);
 
         uint256 price = IPriceOracleV2(payable(PROD_PYTH_ORACLE_WETH_USD_ARBITRUM)).price();
-        assertEq(price, 3560.53401745e18);
+        assertEq(price, 3469.82302107e18);
 
         price = IPriceOracleV2(payable(PROD_PYTH_ORACLE_WBTC_USD_ARBITRUM)).price();
-        assertEq(price, 104917.39325687e18);
+        assertEq(price, 102777.25049564e18);
     }
 
     function testProdCycloPythOracleBytecode() external {
