@@ -15,8 +15,6 @@ import {PythOracle, PythOracleConfig} from "ethgild/concrete/oracle/PythOracle.s
 import {LibPyth} from "rain.pyth/lib/pyth/LibPyth.sol";
 import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
 
-import {IPriceOracleV2} from "ethgild/interface/IPriceOracleV2.sol";
-
 contract PythOracleProdTest is Test {
     function testProdCycloPythOraclePrice() external {
         LibCycloTestProd.createSelectForkArbitrum(vm);
