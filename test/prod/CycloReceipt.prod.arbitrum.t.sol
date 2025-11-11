@@ -7,6 +7,8 @@ import {Test} from "forge-std/Test.sol";
 import {CycloReceipt} from "src/concrete/receipt/CycloReceipt.sol";
 import {
     PROD_ARBITRUM_RECEIPT_CYWETH_PYTH,
+    PROD_ARBITRUM_RECEIPT_CYWBTC_PYTH,
+    PROD_ARBITRUM_RECEIPT_CYCBBTC_PYTH,
     PROD_ARBITRUM_CYCLO_RECEIPT_IMPLEMENTATION_V2,
     PROD_ARBITRUM_CYCLO_RECEIPT_CODEHASH_V2
 } from "src/lib/LibCycloProdReceipt.sol";
@@ -25,6 +27,16 @@ contract CycloReceiptProdArbitrumTest is Test {
             PROD_ARBITRUM_CYCLO_RECEIPT_IMPLEMENTATION_V2,
             PROD_ARBITRUM_CYCLO_RECEIPT_CODEHASH_V2
         );
+        LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
+            PROD_ARBITRUM_RECEIPT_CYWBTC_PYTH,
+            PROD_ARBITRUM_CYCLO_RECEIPT_IMPLEMENTATION_V2,
+            PROD_ARBITRUM_CYCLO_RECEIPT_CODEHASH_V2
+        );
+        LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
+            PROD_ARBITRUM_RECEIPT_CYCBBTC_PYTH,
+            PROD_ARBITRUM_CYCLO_RECEIPT_IMPLEMENTATION_V2,
+            PROD_ARBITRUM_CYCLO_RECEIPT_CODEHASH_V2
+        );
     }
 
     function testProdCysWETHImplementationIsInitializedArbitrum() external {
@@ -35,6 +47,16 @@ contract CycloReceiptProdArbitrumTest is Test {
     function testProdCycloReceiptIsInitializedCYWETHArbitrum() external {
         LibCycloTestProd.createSelectForkArbitrum(vm);
         LibCycloTestProd.checkIsInitialized(vm, PROD_ARBITRUM_RECEIPT_CYWETH_PYTH);
+    }
+
+    function testProdCycloReceiptIsInitializedCYWBTCArbitrum() external {
+        LibCycloTestProd.createSelectForkArbitrum(vm);
+        LibCycloTestProd.checkIsInitialized(vm, PROD_ARBITRUM_RECEIPT_CYWBTC_PYTH);
+    }
+
+    function testProdCycloReceiptIsInitializedCYCBBTCArbitrum() external {
+        LibCycloTestProd.createSelectForkArbitrum(vm);
+        LibCycloTestProd.checkIsInitialized(vm, PROD_ARBITRUM_RECEIPT_CYCBBTC_PYTH);
     }
 
     fallback() external payable {}
