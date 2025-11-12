@@ -493,6 +493,16 @@ contract Deploy is Script {
             deployPythOracleCBBTCUSDArbitrum(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_PYTH_ORACLE_LINK_USD) {
             deployPythOracleLinkUSDArbitrum(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_PYTH_ORACLE_DOT_USD) {
+            deployPythOracleDotUSDArbitrum(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_PYTH_ORACLE_UNI_USD) {
+            deployPythOracleUniUSDArbitrum(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_PYTH_ORACLE_PEPE_USD) {
+            deployPythOraclePepeUSDArbitrum(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_PYTH_ORACLE_ENA_USD) {
+            deployPythOracleEnaUSDArbitrum(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_PYTH_ORACLE_ARB_USD) {
+            deployPythOracleArbUSDArbitrum(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_PYTH_WETH_PRICE_VAULT) {
             deployPythWethPriceVault(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_PYTH_WBTC_PRICE_VAULT) {
@@ -501,6 +511,16 @@ contract Deploy is Script {
             deployPythCbbtcPriceVault(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_PYTH_LINK_PRICE_VAULT) {
             deployPythLinkPriceVault(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_PYTH_DOT_PRICE_VAULT) {
+            deployPythDotPriceVault(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_PYTH_UNI_PRICE_VAULT) {
+            deployPythUniPriceVault(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_PYTH_PEPE_PRICE_VAULT) {
+            deployPythPepePriceVault(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_PYTH_ENA_PRICE_VAULT) {
+            deployPythEnaPriceVault(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_PYTH_ARB_PRICE_VAULT) {
+            deployPythArbPriceVault(deployerPrivateKey);
         } else {
             revert("Unknown deployment suite");
         }
