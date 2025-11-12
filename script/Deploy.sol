@@ -481,12 +481,16 @@ contract Deploy is Script {
             deployPythOracleWBTCUSDArbitrum(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_PYTH_ORACLE_CBBTC_USD) {
             deployPythOracleCBBTCUSDArbitrum(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_PYTH_ORACLE_LINK_USD) {
+            deployPythOracleLinkUSDArbitrum(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_PYTH_WETH_PRICE_VAULT) {
             deployPythWethPriceVault(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_PYTH_WBTC_PRICE_VAULT) {
             deployPythWbtcPriceVault(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_PYTH_CBBTC_PRICE_VAULT) {
             deployPythCbbtcPriceVault(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_PYTH_LINK_PRICE_VAULT) {
+            deployPythLinkPriceVault(deployerPrivateKey);
         } else {
             revert("Unknown deployment suite");
         }
