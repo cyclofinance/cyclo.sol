@@ -30,8 +30,10 @@ on:
           - factory-arbitrum
           - pyth-oracle-weth-usd
           - pyth-oracle-wbtc-usd
+          - pyth-oracle-cbbtc-usd
           - pyth-weth-price-vault
           - pyth-wbtc-price-vault
+          - pyth-cbbtc-price-vault
 
 jobs:
   deploy:
