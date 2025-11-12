@@ -53,5 +53,20 @@ address constant PROD_PYTH_ORACLE_LINK_USD_ARBITRUM = address(0xd8113E026591edec
 bytes32 constant PYTH_ORACLE_LINK_USD_ARBITRUM_CODEHASH =
     bytes32(0xd2bd427b9da5976ba841eaa2718c314f9d2089c1025a26346e76a5ce425c933b);
 
+address constant PROD_PYTH_ORACLE_DOT_USD_ARBITRUM = address(0);
+bytes32 constant PYTH_ORACLE_DOT_USD_ARBITRUM_CODEHASH = bytes32(0);
+
+address constant PROD_PYTH_ORACLE_UNI_USD_ARBITRUM = address(0);
+bytes32 constant PYTH_ORACLE_UNI_USD_ARBITRUM_CODEHASH = bytes32(0);
+
+address constant PROD_PYTH_ORACLE_PEPE_USD_ARBITRUM = address(0);
+bytes32 constant PYTH_ORACLE_PEPE_USD_ARBITRUM_CODEHASH = bytes32(0);
+
+address constant PROD_PYTH_ORACLE_ENA_USD_ARBITRUM = address(0);
+bytes32 constant PYTH_ORACLE_ENA_USD_ARBITRUM_CODEHASH = bytes32(0);
+
+address constant PROD_PYTH_ORACLE_ARB_USD_ARBITRUM = address(0);
+bytes32 constant PYTH_ORACLE_ARB_USD_ARBITRUM_CODEHASH = bytes32(0);
+
 string constant PYTH_ORACLE_NAME = "Pyth";
 string constant PYTH_ORACLE_SYMBOL = "pyth";

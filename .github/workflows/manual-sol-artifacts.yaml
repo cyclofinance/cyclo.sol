@@ -32,10 +32,20 @@ on:
           - pyth-oracle-wbtc-usd
           - pyth-oracle-cbbtc-usd
           - pyth-oracle-link-usd
+          - pyth-oracle-dot-usd
+          - pyth-oracle-uni-usd
+          - pyth-oracle-pepe-usd
+          - pyth-oracle-ena-usd
+          - pyth-oracle-arb-usd
           - pyth-weth-price-vault
           - pyth-wbtc-price-vault
           - pyth-cbbtc-price-vault
           - pyth-link-price-vault
+          - pyth-dot-price-vault
+          - pyth-uni-price-vault
+          - pyth-pepe-price-vault
+          - pyth-ena-price-vault
+          - pyth-arb-price-vault
 
 jobs:
   deploy:
