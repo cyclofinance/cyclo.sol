@@ -29,6 +29,7 @@ import {
     FLARE_STARGATE_WETH,
     FLARE_FASSET_XRP,
     ARBITRUM_WETH,
+    ARBITRUM_WSTETH,
     ARBITRUM_WBTC,
     ARBITRUM_CBBTC,
     ARBITRUM_LINK,
@@ -66,6 +67,7 @@ import {
     PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE,
     PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE,
     PYTH_ORACLE_WETH_USD_ARBITRUM_CODEHASH,
+    PYTH_ORACLE_WSTETH_USD_ARBITRUM_CODEHASH,
     PYTH_ORACLE_WBTC_USD_ARBITRUM_CODEHASH,
     PYTH_ORACLE_CBBTC_USD_ARBITRUM_CODEHASH,
     PYTH_ORACLE_LINK_USD_ARBITRUM_CODEHASH,
@@ -75,6 +77,7 @@ import {
     PYTH_ORACLE_ENA_USD_ARBITRUM_CODEHASH,
     PYTH_ORACLE_ARB_USD_ARBITRUM_CODEHASH,
     PROD_PYTH_ORACLE_WETH_USD_ARBITRUM,
+    PROD_PYTH_ORACLE_WSTETH_USD_ARBITRUM,
     PROD_PYTH_ORACLE_WBTC_USD_ARBITRUM,
     PROD_PYTH_ORACLE_CBBTC_USD_ARBITRUM,
     PROD_PYTH_ORACLE_LINK_USD_ARBITRUM,
@@ -106,6 +109,7 @@ bytes32 constant DEPLOYMENT_SUITE_STARGATE_WETH_PRICE_VAULT = keccak256("stargat
 bytes32 constant DEPLOYMENT_SUITE_FLARE_FASSET_XRP = keccak256("flare-fasset-xrp-price-vault");
 
 bytes32 constant DEPLOYMENT_SUITE_PYTH_ORACLE_WETH_USD = keccak256("pyth-oracle-weth-usd");
+bytes32 constant DEPLOYMENT_SUITE_PYTH_ORACLE_WSTETH_USD = keccak256("pyth-oracle-wsteth-usd");
 bytes32 constant DEPLOYMENT_SUITE_PYTH_ORACLE_WBTC_USD = keccak256("pyth-oracle-wbtc-usd");
 bytes32 constant DEPLOYMENT_SUITE_PYTH_ORACLE_CBBTC_USD = keccak256("pyth-oracle-cbbtc-usd");
 bytes32 constant DEPLOYMENT_SUITE_PYTH_ORACLE_LINK_USD = keccak256("pyth-oracle-link-usd");
@@ -116,6 +120,7 @@ bytes32 constant DEPLOYMENT_SUITE_PYTH_ORACLE_ENA_USD = keccak256("pyth-oracle-e
 bytes32 constant DEPLOYMENT_SUITE_PYTH_ORACLE_ARB_USD = keccak256("pyth-oracle-arb-usd");
 
 bytes32 constant DEPLOYMENT_SUITE_PYTH_WETH_PRICE_VAULT = keccak256("pyth-weth-price-vault");
+bytes32 constant DEPLOYMENT_SUITE_PYTH_WSTETH_PRICE_VAULT = keccak256("pyth-wsteth-price-vault");
 bytes32 constant DEPLOYMENT_SUITE_PYTH_WBTC_PRICE_VAULT = keccak256("pyth-wbtc-price-vault");
 bytes32 constant DEPLOYMENT_SUITE_PYTH_CBBTC_PRICE_VAULT = keccak256("pyth-cbbtc-price-vault");
 bytes32 constant DEPLOYMENT_SUITE_PYTH_LINK_PRICE_VAULT = keccak256("pyth-link-price-vault");
@@ -281,6 +286,13 @@ contract Deploy is Script {
     }
 
     //forge-lint: disable-next-line(mixed-case-function)
+    function deployPythOracleWSTETHUSDArbitrum(uint256 deploymentKey) internal {
+        deployPythOracleXUSDArbitrum(
+            deploymentKey, LibPyth.PRICE_FEED_ID_CRYPTO_WSTETH_USD, PYTH_ORACLE_WSTETH_USD_ARBITRUM_CODEHASH
+        );
+    }
+
+    //forge-lint: disable-next-line(mixed-case-function)
     function deployPythOracleWBTCUSDArbitrum(uint256 deploymentKey) internal {
         deployPythOracleXUSDArbitrum(
             deploymentKey, LibPyth.PRICE_FEED_ID_CRYPTO_WBTC_USD, PYTH_ORACLE_WBTC_USD_ARBITRUM_CODEHASH
@@ -401,6 +413,10 @@ contract Deploy is Script {
         deployPythXPriceVault(deploymentKey, PROD_PYTH_ORACLE_WETH_USD_ARBITRUM, ARBITRUM_WETH);
     }
 
+    function deployPythWstethPriceVault(uint256 deploymentKey) internal {
+        deployPythXPriceVault(deploymentKey, PROD_PYTH_ORACLE_WSTETH_USD_ARBITRUM, ARBITRUM_WSTETH);
+    }
+
     function deployPythWbtcPriceVault(uint256 deploymentKey) internal {
         deployPythXPriceVault(deploymentKey, PROD_PYTH_ORACLE_WBTC_USD_ARBITRUM, ARBITRUM_WBTC);
     }
@@ -483,6 +499,8 @@ contract Deploy is Script {
             deployFTSOV2LTSFeedOracleXRPUSD(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_STARGATE_WETH_PRICE_VAULT) {
             deployStargateWethPriceVault(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_PYTH_ORACLE_WSTETH_USD) {
+            deployPythOracleWSTETHUSDArbitrum(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_FLARE_FASSET_XRP) {
             deployFlareFassetXRP(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_PYTH_ORACLE_WETH_USD) {
@@ -505,6 +523,8 @@ contract Deploy is Script {
             deployPythOracleArbUSDArbitrum(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_PYTH_WETH_PRICE_VAULT) {
             deployPythWethPriceVault(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_PYTH_WSTETH_PRICE_VAULT) {
+            deployPythWstethPriceVault(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_PYTH_WBTC_PRICE_VAULT) {
             deployPythWbtcPriceVault(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_PYTH_CBBTC_PRICE_VAULT) {
