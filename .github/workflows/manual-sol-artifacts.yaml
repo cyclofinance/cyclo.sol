@@ -29,6 +29,7 @@ on:
           - factory
           - factory-arbitrum
           - pyth-oracle-weth-usd
+          - pyth-oracle-wsteth-usd
           - pyth-oracle-wbtc-usd
           - pyth-oracle-cbbtc-usd
           - pyth-oracle-link-usd
@@ -38,6 +39,7 @@ on:
           - pyth-oracle-ena-usd
           - pyth-oracle-arb-usd
           - pyth-weth-price-vault
+          - pyth-wsteth-price-vault
           - pyth-wbtc-price-vault
           - pyth-cbbtc-price-vault
           - pyth-link-price-vault
