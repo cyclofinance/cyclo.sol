@@ -15,7 +15,9 @@ import {ICloneableFactoryV2} from "rain.factory/interface/ICloneableFactoryV2.so
 import {SceptreStakedFlrOracle} from "ethgild/concrete/oracle/SceptreStakedFlrOracle.sol";
 import {TwoPriceOracleV2, TwoPriceOracleConfigV2} from "ethgild/concrete/oracle/TwoPriceOracleV2.sol";
 import {FtsoV2LTSFeedOracle, FtsoV2LTSFeedOracleConfig} from "ethgild/concrete/oracle/FtsoV2LTSFeedOracle.sol";
-import {FLR_USD_FEED_ID, ETH_USD_FEED_ID, XRP_USD_FEED_ID} from "rain.flare/lib/lts/LibFtsoV2LTS.sol";
+import {
+    FLR_USD_FEED_ID, ETH_USD_FEED_ID, XRP_USD_FEED_ID, JOULE_USD_FEED_ID
+} from "rain.flare/lib/lts/LibFtsoV2LTS.sol";
 import {IPriceOracleV2} from "ethgild/abstract/PriceOracleV2.sol";
 import {SFLR_CONTRACT} from "rain.flare/lib/sflr/LibSceptreStakedFlare.sol";
 import {
@@ -59,6 +61,7 @@ import {
     PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE,
     PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE_CODEHASH,
     PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE_CODEHASH,
+    PROD_FLARE_FTSO_V2_LTS_JOULE_USD_FEED_ORACLE_CODEHASH,
     PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2_CODEHASH,
     PROD_FLARE_FTSO_V2_LTS_XRP_USD_FEED_ORACLE,
     PROD_FLARE_FTSO_V2_LTS_XRP_USD_FEED_ORACLE_CODEHASH2,
@@ -105,6 +108,7 @@ bytes32 constant DEPLOYMENT_SUITE_STAKED_FLR_ORACLE_2 = keccak256("sceptre-stake
 bytes32 constant DEPLOYMENT_SUITE_STAKED_FLR_PRICE_VAULT = keccak256("sceptre-staked-flare-price-vault");
 bytes32 constant DEPLOYMENT_SUITE_FTSO_V2_LTS_FEED_ORACLE_ETH_USD = keccak256("ftso-v2-lts-feed-oracle-eth-usd");
 bytes32 constant DEPLOYMENT_SUITE_FTSO_V2_LTS_FEED_ORACLE_XRP_USD = keccak256("ftso-v2-lts-feed-oracle-xrp-usd");
+bytes32 constant DEPLOYMENT_SUITE_FTSO_V2_LTS_FEED_ORACLE_JOULE_USD = keccak256("ftso-v2-lts-feed-oracle-joule-usd");
 bytes32 constant DEPLOYMENT_SUITE_STARGATE_WETH_PRICE_VAULT = keccak256("stargate-weth-price-vault");
 bytes32 constant DEPLOYMENT_SUITE_FLARE_FASSET_XRP = keccak256("flare-fasset-xrp-price-vault");
 
@@ -253,29 +257,35 @@ contract Deploy is Script {
     }
 
     //forge-lint: disable-next-line(mixed-case-function)
-    function deployFTSOV2LTSFeedOracleETHUSD(uint256 deploymentKey) internal {
+    function deployFTSOV2LTsFeedOracleXUSD(uint256 deploymentKey, bytes21 feedId, bytes32 codehash) internal {
         vm.startBroadcast(deploymentKey);
         //forge-lint: disable-next-line(mixed-case-variable)
         IPriceOracleV2 ftsoV2LTSFeedOracle = new FtsoV2LTSFeedOracle(
-            FtsoV2LTSFeedOracleConfig({feedId: ETH_USD_FEED_ID, staleAfter: PROD_ORACLE_DEFAULT_STALE_AFTER})
+            FtsoV2LTSFeedOracleConfig({feedId: feedId, staleAfter: PROD_ORACLE_DEFAULT_STALE_AFTER})
         );
-        LibCycloTestProd.checkCBORTrimmedBytecodeHash(
-            address(payable(ftsoV2LTSFeedOracle)), PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE_CODEHASH
-        );
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(payable(ftsoV2LTSFeedOracle)), codehash);
         vm.stopBroadcast();
     }
 
     //forge-lint: disable-next-line(mixed-case-function)
+    function deployFTSOV2LTSFeedOracleJOULEUSD(uint256 deploymentKey) internal {
+        deployFTSOV2LTsFeedOracleXUSD(
+            deploymentKey, JOULE_USD_FEED_ID, PROD_FLARE_FTSO_V2_LTS_JOULE_USD_FEED_ORACLE_CODEHASH
+        );
+    }
+
+    //forge-lint: disable-next-line(mixed-case-function)
+    function deployFTSOV2LTSFeedOracleETHUSD(uint256 deploymentKey) internal {
+        deployFTSOV2LTsFeedOracleXUSD(
+            deploymentKey, ETH_USD_FEED_ID, PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE_CODEHASH
+        );
+    }
+
+    //forge-lint: disable-next-line(mixed-case-function)
     function deployFTSOV2LTSFeedOracleXRPUSD(uint256 deploymentKey) internal {
-        vm.startBroadcast(deploymentKey);
-        //forge-lint: disable-next-line(mixed-case-variable)
-        IPriceOracleV2 ftsoV2LTSFeedOracle = new FtsoV2LTSFeedOracle(
-            FtsoV2LTSFeedOracleConfig({feedId: XRP_USD_FEED_ID, staleAfter: PROD_ORACLE_DEFAULT_STALE_AFTER})
+        deployFTSOV2LTsFeedOracleXUSD(
+            deploymentKey, XRP_USD_FEED_ID, PROD_FLARE_FTSO_V2_LTS_XRP_USD_FEED_ORACLE_CODEHASH2
         );
-        LibCycloTestProd.checkCBORTrimmedBytecodeHash(
-            address(payable(ftsoV2LTSFeedOracle)), PROD_FLARE_FTSO_V2_LTS_XRP_USD_FEED_ORACLE_CODEHASH2
-        );
-        vm.stopBroadcast();
     }
 
     //forge-lint: disable-next-line(mixed-case-function)
@@ -497,6 +507,8 @@ contract Deploy is Script {
             deployFTSOV2LTSFeedOracleETHUSD(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_FTSO_V2_LTS_FEED_ORACLE_XRP_USD) {
             deployFTSOV2LTSFeedOracleXRPUSD(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_FTSO_V2_LTS_FEED_ORACLE_JOULE_USD) {
+            deployFTSOV2LTSFeedOracleJOULEUSD(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_STARGATE_WETH_PRICE_VAULT) {
             deployStargateWethPriceVault(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_PYTH_ORACLE_WSTETH_USD) {
