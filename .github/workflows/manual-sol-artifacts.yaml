@@ -23,6 +23,7 @@ on:
           - ftso-v2-lts-feed-oracle-joule-usd
           - stargate-weth-price-vault
           - flare-fasset-xrp-price-vault
+          - flare-ftso-v2-lts-price-vault-joule
           - cyclo-receipt-implementation
           - cyclo-receipt-implementation-arbitrum
           - cyclo-vault-implementation

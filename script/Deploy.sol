@@ -30,6 +30,7 @@ import {CycloVault, CycloVaultConfig} from "src/concrete/vault/CycloVault.sol";
 import {
     FLARE_STARGATE_WETH,
     FLARE_FASSET_XRP,
+    FLARE_JOULE,
     ARBITRUM_WETH,
     ARBITRUM_WSTETH,
     ARBITRUM_WBTC,
@@ -68,6 +69,7 @@ import {
     PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2,
     PROD_ORACLE_DEFAULT_STALE_AFTER,
     PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE,
+    PROD_FLARE_FTSO_V2_LTS_JOULE_USD_FEED_ORACLE,
     PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE,
     PYTH_ORACLE_WETH_USD_ARBITRUM_CODEHASH,
     PYTH_ORACLE_WSTETH_USD_ARBITRUM_CODEHASH,
@@ -111,6 +113,7 @@ bytes32 constant DEPLOYMENT_SUITE_FTSO_V2_LTS_FEED_ORACLE_XRP_USD = keccak256("f
 bytes32 constant DEPLOYMENT_SUITE_FTSO_V2_LTS_FEED_ORACLE_JOULE_USD = keccak256("ftso-v2-lts-feed-oracle-joule-usd");
 bytes32 constant DEPLOYMENT_SUITE_STARGATE_WETH_PRICE_VAULT = keccak256("stargate-weth-price-vault");
 bytes32 constant DEPLOYMENT_SUITE_FLARE_FASSET_XRP = keccak256("flare-fasset-xrp-price-vault");
+bytes32 constant DEPLOYMENT_SUITE_FLARE_FTSOV2_LTS_PRICE_VAULT_JOULE = keccak256("flare-ftso-v2-lts-price-vault-joule");
 
 bytes32 constant DEPLOYMENT_SUITE_PYTH_ORACLE_WETH_USD = keccak256("pyth-oracle-weth-usd");
 bytes32 constant DEPLOYMENT_SUITE_PYTH_ORACLE_WSTETH_USD = keccak256("pyth-oracle-wsteth-usd");
@@ -460,15 +463,15 @@ contract Deploy is Script {
     }
 
     //forge-lint: disable-next-line(mixed-case-function)
-    function deployFlareFassetXRP(uint256 deploymentKey) internal {
+    function deployFlareFTSOV2LTSPriceVault(uint256 deploymentKey, address ftso, address asset) internal {
         vm.startBroadcast(deploymentKey);
 
-        address cyxrp = ICloneableFactoryV2(PROD_FLARE_CLONE_FACTORY_ADDRESS_V1).clone(
+        address vault = ICloneableFactoryV2(PROD_FLARE_CLONE_FACTORY_ADDRESS_V1).clone(
             PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2,
             abi.encode(
                 CycloVaultConfig({
-                    priceOracle: IPriceOracleV2(payable(PROD_FLARE_FTSO_V2_LTS_XRP_USD_FEED_ORACLE)),
-                    asset: FLARE_FASSET_XRP,
+                    priceOracle: IPriceOracleV2(payable(ftso)),
+                    asset: asset,
                     oracleName: "FTSO",
                     oracleSymbol: "ftso"
                 })
@@ -476,9 +479,19 @@ contract Deploy is Script {
         );
 
         LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
-            cyxrp, PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2, PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH
+            vault, PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2, PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH
         );
         vm.stopBroadcast();
+    }
+
+    //forge-lint: disable-next-line(mixed-case-function)
+    function deployFlareFTSOV2LTSPriceVaultJOULE(uint256 deploymentKey) internal {
+        deployFlareFTSOV2LTSPriceVault(deploymentKey, PROD_FLARE_FTSO_V2_LTS_JOULE_USD_FEED_ORACLE, FLARE_JOULE);
+    }
+
+    //forge-lint: disable-next-line(mixed-case-function)
+    function deployFlareFassetXRP(uint256 deploymentKey) internal {
+        deployFlareFTSOV2LTSPriceVault(deploymentKey, PROD_FLARE_FTSO_V2_LTS_XRP_USD_FEED_ORACLE, FLARE_FASSET_XRP);
     }
 
     function run() external {
@@ -515,6 +528,8 @@ contract Deploy is Script {
             deployPythOracleWSTETHUSDArbitrum(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_FLARE_FASSET_XRP) {
             deployFlareFassetXRP(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_FLARE_FTSOV2_LTS_PRICE_VAULT_JOULE) {
+            deployFlareFTSOV2LTSPriceVaultJOULE(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_PYTH_ORACLE_WETH_USD) {
             deployPythOracleWETHUSDArbitrum(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_PYTH_ORACLE_WBTC_USD) {
