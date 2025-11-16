@@ -79,8 +79,10 @@ import {
     PYTH_ORACLE_DOT_USD_ARBITRUM_CODEHASH,
     PYTH_ORACLE_UNI_USD_ARBITRUM_CODEHASH,
     PYTH_ORACLE_PEPE_USD_ARBITRUM_CODEHASH,
+    PYTH_ORACLE_PYTH_USD_ARBITRUM_CODEHASH,
     PYTH_ORACLE_ENA_USD_ARBITRUM_CODEHASH,
     PYTH_ORACLE_ARB_USD_ARBITRUM_CODEHASH,
+    PYTH_ORACLE_XAUT_USD_ARBITRUM_CODEHASH,
     PROD_PYTH_ORACLE_WETH_USD_ARBITRUM,
     PROD_PYTH_ORACLE_WSTETH_USD_ARBITRUM,
     PROD_PYTH_ORACLE_WBTC_USD_ARBITRUM,
@@ -123,8 +125,10 @@ bytes32 constant DEPLOYMENT_SUITE_PYTH_ORACLE_LINK_USD = keccak256("pyth-oracle-
 bytes32 constant DEPLOYMENT_SUITE_PYTH_ORACLE_DOT_USD = keccak256("pyth-oracle-dot-usd");
 bytes32 constant DEPLOYMENT_SUITE_PYTH_ORACLE_UNI_USD = keccak256("pyth-oracle-uni-usd");
 bytes32 constant DEPLOYMENT_SUITE_PYTH_ORACLE_PEPE_USD = keccak256("pyth-oracle-pepe-usd");
+bytes32 constant DEPLOYMENT_SUITE_PYTH_ORACLE_PYTH_USD = keccak256("pyth-oracle-pyth-usd");
 bytes32 constant DEPLOYMENT_SUITE_PYTH_ORACLE_ENA_USD = keccak256("pyth-oracle-ena-usd");
 bytes32 constant DEPLOYMENT_SUITE_PYTH_ORACLE_ARB_USD = keccak256("pyth-oracle-arb-usd");
+bytes32 constant DEPLOYMENT_SUITE_PYTH_ORACLE_XAUT_USD = keccak256("pyth-oracle-xaut-usd");
 
 bytes32 constant DEPLOYMENT_SUITE_PYTH_WETH_PRICE_VAULT = keccak256("pyth-weth-price-vault");
 bytes32 constant DEPLOYMENT_SUITE_PYTH_WSTETH_PRICE_VAULT = keccak256("pyth-wsteth-price-vault");
@@ -348,6 +352,13 @@ contract Deploy is Script {
     }
 
     //forge-lint: disable-next-line(mixed-case-function)
+    function deployPythOraclePythUSDArbitrum(uint256 deploymentKey) internal {
+        deployPythOracleXUSDArbitrum(
+            deploymentKey, LibPyth.PRICE_FEED_ID_CRYPTO_PYTH_USD, PYTH_ORACLE_PYTH_USD_ARBITRUM_CODEHASH
+        );
+    }
+
+    //forge-lint: disable-next-line(mixed-case-function)
     function deployPythOracleEnaUSDArbitrum(uint256 deploymentKey) internal {
         deployPythOracleXUSDArbitrum(
             deploymentKey, LibPyth.PRICE_FEED_ID_CRYPTO_ENA_USD, PYTH_ORACLE_ENA_USD_ARBITRUM_CODEHASH
@@ -358,6 +369,13 @@ contract Deploy is Script {
     function deployPythOracleArbUSDArbitrum(uint256 deploymentKey) internal {
         deployPythOracleXUSDArbitrum(
             deploymentKey, LibPyth.PRICE_FEED_ID_CRYPTO_ARB_USD, PYTH_ORACLE_ARB_USD_ARBITRUM_CODEHASH
+        );
+    }
+
+    //forge-lint: disable-next-line(mixed-case-function)
+    function deployPythOracleXAUTArbitrum(uint256 deploymentKey) internal {
+        deployPythOracleXUSDArbitrum(
+            deploymentKey, LibPyth.PRICE_FEED_ID_CRYPTO_XAUT_USD, PYTH_ORACLE_XAUT_USD_ARBITRUM_CODEHASH
         );
     }
 
@@ -544,10 +562,14 @@ contract Deploy is Script {
             deployPythOracleUniUSDArbitrum(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_PYTH_ORACLE_PEPE_USD) {
             deployPythOraclePepeUSDArbitrum(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_PYTH_ORACLE_PYTH_USD) {
+            deployPythOraclePythUSDArbitrum(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_PYTH_ORACLE_ENA_USD) {
             deployPythOracleEnaUSDArbitrum(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_PYTH_ORACLE_ARB_USD) {
             deployPythOracleArbUSDArbitrum(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_PYTH_ORACLE_XAUT_USD) {
+            deployPythOracleXAUTArbitrum(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_PYTH_WETH_PRICE_VAULT) {
             deployPythWethPriceVault(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_PYTH_WSTETH_PRICE_VAULT) {
