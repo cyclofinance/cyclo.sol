@@ -38,8 +38,10 @@ on:
           - pyth-oracle-dot-usd
           - pyth-oracle-uni-usd
           - pyth-oracle-pepe-usd
+          - pyth-oracle-pyth-usd
           - pyth-oracle-ena-usd
           - pyth-oracle-arb-usd
+          - pyth-oracle-xaut-usd
           - pyth-weth-price-vault
           - pyth-wsteth-price-vault
           - pyth-wbtc-price-vault
