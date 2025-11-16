@@ -59,6 +59,7 @@ jobs:
     steps:
       - run: |
           network=${{ inputs.network }}
+          suite=${{ inputs.suite }}
           echo "clone_factory_name=CI_DEPLOY_${network^^}_CLONE_FACTORY_ADDRESS" >> $GITHUB_ENV
           echo "erc20_price_oracle_vault_implementation_name=CI_DEPLOY_${network^^}_ERC20_PRICE_ORACLE_VAULT_IMPLEMENTATION_ADDRESS" >> $GITHUB_ENV
 
