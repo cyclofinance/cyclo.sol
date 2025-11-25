@@ -40,7 +40,9 @@ import {
     ARBITRUM_UNI,
     ARBITRUM_PEPE,
     ARBITRUM_ENA,
-    ARBITRUM_ARB
+    ARBITRUM_ARB,
+    ARBITRUM_PYTH,
+    ARBITRUM_XAUT
 } from "src/lib/LibCycloProdAssets.sol";
 import {
     PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1,
@@ -93,6 +95,8 @@ import {
     PROD_PYTH_ORACLE_PEPE_USD_ARBITRUM,
     PROD_PYTH_ORACLE_ENA_USD_ARBITRUM,
     PROD_PYTH_ORACLE_ARB_USD_ARBITRUM,
+    PROD_PYTH_ORACLE_XAUT_USD_ARBITRUM,
+    PROD_PYTH_ORACLE_PYTH_USD_ARBITRUM,
     PYTH_ORACLE_NAME,
     PYTH_ORACLE_SYMBOL
 } from "src/lib/LibCycloProdOracle.sol";
@@ -138,8 +142,10 @@ bytes32 constant DEPLOYMENT_SUITE_PYTH_LINK_PRICE_VAULT = keccak256("pyth-link-p
 bytes32 constant DEPLOYMENT_SUITE_PYTH_DOT_PRICE_VAULT = keccak256("pyth-dot-price-vault");
 bytes32 constant DEPLOYMENT_SUITE_PYTH_UNI_PRICE_VAULT = keccak256("pyth-uni-price-vault");
 bytes32 constant DEPLOYMENT_SUITE_PYTH_PEPE_PRICE_VAULT = keccak256("pyth-pepe-price-vault");
+bytes32 constant DEPLOYMENT_SUITE_PYTH_PYTH_PRICE_VAULT = keccak256("pyth-pyth-price-vault");
 bytes32 constant DEPLOYMENT_SUITE_PYTH_ENA_PRICE_VAULT = keccak256("pyth-ena-price-vault");
 bytes32 constant DEPLOYMENT_SUITE_PYTH_ARB_PRICE_VAULT = keccak256("pyth-arb-price-vault");
+bytes32 constant DEPLOYMENT_SUITE_PYTH_XAUT_PRICE_VAULT = keccak256("pyth-xaut-price-vault");
 
 contract Deploy is Script {
     function deployFactory(uint256 deploymentKey) internal {
@@ -472,12 +478,20 @@ contract Deploy is Script {
         deployPythXPriceVault(deploymentKey, PROD_PYTH_ORACLE_PEPE_USD_ARBITRUM, ARBITRUM_PEPE);
     }
 
+    function deployPythPythPriceVault(uint256 deploymentKey) internal {
+        deployPythXPriceVault(deploymentKey, PROD_PYTH_ORACLE_PYTH_USD_ARBITRUM, ARBITRUM_PYTH);
+    }
+
     function deployPythEnaPriceVault(uint256 deploymentKey) internal {
         deployPythXPriceVault(deploymentKey, PROD_PYTH_ORACLE_ENA_USD_ARBITRUM, ARBITRUM_ENA);
     }
 
     function deployPythArbPriceVault(uint256 deploymentKey) internal {
         deployPythXPriceVault(deploymentKey, PROD_PYTH_ORACLE_ARB_USD_ARBITRUM, ARBITRUM_ARB);
+    }
+
+    function deployPythXautPriceVault(uint256 deploymentKey) internal {
+        deployPythXPriceVault(deploymentKey, PROD_PYTH_ORACLE_XAUT_USD_ARBITRUM, ARBITRUM_XAUT);
     }
 
     //forge-lint: disable-next-line(mixed-case-function)

@@ -50,8 +50,10 @@ on:
           - pyth-dot-price-vault
           - pyth-uni-price-vault
           - pyth-pepe-price-vault
+          - pyth-pyth-price-vault
           - pyth-ena-price-vault
           - pyth-arb-price-vault
+          - pyth-xaut-price-vault
 
 jobs:
   deploy:
