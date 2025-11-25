@@ -600,10 +600,14 @@ contract Deploy is Script {
             deployPythUniPriceVault(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_PYTH_PEPE_PRICE_VAULT) {
             deployPythPepePriceVault(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_PYTH_PYTH_PRICE_VAULT) {
+            deployPythPythPriceVault(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_PYTH_ENA_PRICE_VAULT) {
             deployPythEnaPriceVault(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_PYTH_ARB_PRICE_VAULT) {
             deployPythArbPriceVault(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_PYTH_XAUT_PRICE_VAULT) {
+            deployPythXautPriceVault(deployerPrivateKey);
         } else {
             revert("Unknown deployment suite");
         }
