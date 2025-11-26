@@ -11,7 +11,7 @@ import {CycloVault} from "src/concrete/vault/CycloVault.sol";
 import {IERC20Upgradeable as IERC20} from
     "openzeppelin-contracts-upgradeable/contracts/token/ERC20/IERC20Upgradeable.sol";
 
-uint256 constant PROD_TEST_BLOCK_NUMBER_FLARE = 50346046;
+uint256 constant PROD_TEST_BLOCK_NUMBER_FLARE = 51262162;
 
 uint256 constant PROD_TEST_BLOCK_NUMBER_ARBITRUM = 404362380;
 

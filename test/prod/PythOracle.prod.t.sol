@@ -87,6 +87,105 @@ contract PythOracleProdTest is Test {
         );
         LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(ethusd), PYTH_ORACLE_WETH_USD_ARBITRUM_CODEHASH);
 
+        PythOracle wstethusd = new PythOracle(
+            PythOracleConfig({
+                priceFeedId: LibPyth.PRICE_FEED_ID_CRYPTO_WSTETH_USD,
+                staleAfter: PROD_ORACLE_DEFAULT_STALE_AFTER,
+                pythContract: LibPyth.PRICE_FEED_CONTRACT_ARBITRUM
+            })
+        );
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(wstethusd), PYTH_ORACLE_WSTETH_USD_ARBITRUM_CODEHASH);
+
+        PythOracle wbtcusd = new PythOracle(
+            PythOracleConfig({
+                priceFeedId: LibPyth.PRICE_FEED_ID_CRYPTO_WBTC_USD,
+                staleAfter: PROD_ORACLE_DEFAULT_STALE_AFTER,
+                pythContract: LibPyth.PRICE_FEED_CONTRACT_ARBITRUM
+            })
+        );
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(wbtcusd), PYTH_ORACLE_WBTC_USD_ARBITRUM_CODEHASH);
+
+        PythOracle cbbtcusd = new PythOracle(
+            PythOracleConfig({
+                priceFeedId: LibPyth.PRICE_FEED_ID_CRYPTO_CBBTC_USD,
+                staleAfter: PROD_ORACLE_DEFAULT_STALE_AFTER,
+                pythContract: LibPyth.PRICE_FEED_CONTRACT_ARBITRUM
+            })
+        );
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(cbbtcusd), PYTH_ORACLE_CBBTC_USD_ARBITRUM_CODEHASH);
+
+        PythOracle linkusd = new PythOracle(
+            PythOracleConfig({
+                priceFeedId: LibPyth.PRICE_FEED_ID_CRYPTO_LINK_USD,
+                staleAfter: PROD_ORACLE_DEFAULT_STALE_AFTER,
+                pythContract: LibPyth.PRICE_FEED_CONTRACT_ARBITRUM
+            })
+        );
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(linkusd), PYTH_ORACLE_LINK_USD_ARBITRUM_CODEHASH);
+
+        PythOracle dotusd = new PythOracle(
+            PythOracleConfig({
+                priceFeedId: LibPyth.PRICE_FEED_ID_CRYPTO_DOT_USD,
+                staleAfter: PROD_ORACLE_DEFAULT_STALE_AFTER,
+                pythContract: LibPyth.PRICE_FEED_CONTRACT_ARBITRUM
+            })
+        );
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(dotusd), PYTH_ORACLE_DOT_USD_ARBITRUM_CODEHASH);
+
+        PythOracle uniusd = new PythOracle(
+            PythOracleConfig({
+                priceFeedId: LibPyth.PRICE_FEED_ID_CRYPTO_UNI_USD,
+                staleAfter: PROD_ORACLE_DEFAULT_STALE_AFTER,
+                pythContract: LibPyth.PRICE_FEED_CONTRACT_ARBITRUM
+            })
+        );
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(uniusd), PYTH_ORACLE_UNI_USD_ARBITRUM_CODEHASH);
+
+        PythOracle pepeusd = new PythOracle(
+            PythOracleConfig({
+                priceFeedId: LibPyth.PRICE_FEED_ID_CRYPTO_PEPE_USD,
+                staleAfter: PROD_ORACLE_DEFAULT_STALE_AFTER,
+                pythContract: LibPyth.PRICE_FEED_CONTRACT_ARBITRUM
+            })
+        );
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(pepeusd), PYTH_ORACLE_PEPE_USD_ARBITRUM_CODEHASH);
+
+        PythOracle enausd = new PythOracle(
+            PythOracleConfig({
+                priceFeedId: LibPyth.PRICE_FEED_ID_CRYPTO_ENA_USD,
+                staleAfter: PROD_ORACLE_DEFAULT_STALE_AFTER,
+                pythContract: LibPyth.PRICE_FEED_CONTRACT_ARBITRUM
+            })
+        );
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(enausd), PYTH_ORACLE_ENA_USD_ARBITRUM_CODEHASH);
+
+        PythOracle arbusd = new PythOracle(
+            PythOracleConfig({
+                priceFeedId: LibPyth.PRICE_FEED_ID_CRYPTO_ARB_USD,
+                staleAfter: PROD_ORACLE_DEFAULT_STALE_AFTER,
+                pythContract: LibPyth.PRICE_FEED_CONTRACT_ARBITRUM
+            })
+        );
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(arbusd), PYTH_ORACLE_ARB_USD_ARBITRUM_CODEHASH);
+
+        PythOracle pythusd = new PythOracle(
+            PythOracleConfig({
+                priceFeedId: LibPyth.PRICE_FEED_ID_CRYPTO_PYTH_USD,
+                staleAfter: PROD_ORACLE_DEFAULT_STALE_AFTER,
+                pythContract: LibPyth.PRICE_FEED_CONTRACT_ARBITRUM
+            })
+        );
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(pythusd), PYTH_ORACLE_PYTH_USD_ARBITRUM_CODEHASH);
+
+        PythOracle xautusd = new PythOracle(
+            PythOracleConfig({
+                priceFeedId: LibPyth.PRICE_FEED_ID_CRYPTO_XAUT_USD,
+                staleAfter: PROD_ORACLE_DEFAULT_STALE_AFTER,
+                pythContract: LibPyth.PRICE_FEED_CONTRACT_ARBITRUM
+            })
+        );
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(xautusd), PYTH_ORACLE_XAUT_USD_ARBITRUM_CODEHASH);
+
         LibCycloTestProd.createSelectForkArbitrum(vm);
 
         LibCycloTestProd.checkCBORTrimmedBytecodeHash(
