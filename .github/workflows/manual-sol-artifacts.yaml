@@ -20,8 +20,10 @@ on:
           - sceptre-staked-flare-price-vault
           - ftso-v2-lts-feed-oracle-eth-usd
           - ftso-v2-lts-feed-oracle-xrp-usd
+          - ftso-v2-lts-feed-oracle-joule-usd
           - stargate-weth-price-vault
           - flare-fasset-xrp-price-vault
+          - flare-ftso-v2-lts-price-vault-joule
           - cyclo-receipt-implementation
           - cyclo-receipt-implementation-arbitrum
           - cyclo-vault-implementation
@@ -29,11 +31,29 @@ on:
           - factory
           - factory-arbitrum
           - pyth-oracle-weth-usd
+          - pyth-oracle-wsteth-usd
           - pyth-oracle-wbtc-usd
           - pyth-oracle-cbbtc-usd
+          - pyth-oracle-link-usd
+          - pyth-oracle-dot-usd
+          - pyth-oracle-uni-usd
+          - pyth-oracle-pepe-usd
+          - pyth-oracle-pyth-usd
+          - pyth-oracle-ena-usd
+          - pyth-oracle-arb-usd
+          - pyth-oracle-xaut-usd
           - pyth-weth-price-vault
+          - pyth-wsteth-price-vault
           - pyth-wbtc-price-vault
           - pyth-cbbtc-price-vault
+          - pyth-link-price-vault
+          - pyth-dot-price-vault
+          - pyth-uni-price-vault
+          - pyth-pepe-price-vault
+          - pyth-pyth-price-vault
+          - pyth-ena-price-vault
+          - pyth-arb-price-vault
+          - pyth-xaut-price-vault
 
 jobs:
   deploy:
@@ -41,6 +61,7 @@ jobs:
     steps:
       - run: |
           network=${{ inputs.network }}
+          suite=${{ inputs.suite }}
           echo "clone_factory_name=CI_DEPLOY_${network^^}_CLONE_FACTORY_ADDRESS" >> $GITHUB_ENV
           echo "erc20_price_oracle_vault_implementation_name=CI_DEPLOY_${network^^}_ERC20_PRICE_ORACLE_VAULT_IMPLEMENTATION_ADDRESS" >> $GITHUB_ENV
 

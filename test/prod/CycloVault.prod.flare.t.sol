@@ -9,14 +9,16 @@ import {SFLR_CONTRACT} from "rain.flare/lib/sflr/LibSceptreStakedFlare.sol";
 import {
     PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2,
     PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE,
-    PROD_FLARE_FTSO_V2_LTS_XRP_USD_FEED_ORACLE
+    PROD_FLARE_FTSO_V2_LTS_XRP_USD_FEED_ORACLE,
+    PROD_FLARE_FTSO_V2_LTS_JOULE_USD_FEED_ORACLE
 } from "src/lib/LibCycloProdOracle.sol";
-import {FLARE_FASSET_XRP} from "src/lib/LibCycloProdAssets.sol";
+import {FLARE_FASSET_XRP, FLARE_JOULE, FLARE_STARGATE_WETH} from "src/lib/LibCycloProdAssets.sol";
 
 import {
     PROD_FLARE_VAULT_CYSFLR,
     PROD_FLARE_VAULT_CYWETH,
     PROD_FLARE_VAULT_CYFXRP,
+    PROD_FLARE_VAULT_CYJOULE,
     PROD_FLARE_VAULT_IMPLEMENTATION_CYSFLR,
     PROD_FLARE_VAULT_IMPLEMENTATION_CYSFLR_CODEHASH,
     PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1,
@@ -73,6 +75,12 @@ contract CycloVaultProdFlareTest is CycloVaultTest {
             PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2,
             PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH
         );
+
+        LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
+            PROD_FLARE_VAULT_CYJOULE,
+            PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2,
+            PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH
+        );
     }
 
     function testProdCycloVaultPriceOracle() external view {
@@ -88,14 +96,17 @@ contract CycloVaultProdFlareTest is CycloVaultTest {
             address(CycloVault(payable(PROD_FLARE_VAULT_CYFXRP)).priceOracle()),
             PROD_FLARE_FTSO_V2_LTS_XRP_USD_FEED_ORACLE
         );
+        assertEq(
+            address(CycloVault(payable(PROD_FLARE_VAULT_CYJOULE)).priceOracle()),
+            PROD_FLARE_FTSO_V2_LTS_JOULE_USD_FEED_ORACLE
+        );
     }
 
     function testProdCycloVaultAsset() external view {
         assertEq(address(CycloVault(payable(PROD_FLARE_VAULT_CYSFLR)).asset()), address(SFLR_CONTRACT));
-        assertEq(
-            address(CycloVault(payable(PROD_FLARE_VAULT_CYWETH)).asset()), 0x1502FA4be69d526124D453619276FacCab275d3D
-        );
+        assertEq(address(CycloVault(payable(PROD_FLARE_VAULT_CYWETH)).asset()), FLARE_STARGATE_WETH);
         assertEq(address(CycloVault(payable(PROD_FLARE_VAULT_CYFXRP)).asset()), FLARE_FASSET_XRP);
+        assertEq(address(CycloVault(payable(PROD_FLARE_VAULT_CYJOULE)).asset()), FLARE_JOULE);
     }
 
     function testProdCycloVaultName() external {
@@ -105,6 +116,7 @@ contract CycloVaultProdFlareTest is CycloVaultTest {
         assertEq(CycloVault(payable(PROD_FLARE_VAULT_CYSFLR)).name(), "cysFLR");
         assertEq(CycloVault(payable(PROD_FLARE_VAULT_CYWETH)).name(), "Cyclo cyWETH");
         assertEq(CycloVault(payable(PROD_FLARE_VAULT_CYFXRP)).name(), "Cyclo cyFXRP.ftso (FTSO oracle)");
+        assertEq(CycloVault(payable(PROD_FLARE_VAULT_CYJOULE)).name(), "Cyclo cyJOULE.ftso (FTSO oracle)");
     }
 
     function testProdCycloVaultSymbol() external {
@@ -114,6 +126,7 @@ contract CycloVaultProdFlareTest is CycloVaultTest {
         assertEq(CycloVault(payable(PROD_FLARE_VAULT_CYSFLR)).symbol(), "cysFLR");
         assertEq(CycloVault(payable(PROD_FLARE_VAULT_CYWETH)).symbol(), "cyWETH");
         assertEq(CycloVault(payable(PROD_FLARE_VAULT_CYFXRP)).symbol(), "cyFXRP.ftso");
+        assertEq(CycloVault(payable(PROD_FLARE_VAULT_CYJOULE)).symbol(), "cyJOULE.ftso");
     }
 
     /// forge-config: default.fuzz.runs = 1
@@ -128,6 +141,9 @@ contract CycloVaultProdFlareTest is CycloVaultTest {
 
         deposit = bound(depositSeed, 1, 2000000e6);
         LibCycloTestProd.checkDeposit(vm, PROD_FLARE_VAULT_CYFXRP, deposit, ALICE_FXRP);
+
+        deal(CycloVault(payable(PROD_FLARE_VAULT_CYJOULE)).asset(), DEFAULT_ALICE, deposit);
+        LibCycloTestProd.checkDeposit(vm, PROD_FLARE_VAULT_CYJOULE, deposit);
     }
 
     /// forge-config: default.fuzz.runs = 1
@@ -150,6 +166,11 @@ contract CycloVaultProdFlareTest is CycloVaultTest {
         shares = bound(sharesSeed, 1, 1000000e6);
         assets = vault.previewMint(shares, 0);
         LibCycloTestProd.checkMint(vm, PROD_FLARE_VAULT_CYFXRP, shares, assets, ALICE_FXRP);
+
+        vault = CycloVault(payable(PROD_FLARE_VAULT_CYJOULE));
+        assets = vault.previewMint(shares, 0);
+        deal(vault.asset(), DEFAULT_ALICE, assets);
+        LibCycloTestProd.checkMint(vm, PROD_FLARE_VAULT_CYJOULE, shares, assets, DEFAULT_ALICE);
     }
 
     function testProdCycloVaultcysFLRImplementationIsInitialized() external {
@@ -173,6 +194,11 @@ contract CycloVaultProdFlareTest is CycloVaultTest {
     function testProdCycloVaultcyFXRPIsInitialized() external {
         CycloVaultConfig memory config;
         LibCycloTestProd.checkIsInitialized(vm, PROD_FLARE_VAULT_CYFXRP, abi.encode(config));
+    }
+
+    function testProdCycloVaultcyJOULEIsInitialized() external {
+        CycloVaultConfig memory config;
+        LibCycloTestProd.checkIsInitialized(vm, PROD_FLARE_VAULT_CYJOULE, abi.encode(config));
     }
 
     fallback() external payable {}

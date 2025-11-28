@@ -15,7 +15,9 @@ import {ICloneableFactoryV2} from "rain.factory/interface/ICloneableFactoryV2.so
 import {SceptreStakedFlrOracle} from "ethgild/concrete/oracle/SceptreStakedFlrOracle.sol";
 import {TwoPriceOracleV2, TwoPriceOracleConfigV2} from "ethgild/concrete/oracle/TwoPriceOracleV2.sol";
 import {FtsoV2LTSFeedOracle, FtsoV2LTSFeedOracleConfig} from "ethgild/concrete/oracle/FtsoV2LTSFeedOracle.sol";
-import {FLR_USD_FEED_ID, ETH_USD_FEED_ID, XRP_USD_FEED_ID} from "rain.flare/lib/lts/LibFtsoV2LTS.sol";
+import {
+    FLR_USD_FEED_ID, ETH_USD_FEED_ID, XRP_USD_FEED_ID, JOULE_USD_FEED_ID
+} from "rain.flare/lib/lts/LibFtsoV2LTS.sol";
 import {IPriceOracleV2} from "ethgild/abstract/PriceOracleV2.sol";
 import {SFLR_CONTRACT} from "rain.flare/lib/sflr/LibSceptreStakedFlare.sol";
 import {
@@ -28,9 +30,19 @@ import {CycloVault, CycloVaultConfig} from "src/concrete/vault/CycloVault.sol";
 import {
     FLARE_STARGATE_WETH,
     FLARE_FASSET_XRP,
+    FLARE_JOULE,
     ARBITRUM_WETH,
+    ARBITRUM_WSTETH,
     ARBITRUM_WBTC,
-    ARBITRUM_CBBTC
+    ARBITRUM_CBBTC,
+    ARBITRUM_LINK,
+    ARBITRUM_DOT,
+    ARBITRUM_UNI,
+    ARBITRUM_PEPE,
+    ARBITRUM_ENA,
+    ARBITRUM_ARB,
+    ARBITRUM_PYTH,
+    ARBITRUM_XAUT
 } from "src/lib/LibCycloProdAssets.sol";
 import {
     PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1,
@@ -52,19 +64,39 @@ import {
     PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE,
     PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE_CODEHASH,
     PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE_CODEHASH,
+    PROD_FLARE_FTSO_V2_LTS_JOULE_USD_FEED_ORACLE_CODEHASH,
     PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2_CODEHASH,
     PROD_FLARE_FTSO_V2_LTS_XRP_USD_FEED_ORACLE,
     PROD_FLARE_FTSO_V2_LTS_XRP_USD_FEED_ORACLE_CODEHASH2,
     PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2,
     PROD_ORACLE_DEFAULT_STALE_AFTER,
     PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE,
+    PROD_FLARE_FTSO_V2_LTS_JOULE_USD_FEED_ORACLE,
     PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE,
     PYTH_ORACLE_WETH_USD_ARBITRUM_CODEHASH,
+    PYTH_ORACLE_WSTETH_USD_ARBITRUM_CODEHASH,
     PYTH_ORACLE_WBTC_USD_ARBITRUM_CODEHASH,
     PYTH_ORACLE_CBBTC_USD_ARBITRUM_CODEHASH,
+    PYTH_ORACLE_LINK_USD_ARBITRUM_CODEHASH,
+    PYTH_ORACLE_DOT_USD_ARBITRUM_CODEHASH,
+    PYTH_ORACLE_UNI_USD_ARBITRUM_CODEHASH,
+    PYTH_ORACLE_PEPE_USD_ARBITRUM_CODEHASH,
+    PYTH_ORACLE_PYTH_USD_ARBITRUM_CODEHASH,
+    PYTH_ORACLE_ENA_USD_ARBITRUM_CODEHASH,
+    PYTH_ORACLE_ARB_USD_ARBITRUM_CODEHASH,
+    PYTH_ORACLE_XAUT_USD_ARBITRUM_CODEHASH,
     PROD_PYTH_ORACLE_WETH_USD_ARBITRUM,
+    PROD_PYTH_ORACLE_WSTETH_USD_ARBITRUM,
     PROD_PYTH_ORACLE_WBTC_USD_ARBITRUM,
     PROD_PYTH_ORACLE_CBBTC_USD_ARBITRUM,
+    PROD_PYTH_ORACLE_LINK_USD_ARBITRUM,
+    PROD_PYTH_ORACLE_DOT_USD_ARBITRUM,
+    PROD_PYTH_ORACLE_UNI_USD_ARBITRUM,
+    PROD_PYTH_ORACLE_PEPE_USD_ARBITRUM,
+    PROD_PYTH_ORACLE_ENA_USD_ARBITRUM,
+    PROD_PYTH_ORACLE_ARB_USD_ARBITRUM,
+    PROD_PYTH_ORACLE_XAUT_USD_ARBITRUM,
+    PROD_PYTH_ORACLE_PYTH_USD_ARBITRUM,
     PYTH_ORACLE_NAME,
     PYTH_ORACLE_SYMBOL
 } from "src/lib/LibCycloProdOracle.sol";
@@ -84,14 +116,36 @@ bytes32 constant DEPLOYMENT_SUITE_STAKED_FLR_ORACLE_2 = keccak256("sceptre-stake
 bytes32 constant DEPLOYMENT_SUITE_STAKED_FLR_PRICE_VAULT = keccak256("sceptre-staked-flare-price-vault");
 bytes32 constant DEPLOYMENT_SUITE_FTSO_V2_LTS_FEED_ORACLE_ETH_USD = keccak256("ftso-v2-lts-feed-oracle-eth-usd");
 bytes32 constant DEPLOYMENT_SUITE_FTSO_V2_LTS_FEED_ORACLE_XRP_USD = keccak256("ftso-v2-lts-feed-oracle-xrp-usd");
+bytes32 constant DEPLOYMENT_SUITE_FTSO_V2_LTS_FEED_ORACLE_JOULE_USD = keccak256("ftso-v2-lts-feed-oracle-joule-usd");
 bytes32 constant DEPLOYMENT_SUITE_STARGATE_WETH_PRICE_VAULT = keccak256("stargate-weth-price-vault");
 bytes32 constant DEPLOYMENT_SUITE_FLARE_FASSET_XRP = keccak256("flare-fasset-xrp-price-vault");
+bytes32 constant DEPLOYMENT_SUITE_FLARE_FTSOV2_LTS_PRICE_VAULT_JOULE = keccak256("flare-ftso-v2-lts-price-vault-joule");
+
 bytes32 constant DEPLOYMENT_SUITE_PYTH_ORACLE_WETH_USD = keccak256("pyth-oracle-weth-usd");
+bytes32 constant DEPLOYMENT_SUITE_PYTH_ORACLE_WSTETH_USD = keccak256("pyth-oracle-wsteth-usd");
 bytes32 constant DEPLOYMENT_SUITE_PYTH_ORACLE_WBTC_USD = keccak256("pyth-oracle-wbtc-usd");
 bytes32 constant DEPLOYMENT_SUITE_PYTH_ORACLE_CBBTC_USD = keccak256("pyth-oracle-cbbtc-usd");
+bytes32 constant DEPLOYMENT_SUITE_PYTH_ORACLE_LINK_USD = keccak256("pyth-oracle-link-usd");
+bytes32 constant DEPLOYMENT_SUITE_PYTH_ORACLE_DOT_USD = keccak256("pyth-oracle-dot-usd");
+bytes32 constant DEPLOYMENT_SUITE_PYTH_ORACLE_UNI_USD = keccak256("pyth-oracle-uni-usd");
+bytes32 constant DEPLOYMENT_SUITE_PYTH_ORACLE_PEPE_USD = keccak256("pyth-oracle-pepe-usd");
+bytes32 constant DEPLOYMENT_SUITE_PYTH_ORACLE_PYTH_USD = keccak256("pyth-oracle-pyth-usd");
+bytes32 constant DEPLOYMENT_SUITE_PYTH_ORACLE_ENA_USD = keccak256("pyth-oracle-ena-usd");
+bytes32 constant DEPLOYMENT_SUITE_PYTH_ORACLE_ARB_USD = keccak256("pyth-oracle-arb-usd");
+bytes32 constant DEPLOYMENT_SUITE_PYTH_ORACLE_XAUT_USD = keccak256("pyth-oracle-xaut-usd");
+
 bytes32 constant DEPLOYMENT_SUITE_PYTH_WETH_PRICE_VAULT = keccak256("pyth-weth-price-vault");
+bytes32 constant DEPLOYMENT_SUITE_PYTH_WSTETH_PRICE_VAULT = keccak256("pyth-wsteth-price-vault");
 bytes32 constant DEPLOYMENT_SUITE_PYTH_WBTC_PRICE_VAULT = keccak256("pyth-wbtc-price-vault");
 bytes32 constant DEPLOYMENT_SUITE_PYTH_CBBTC_PRICE_VAULT = keccak256("pyth-cbbtc-price-vault");
+bytes32 constant DEPLOYMENT_SUITE_PYTH_LINK_PRICE_VAULT = keccak256("pyth-link-price-vault");
+bytes32 constant DEPLOYMENT_SUITE_PYTH_DOT_PRICE_VAULT = keccak256("pyth-dot-price-vault");
+bytes32 constant DEPLOYMENT_SUITE_PYTH_UNI_PRICE_VAULT = keccak256("pyth-uni-price-vault");
+bytes32 constant DEPLOYMENT_SUITE_PYTH_PEPE_PRICE_VAULT = keccak256("pyth-pepe-price-vault");
+bytes32 constant DEPLOYMENT_SUITE_PYTH_PYTH_PRICE_VAULT = keccak256("pyth-pyth-price-vault");
+bytes32 constant DEPLOYMENT_SUITE_PYTH_ENA_PRICE_VAULT = keccak256("pyth-ena-price-vault");
+bytes32 constant DEPLOYMENT_SUITE_PYTH_ARB_PRICE_VAULT = keccak256("pyth-arb-price-vault");
+bytes32 constant DEPLOYMENT_SUITE_PYTH_XAUT_PRICE_VAULT = keccak256("pyth-xaut-price-vault");
 
 contract Deploy is Script {
     function deployFactory(uint256 deploymentKey) internal {
@@ -216,81 +270,135 @@ contract Deploy is Script {
     }
 
     //forge-lint: disable-next-line(mixed-case-function)
-    function deployFTSOV2LTSFeedOracleETHUSD(uint256 deploymentKey) internal {
+    function deployFTSOV2LTsFeedOracleXUSD(uint256 deploymentKey, bytes21 feedId, bytes32 codehash) internal {
         vm.startBroadcast(deploymentKey);
         //forge-lint: disable-next-line(mixed-case-variable)
         IPriceOracleV2 ftsoV2LTSFeedOracle = new FtsoV2LTSFeedOracle(
-            FtsoV2LTSFeedOracleConfig({feedId: ETH_USD_FEED_ID, staleAfter: PROD_ORACLE_DEFAULT_STALE_AFTER})
+            FtsoV2LTSFeedOracleConfig({feedId: feedId, staleAfter: PROD_ORACLE_DEFAULT_STALE_AFTER})
         );
-        LibCycloTestProd.checkCBORTrimmedBytecodeHash(
-            address(payable(ftsoV2LTSFeedOracle)), PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE_CODEHASH
-        );
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(payable(ftsoV2LTSFeedOracle)), codehash);
         vm.stopBroadcast();
+    }
+
+    //forge-lint: disable-next-line(mixed-case-function)
+    function deployFTSOV2LTSFeedOracleJOULEUSD(uint256 deploymentKey) internal {
+        deployFTSOV2LTsFeedOracleXUSD(
+            deploymentKey, JOULE_USD_FEED_ID, PROD_FLARE_FTSO_V2_LTS_JOULE_USD_FEED_ORACLE_CODEHASH
+        );
+    }
+
+    //forge-lint: disable-next-line(mixed-case-function)
+    function deployFTSOV2LTSFeedOracleETHUSD(uint256 deploymentKey) internal {
+        deployFTSOV2LTsFeedOracleXUSD(
+            deploymentKey, ETH_USD_FEED_ID, PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE_CODEHASH
+        );
     }
 
     //forge-lint: disable-next-line(mixed-case-function)
     function deployFTSOV2LTSFeedOracleXRPUSD(uint256 deploymentKey) internal {
-        vm.startBroadcast(deploymentKey);
-        //forge-lint: disable-next-line(mixed-case-variable)
-        IPriceOracleV2 ftsoV2LTSFeedOracle = new FtsoV2LTSFeedOracle(
-            FtsoV2LTSFeedOracleConfig({feedId: XRP_USD_FEED_ID, staleAfter: PROD_ORACLE_DEFAULT_STALE_AFTER})
+        deployFTSOV2LTsFeedOracleXUSD(
+            deploymentKey, XRP_USD_FEED_ID, PROD_FLARE_FTSO_V2_LTS_XRP_USD_FEED_ORACLE_CODEHASH2
         );
-        LibCycloTestProd.checkCBORTrimmedBytecodeHash(
-            address(payable(ftsoV2LTSFeedOracle)), PROD_FLARE_FTSO_V2_LTS_XRP_USD_FEED_ORACLE_CODEHASH2
-        );
-        vm.stopBroadcast();
     }
 
     //forge-lint: disable-next-line(mixed-case-function)
     function deployPythOracleWETHUSDArbitrum(uint256 deploymentKey) internal {
-        vm.startBroadcast(deploymentKey);
-
-        require(block.chainid == LibPyth.CHAIN_ID_ARBITRUM, "Chain is not Arbitrum");
-
-        IPriceOracleV2 pythOracle = new PythOracle(
-            PythOracleConfig({
-                priceFeedId: LibPyth.PRICE_FEED_ID_CRYPTO_WETH_USD,
-                staleAfter: PROD_ORACLE_DEFAULT_STALE_AFTER,
-                pythContract: LibPyth.PRICE_FEED_CONTRACT_ARBITRUM
-            })
+        deployPythOracleXUSDArbitrum(
+            deploymentKey, LibPyth.PRICE_FEED_ID_CRYPTO_WETH_USD, PYTH_ORACLE_WETH_USD_ARBITRUM_CODEHASH
         );
-        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(pythOracle), PYTH_ORACLE_WETH_USD_ARBITRUM_CODEHASH);
+    }
 
-        vm.stopBroadcast();
+    //forge-lint: disable-next-line(mixed-case-function)
+    function deployPythOracleWSTETHUSDArbitrum(uint256 deploymentKey) internal {
+        deployPythOracleXUSDArbitrum(
+            deploymentKey, LibPyth.PRICE_FEED_ID_CRYPTO_WSTETH_USD, PYTH_ORACLE_WSTETH_USD_ARBITRUM_CODEHASH
+        );
     }
 
     //forge-lint: disable-next-line(mixed-case-function)
     function deployPythOracleWBTCUSDArbitrum(uint256 deploymentKey) internal {
-        vm.startBroadcast(deploymentKey);
-
-        require(block.chainid == LibPyth.CHAIN_ID_ARBITRUM, "Chain is not Arbitrum");
-
-        IPriceOracleV2 pythOracle = new PythOracle(
-            PythOracleConfig({
-                priceFeedId: LibPyth.PRICE_FEED_ID_CRYPTO_WBTC_USD,
-                staleAfter: PROD_ORACLE_DEFAULT_STALE_AFTER,
-                pythContract: LibPyth.PRICE_FEED_CONTRACT_ARBITRUM
-            })
+        deployPythOracleXUSDArbitrum(
+            deploymentKey, LibPyth.PRICE_FEED_ID_CRYPTO_WBTC_USD, PYTH_ORACLE_WBTC_USD_ARBITRUM_CODEHASH
         );
-        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(pythOracle), PYTH_ORACLE_WBTC_USD_ARBITRUM_CODEHASH);
-
-        vm.stopBroadcast();
     }
 
     //forge-lint: disable-next-line(mixed-case-function)
     function deployPythOracleCBBTCUSDArbitrum(uint256 deploymentKey) internal {
+        deployPythOracleXUSDArbitrum(
+            deploymentKey, LibPyth.PRICE_FEED_ID_CRYPTO_CBBTC_USD, PYTH_ORACLE_CBBTC_USD_ARBITRUM_CODEHASH
+        );
+    }
+
+    //forge-lint: disable-next-line(mixed-case-function)
+    function deployPythOracleLinkUSDArbitrum(uint256 deploymentKey) internal {
+        deployPythOracleXUSDArbitrum(
+            deploymentKey, LibPyth.PRICE_FEED_ID_CRYPTO_LINK_USD, PYTH_ORACLE_LINK_USD_ARBITRUM_CODEHASH
+        );
+    }
+
+    //forge-lint: disable-next-line(mixed-case-function)
+    function deployPythOracleDotUSDArbitrum(uint256 deploymentKey) internal {
+        deployPythOracleXUSDArbitrum(
+            deploymentKey, LibPyth.PRICE_FEED_ID_CRYPTO_DOT_USD, PYTH_ORACLE_DOT_USD_ARBITRUM_CODEHASH
+        );
+    }
+
+    //forge-lint: disable-next-line(mixed-case-function)
+    function deployPythOracleUniUSDArbitrum(uint256 deploymentKey) internal {
+        deployPythOracleXUSDArbitrum(
+            deploymentKey, LibPyth.PRICE_FEED_ID_CRYPTO_UNI_USD, PYTH_ORACLE_UNI_USD_ARBITRUM_CODEHASH
+        );
+    }
+
+    //forge-lint: disable-next-line(mixed-case-function)
+    function deployPythOraclePepeUSDArbitrum(uint256 deploymentKey) internal {
+        deployPythOracleXUSDArbitrum(
+            deploymentKey, LibPyth.PRICE_FEED_ID_CRYPTO_PEPE_USD, PYTH_ORACLE_PEPE_USD_ARBITRUM_CODEHASH
+        );
+    }
+
+    //forge-lint: disable-next-line(mixed-case-function)
+    function deployPythOraclePythUSDArbitrum(uint256 deploymentKey) internal {
+        deployPythOracleXUSDArbitrum(
+            deploymentKey, LibPyth.PRICE_FEED_ID_CRYPTO_PYTH_USD, PYTH_ORACLE_PYTH_USD_ARBITRUM_CODEHASH
+        );
+    }
+
+    //forge-lint: disable-next-line(mixed-case-function)
+    function deployPythOracleEnaUSDArbitrum(uint256 deploymentKey) internal {
+        deployPythOracleXUSDArbitrum(
+            deploymentKey, LibPyth.PRICE_FEED_ID_CRYPTO_ENA_USD, PYTH_ORACLE_ENA_USD_ARBITRUM_CODEHASH
+        );
+    }
+
+    //forge-lint: disable-next-line(mixed-case-function)
+    function deployPythOracleArbUSDArbitrum(uint256 deploymentKey) internal {
+        deployPythOracleXUSDArbitrum(
+            deploymentKey, LibPyth.PRICE_FEED_ID_CRYPTO_ARB_USD, PYTH_ORACLE_ARB_USD_ARBITRUM_CODEHASH
+        );
+    }
+
+    //forge-lint: disable-next-line(mixed-case-function)
+    function deployPythOracleXAUTArbitrum(uint256 deploymentKey) internal {
+        deployPythOracleXUSDArbitrum(
+            deploymentKey, LibPyth.PRICE_FEED_ID_CRYPTO_XAUT_USD, PYTH_ORACLE_XAUT_USD_ARBITRUM_CODEHASH
+        );
+    }
+
+    //forge-lint: disable-next-line(mixed-case-function)
+    function deployPythOracleXUSDArbitrum(uint256 deploymentKey, bytes32 priceFeedId, bytes32 codeHash) internal {
         vm.startBroadcast(deploymentKey);
 
         require(block.chainid == LibPyth.CHAIN_ID_ARBITRUM, "Chain is not Arbitrum");
 
         IPriceOracleV2 pythOracle = new PythOracle(
             PythOracleConfig({
-                priceFeedId: LibPyth.PRICE_FEED_ID_CRYPTO_CBBTC_USD,
+                priceFeedId: priceFeedId,
                 staleAfter: PROD_ORACLE_DEFAULT_STALE_AFTER,
                 pythContract: LibPyth.PRICE_FEED_CONTRACT_ARBITRUM
             })
         );
-        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(pythOracle), PYTH_ORACLE_CBBTC_USD_ARBITRUM_CODEHASH);
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(pythOracle), codeHash);
 
         vm.stopBroadcast();
     }
@@ -316,15 +424,15 @@ contract Deploy is Script {
         vm.stopBroadcast();
     }
 
-    function deployPythWethPriceVault(uint256 deploymentKey) internal {
+    function deployPythXPriceVault(uint256 deploymentKey, address pythOracle, address asset) internal {
         vm.startBroadcast(deploymentKey);
 
-        address cyweth = ICloneableFactoryV2(PROD_ARBITRUM_CLONE_FACTORY_ADDRESS_V1).clone(
+        address vault = ICloneableFactoryV2(PROD_ARBITRUM_CLONE_FACTORY_ADDRESS_V1).clone(
             PROD_ARBITRUM_CYCLO_VAULT_IMPLEMENTATION_V2,
             abi.encode(
                 CycloVaultConfig({
-                    priceOracle: IPriceOracleV2(payable(PROD_PYTH_ORACLE_WETH_USD_ARBITRUM)),
-                    asset: ARBITRUM_WETH,
+                    priceOracle: IPriceOracleV2(payable(pythOracle)),
+                    asset: asset,
                     oracleName: PYTH_ORACLE_NAME,
                     oracleSymbol: PYTH_ORACLE_SYMBOL
                 })
@@ -332,63 +440,70 @@ contract Deploy is Script {
         );
 
         LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
-            cyweth, PROD_ARBITRUM_CYCLO_VAULT_IMPLEMENTATION_V2, PROD_ARBITRUM_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH
+            vault, PROD_ARBITRUM_CYCLO_VAULT_IMPLEMENTATION_V2, PROD_ARBITRUM_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH
         );
+
         vm.stopBroadcast();
+    }
+
+    function deployPythWethPriceVault(uint256 deploymentKey) internal {
+        deployPythXPriceVault(deploymentKey, PROD_PYTH_ORACLE_WETH_USD_ARBITRUM, ARBITRUM_WETH);
+    }
+
+    function deployPythWstethPriceVault(uint256 deploymentKey) internal {
+        deployPythXPriceVault(deploymentKey, PROD_PYTH_ORACLE_WSTETH_USD_ARBITRUM, ARBITRUM_WSTETH);
     }
 
     function deployPythWbtcPriceVault(uint256 deploymentKey) internal {
-        vm.startBroadcast(deploymentKey);
-
-        address cywbtc = ICloneableFactoryV2(PROD_ARBITRUM_CLONE_FACTORY_ADDRESS_V1).clone(
-            PROD_ARBITRUM_CYCLO_VAULT_IMPLEMENTATION_V2,
-            abi.encode(
-                CycloVaultConfig({
-                    priceOracle: IPriceOracleV2(payable(PROD_PYTH_ORACLE_WBTC_USD_ARBITRUM)),
-                    asset: ARBITRUM_WBTC,
-                    oracleName: PYTH_ORACLE_NAME,
-                    oracleSymbol: PYTH_ORACLE_SYMBOL
-                })
-            )
-        );
-
-        LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
-            cywbtc, PROD_ARBITRUM_CYCLO_VAULT_IMPLEMENTATION_V2, PROD_ARBITRUM_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH
-        );
-        vm.stopBroadcast();
+        deployPythXPriceVault(deploymentKey, PROD_PYTH_ORACLE_WBTC_USD_ARBITRUM, ARBITRUM_WBTC);
     }
 
     function deployPythCbbtcPriceVault(uint256 deploymentKey) internal {
-        vm.startBroadcast(deploymentKey);
+        deployPythXPriceVault(deploymentKey, PROD_PYTH_ORACLE_CBBTC_USD_ARBITRUM, ARBITRUM_CBBTC);
+    }
 
-        address cycbbtc = ICloneableFactoryV2(PROD_ARBITRUM_CLONE_FACTORY_ADDRESS_V1).clone(
-            PROD_ARBITRUM_CYCLO_VAULT_IMPLEMENTATION_V2,
-            abi.encode(
-                CycloVaultConfig({
-                    priceOracle: IPriceOracleV2(payable(PROD_PYTH_ORACLE_CBBTC_USD_ARBITRUM)),
-                    asset: ARBITRUM_CBBTC,
-                    oracleName: PYTH_ORACLE_NAME,
-                    oracleSymbol: PYTH_ORACLE_SYMBOL
-                })
-            )
-        );
+    function deployPythLinkPriceVault(uint256 deploymentKey) internal {
+        deployPythXPriceVault(deploymentKey, PROD_PYTH_ORACLE_LINK_USD_ARBITRUM, ARBITRUM_LINK);
+    }
 
-        LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
-            cycbbtc, PROD_ARBITRUM_CYCLO_VAULT_IMPLEMENTATION_V2, PROD_ARBITRUM_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH
-        );
-        vm.stopBroadcast();
+    function deployPythDotPriceVault(uint256 deploymentKey) internal {
+        deployPythXPriceVault(deploymentKey, PROD_PYTH_ORACLE_DOT_USD_ARBITRUM, ARBITRUM_DOT);
+    }
+
+    function deployPythUniPriceVault(uint256 deploymentKey) internal {
+        deployPythXPriceVault(deploymentKey, PROD_PYTH_ORACLE_UNI_USD_ARBITRUM, ARBITRUM_UNI);
+    }
+
+    function deployPythPepePriceVault(uint256 deploymentKey) internal {
+        deployPythXPriceVault(deploymentKey, PROD_PYTH_ORACLE_PEPE_USD_ARBITRUM, ARBITRUM_PEPE);
+    }
+
+    function deployPythPythPriceVault(uint256 deploymentKey) internal {
+        deployPythXPriceVault(deploymentKey, PROD_PYTH_ORACLE_PYTH_USD_ARBITRUM, ARBITRUM_PYTH);
+    }
+
+    function deployPythEnaPriceVault(uint256 deploymentKey) internal {
+        deployPythXPriceVault(deploymentKey, PROD_PYTH_ORACLE_ENA_USD_ARBITRUM, ARBITRUM_ENA);
+    }
+
+    function deployPythArbPriceVault(uint256 deploymentKey) internal {
+        deployPythXPriceVault(deploymentKey, PROD_PYTH_ORACLE_ARB_USD_ARBITRUM, ARBITRUM_ARB);
+    }
+
+    function deployPythXautPriceVault(uint256 deploymentKey) internal {
+        deployPythXPriceVault(deploymentKey, PROD_PYTH_ORACLE_XAUT_USD_ARBITRUM, ARBITRUM_XAUT);
     }
 
     //forge-lint: disable-next-line(mixed-case-function)
-    function deployFlareFassetXRP(uint256 deploymentKey) internal {
+    function deployFlareFTSOV2LTSPriceVault(uint256 deploymentKey, address ftso, address asset) internal {
         vm.startBroadcast(deploymentKey);
 
-        address cyxrp = ICloneableFactoryV2(PROD_FLARE_CLONE_FACTORY_ADDRESS_V1).clone(
+        address vault = ICloneableFactoryV2(PROD_FLARE_CLONE_FACTORY_ADDRESS_V1).clone(
             PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2,
             abi.encode(
                 CycloVaultConfig({
-                    priceOracle: IPriceOracleV2(payable(PROD_FLARE_FTSO_V2_LTS_XRP_USD_FEED_ORACLE)),
-                    asset: FLARE_FASSET_XRP,
+                    priceOracle: IPriceOracleV2(payable(ftso)),
+                    asset: asset,
                     oracleName: "FTSO",
                     oracleSymbol: "ftso"
                 })
@@ -396,9 +511,19 @@ contract Deploy is Script {
         );
 
         LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
-            cyxrp, PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2, PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH
+            vault, PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2, PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH
         );
         vm.stopBroadcast();
+    }
+
+    //forge-lint: disable-next-line(mixed-case-function)
+    function deployFlareFTSOV2LTSPriceVaultJOULE(uint256 deploymentKey) internal {
+        deployFlareFTSOV2LTSPriceVault(deploymentKey, PROD_FLARE_FTSO_V2_LTS_JOULE_USD_FEED_ORACLE, FLARE_JOULE);
+    }
+
+    //forge-lint: disable-next-line(mixed-case-function)
+    function deployFlareFassetXRP(uint256 deploymentKey) internal {
+        deployFlareFTSOV2LTSPriceVault(deploymentKey, PROD_FLARE_FTSO_V2_LTS_XRP_USD_FEED_ORACLE, FLARE_FASSET_XRP);
     }
 
     function run() external {
@@ -427,22 +552,62 @@ contract Deploy is Script {
             deployFTSOV2LTSFeedOracleETHUSD(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_FTSO_V2_LTS_FEED_ORACLE_XRP_USD) {
             deployFTSOV2LTSFeedOracleXRPUSD(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_FTSO_V2_LTS_FEED_ORACLE_JOULE_USD) {
+            deployFTSOV2LTSFeedOracleJOULEUSD(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_STARGATE_WETH_PRICE_VAULT) {
             deployStargateWethPriceVault(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_PYTH_ORACLE_WSTETH_USD) {
+            deployPythOracleWSTETHUSDArbitrum(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_FLARE_FASSET_XRP) {
             deployFlareFassetXRP(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_FLARE_FTSOV2_LTS_PRICE_VAULT_JOULE) {
+            deployFlareFTSOV2LTSPriceVaultJOULE(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_PYTH_ORACLE_WETH_USD) {
             deployPythOracleWETHUSDArbitrum(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_PYTH_ORACLE_WBTC_USD) {
             deployPythOracleWBTCUSDArbitrum(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_PYTH_ORACLE_CBBTC_USD) {
             deployPythOracleCBBTCUSDArbitrum(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_PYTH_ORACLE_LINK_USD) {
+            deployPythOracleLinkUSDArbitrum(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_PYTH_ORACLE_DOT_USD) {
+            deployPythOracleDotUSDArbitrum(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_PYTH_ORACLE_UNI_USD) {
+            deployPythOracleUniUSDArbitrum(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_PYTH_ORACLE_PEPE_USD) {
+            deployPythOraclePepeUSDArbitrum(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_PYTH_ORACLE_PYTH_USD) {
+            deployPythOraclePythUSDArbitrum(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_PYTH_ORACLE_ENA_USD) {
+            deployPythOracleEnaUSDArbitrum(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_PYTH_ORACLE_ARB_USD) {
+            deployPythOracleArbUSDArbitrum(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_PYTH_ORACLE_XAUT_USD) {
+            deployPythOracleXAUTArbitrum(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_PYTH_WETH_PRICE_VAULT) {
             deployPythWethPriceVault(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_PYTH_WSTETH_PRICE_VAULT) {
+            deployPythWstethPriceVault(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_PYTH_WBTC_PRICE_VAULT) {
             deployPythWbtcPriceVault(deployerPrivateKey);
         } else if (suite == DEPLOYMENT_SUITE_PYTH_CBBTC_PRICE_VAULT) {
             deployPythCbbtcPriceVault(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_PYTH_LINK_PRICE_VAULT) {
+            deployPythLinkPriceVault(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_PYTH_DOT_PRICE_VAULT) {
+            deployPythDotPriceVault(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_PYTH_UNI_PRICE_VAULT) {
+            deployPythUniPriceVault(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_PYTH_PEPE_PRICE_VAULT) {
+            deployPythPepePriceVault(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_PYTH_PYTH_PRICE_VAULT) {
+            deployPythPythPriceVault(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_PYTH_ENA_PRICE_VAULT) {
+            deployPythEnaPriceVault(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_PYTH_ARB_PRICE_VAULT) {
+            deployPythArbPriceVault(deployerPrivateKey);
+        } else if (suite == DEPLOYMENT_SUITE_PYTH_XAUT_PRICE_VAULT) {
+            deployPythXautPriceVault(deployerPrivateKey);
         } else {
             revert("Unknown deployment suite");
         }
