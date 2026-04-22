@@ -34,13 +34,13 @@ import {
 import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
 import {IReceiptV2} from "ethgild/interface/deprecated/IReceiptV2.sol";
 
-contract CycloReceiptProdAccessFlareTest is Test {
+contract CycloReceiptProdAccessArbitrumTest is Test {
     function checkAccess(address receiptAddress, address vaultAddress, string memory asset) internal view {
         address manager = IReceiptV2(receiptAddress).manager();
         assertEq(manager, vaultAddress, string.concat(asset, " manager should be vault"));
     }
 
-    function testProdCycloReceiptManagerFlare() external {
+    function testProdCycloReceiptManagerArbitrum() external {
         LibCycloTestProd.createSelectForkArbitrum(vm);
 
         checkAccess(PROD_ARBITRUM_RECEIPT_CYWETH_PYTH, PROD_ARBITRUM_VAULT_CYWETH_PYTH, "cyWETH");

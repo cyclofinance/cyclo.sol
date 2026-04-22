@@ -87,4 +87,21 @@ contract CycloReceiptProdMetadataArbitrumTest is CycloReceiptMetadataTest {
         checkCycloReceiptURIZeroId(PROD_ARBITRUM_RECEIPT_CYARB_PYTH);
         checkCycloReceiptURIZeroId(PROD_ARBITRUM_RECEIPT_CYXAUT_PYTH);
     }
+
+    function testProdCycloReceiptURIVariesWithId() external {
+        LibCycloTestProd.createSelectForkArbitrum(vm);
+
+        checkCycloReceiptURIVariesWithId(PROD_ARBITRUM_RECEIPT_CYWETH_PYTH);
+        checkCycloReceiptURIVariesWithId(PROD_ARBITRUM_RECEIPT_CYWSTETH_PYTH);
+        checkCycloReceiptURIVariesWithId(PROD_ARBITRUM_RECEIPT_CYWBTC_PYTH);
+        checkCycloReceiptURIVariesWithId(PROD_ARBITRUM_RECEIPT_CYCBBTC_PYTH);
+        checkCycloReceiptURIVariesWithId(PROD_ARBITRUM_RECEIPT_CYLINK_PYTH);
+        checkCycloReceiptURIVariesWithId(PROD_ARBITRUM_RECEIPT_CYDOT_PYTH);
+        checkCycloReceiptURIVariesWithId(PROD_ARBITRUM_RECEIPT_CYUNI_PYTH);
+        checkCycloReceiptURIVariesWithId(PROD_ARBITRUM_RECEIPT_CYPEPE_PYTH);
+        checkCycloReceiptURIVariesWithId(PROD_ARBITRUM_RECEIPT_CYPYTH_PYTH);
+        checkCycloReceiptURIVariesWithId(PROD_ARBITRUM_RECEIPT_CYENA_PYTH);
+        checkCycloReceiptURIVariesWithId(PROD_ARBITRUM_RECEIPT_CYARB_PYTH);
+        checkCycloReceiptURIVariesWithId(PROD_ARBITRUM_RECEIPT_CYXAUT_PYTH);
+    }
 }

@@ -47,4 +47,13 @@ contract CycloReceiptProdMetadataFlareTest is CycloReceiptMetadataTest {
         checkCycloReceiptURIZeroId(PROD_FLARE_RECEIPT_CYFXRP);
         checkCycloReceiptURIZeroId(PROD_FLARE_RECEIPT_CYJOULE);
     }
+
+    function testProdCycloReceiptURIVariesWithId() external {
+        LibCycloTestProd.createSelectForkFlare(vm);
+
+        checkCycloReceiptURIVariesWithId(PROD_FLARE_RECEIPT_CYSFLR);
+        checkCycloReceiptURIVariesWithId(PROD_FLARE_RECEIPT_CYWETH);
+        checkCycloReceiptURIVariesWithId(PROD_FLARE_RECEIPT_CYFXRP);
+        checkCycloReceiptURIVariesWithId(PROD_FLARE_RECEIPT_CYJOULE);
+    }
 }

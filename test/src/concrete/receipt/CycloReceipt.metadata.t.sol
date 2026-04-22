@@ -81,6 +81,17 @@ contract CycloReceiptMetadataTest is CycloReceiptFactoryTest {
         assertEq(receipt.symbol(), string.concat("cy", assetSymbol, " RCPT"));
     }
 
+    function checkCycloReceiptURIVariesWithId(address cycloReceipt) internal view {
+        CycloReceipt receipt = CycloReceipt(cycloReceipt);
+        // Two arbitrary non-zero priceIds that would differ in the URI description.
+        string memory uri1 = receipt.uri(0.01544e18);
+        string memory uri2 = receipt.uri(0.03088e18);
+        assertTrue(
+            keccak256(bytes(uri1)) != keccak256(bytes(uri2)),
+            "uri output should differ by priceId"
+        );
+    }
+
     function testCycloReceiptURI() external {
         CycloVault vault = CycloVault(
             payable(
