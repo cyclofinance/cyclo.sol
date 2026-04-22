@@ -38,4 +38,22 @@ contract CycloReceiptProdMetadataFlareTest is CycloReceiptMetadataTest {
         checkCycloReceiptSymbolV2(PROD_FLARE_RECEIPT_CYFXRP, "FXRP.ftso");
         checkCycloReceiptSymbolV2(PROD_FLARE_RECEIPT_CYJOULE, "JOULE.ftso");
     }
+
+    function testProdCycloReceiptURIZeroIdReverts() external {
+        LibCycloTestProd.createSelectForkFlare(vm);
+
+        checkCycloReceiptURIZeroId(PROD_FLARE_RECEIPT_CYSFLR);
+        checkCycloReceiptURIZeroId(PROD_FLARE_RECEIPT_CYWETH);
+        checkCycloReceiptURIZeroId(PROD_FLARE_RECEIPT_CYFXRP);
+        checkCycloReceiptURIZeroId(PROD_FLARE_RECEIPT_CYJOULE);
+    }
+
+    function testProdCycloReceiptURIVariesWithId() external {
+        LibCycloTestProd.createSelectForkFlare(vm);
+
+        checkCycloReceiptURIVariesWithId(PROD_FLARE_RECEIPT_CYSFLR);
+        checkCycloReceiptURIVariesWithId(PROD_FLARE_RECEIPT_CYWETH);
+        checkCycloReceiptURIVariesWithId(PROD_FLARE_RECEIPT_CYFXRP);
+        checkCycloReceiptURIVariesWithId(PROD_FLARE_RECEIPT_CYJOULE);
+    }
 }
