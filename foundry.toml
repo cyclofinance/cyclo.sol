@@ -9,6 +9,10 @@ optimizer_runs = 100000
 # pre push0 for maximum compatibility
 evm_version = "paris"
 
+# Canonical token registry shared with cyclofinance/cyclo.site. Tests in
+# test/prod/CycloSiteTokens.prod.*.t.sol read it via vm.readFile.
+fs_permissions = [{ access = "read", path = "./canonical" }]
+
 remappings = [
     "ethgild/=lib/ethgild/src/",
     "rain.factory/=lib/ethgild/lib/rain.factory/src/",
