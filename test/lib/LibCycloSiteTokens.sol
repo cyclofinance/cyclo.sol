@@ -50,10 +50,7 @@ library LibCycloSiteTokens {
             verified++;
 
             uint256 actualVaultDecimals = uint256(IERC20Metadata(entry.vaultAddress).decimals());
-            require(
-                actualVaultDecimals == entry.decimals,
-                string.concat("vault decimals mismatch for ", entry.name)
-            );
+            require(actualVaultDecimals == entry.decimals, string.concat("vault decimals mismatch for ", entry.name));
 
             uint256 actualUnderlyingDecimals = uint256(IERC20Metadata(entry.underlyingAddress).decimals());
             require(
@@ -62,10 +59,7 @@ library LibCycloSiteTokens {
             );
 
             address actualAsset = address(CycloVault(payable(entry.vaultAddress)).asset());
-            require(
-                actualAsset == entry.underlyingAddress,
-                string.concat("vault.asset() mismatch for ", entry.name)
-            );
+            require(actualAsset == entry.underlyingAddress, string.concat("vault.asset() mismatch for ", entry.name));
         }
         require(verified > 0, "no JSON entries matched the requested chainId");
     }
