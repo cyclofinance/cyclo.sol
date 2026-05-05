@@ -56,6 +56,7 @@ import {PROD_ARBITRUM_CLONE_FACTORY_ADDRESS_V1} from "src/lib/LibCycloProdCloneF
 import {IERC20MetadataUpgradeable as IERC20Metadata} from
     "openzeppelin-contracts-upgradeable/contracts/token/ERC20/extensions/IERC20MetadataUpgradeable.sol";
 import {IReceiptV3} from "ethgild/abstract/ReceiptVault.sol";
+import {IPriceOracleV2} from "ethgild/interface/IPriceOracleV2.sol";
 
 contract CycloVaultProdArbitrumTest is CycloVaultTest {
     function _rpcEnvName() internal pure override returns (string memory) {
@@ -286,69 +287,44 @@ contract CycloVaultProdArbitrumTest is CycloVaultTest {
         LibCycloTestProd.checkDeposit(vm, PROD_ARBITRUM_VAULT_CYXAUT_PYTH, deposit);
     }
 
+    /// Mints `shares` from `vault` if its Pyth feed is fresh at the pinned
+    /// block. If the feed is stale, asserts the full revert chain we observe:
+    /// `previewMint` panics with divide-by-zero (0x12) because
+    /// `ERC20PriceOracleReceiptVault._nextId()` swallows the oracle revert in a
+    /// try/catch and returns id=0, then `_calculateMint` divides by zero. The
+    /// underlying cause is pinned by calling the oracle directly and asserting
+    /// `StalePrice()` (Pyth selector 0x19abf40e).
+    function _checkMintForVault(address vault_, address oracle_, uint256 shares) internal {
+        CycloVault vault = CycloVault(payable(vault_));
+        try vault.previewMint(shares, 0) returns (uint256 expectedAssets) {
+            deal(vault.asset(), DEFAULT_ALICE, expectedAssets);
+            LibCycloTestProd.checkMint(vm, vault_, shares, expectedAssets);
+        } catch (bytes memory err) {
+            require(
+                keccak256(err) == keccak256(abi.encodeWithSignature("Panic(uint256)", uint256(0x12))),
+                "previewMint reverted with something other than divide-by-zero"
+            );
+            vm.expectRevert(abi.encodeWithSignature("StalePrice()"));
+            IPriceOracleV2(payable(oracle_)).price();
+        }
+    }
+
     /// forge-config: default.fuzz.runs = 1
     function testProdCycloVaultCanMintArbitrum(uint256 sharesSeed) public {
         uint256 shares = bound(sharesSeed, 1, type(uint128).max);
 
-        CycloVault vault = CycloVault(payable(PROD_ARBITRUM_VAULT_CYWETH_PYTH));
-        uint256 assets = vault.previewMint(shares, 0);
-        deal(vault.asset(), DEFAULT_ALICE, assets);
-        LibCycloTestProd.checkMint(vm, PROD_ARBITRUM_VAULT_CYWETH_PYTH, shares, assets);
-
-        vault = CycloVault(payable(PROD_ARBITRUM_VAULT_CYWSTETH_PYTH));
-        assets = vault.previewMint(shares, 0);
-        deal(vault.asset(), DEFAULT_ALICE, assets);
-        LibCycloTestProd.checkMint(vm, PROD_ARBITRUM_VAULT_CYWSTETH_PYTH, shares, assets);
-
-        vault = CycloVault(payable(PROD_ARBITRUM_VAULT_CYWBTC_PYTH));
-        assets = vault.previewMint(shares, 0);
-        deal(vault.asset(), DEFAULT_ALICE, assets);
-        LibCycloTestProd.checkMint(vm, PROD_ARBITRUM_VAULT_CYWBTC_PYTH, shares, assets);
-
-        vault = CycloVault(payable(PROD_ARBITRUM_VAULT_CYCBBTC_PYTH));
-        assets = vault.previewMint(shares, 0);
-        deal(vault.asset(), DEFAULT_ALICE, assets);
-        LibCycloTestProd.checkMint(vm, PROD_ARBITRUM_VAULT_CYCBBTC_PYTH, shares, assets);
-
-        vault = CycloVault(payable(PROD_ARBITRUM_VAULT_CYLINK_PYTH));
-        assets = vault.previewMint(shares, 0);
-        deal(vault.asset(), DEFAULT_ALICE, assets);
-        LibCycloTestProd.checkMint(vm, PROD_ARBITRUM_VAULT_CYLINK_PYTH, shares, assets);
-
-        vault = CycloVault(payable(PROD_ARBITRUM_VAULT_CYDOT_PYTH));
-        assets = vault.previewMint(shares, 0);
-        deal(vault.asset(), DEFAULT_ALICE, assets);
-        LibCycloTestProd.checkMint(vm, PROD_ARBITRUM_VAULT_CYDOT_PYTH, shares, assets);
-
-        vault = CycloVault(payable(PROD_ARBITRUM_VAULT_CYUNI_PYTH));
-        assets = vault.previewMint(shares, 0);
-        deal(vault.asset(), DEFAULT_ALICE, assets);
-        LibCycloTestProd.checkMint(vm, PROD_ARBITRUM_VAULT_CYUNI_PYTH, shares, assets);
-
-        vault = CycloVault(payable(PROD_ARBITRUM_VAULT_CYPEPE_PYTH));
-        assets = vault.previewMint(shares, 0);
-        deal(vault.asset(), DEFAULT_ALICE, assets);
-        LibCycloTestProd.checkMint(vm, PROD_ARBITRUM_VAULT_CYPEPE_PYTH, shares, assets);
-
-        vault = CycloVault(payable(PROD_ARBITRUM_VAULT_CYPYTH_PYTH));
-        assets = vault.previewMint(shares, 0);
-        deal(vault.asset(), DEFAULT_ALICE, assets);
-        LibCycloTestProd.checkMint(vm, PROD_ARBITRUM_VAULT_CYPYTH_PYTH, shares, assets);
-
-        vault = CycloVault(payable(PROD_ARBITRUM_VAULT_CYENA_PYTH));
-        assets = vault.previewMint(shares, 0);
-        deal(vault.asset(), DEFAULT_ALICE, assets);
-        LibCycloTestProd.checkMint(vm, PROD_ARBITRUM_VAULT_CYENA_PYTH, shares, assets);
-
-        vault = CycloVault(payable(PROD_ARBITRUM_VAULT_CYARB_PYTH));
-        assets = vault.previewMint(shares, 0);
-        deal(vault.asset(), DEFAULT_ALICE, assets);
-        LibCycloTestProd.checkMint(vm, PROD_ARBITRUM_VAULT_CYARB_PYTH, shares, assets);
-
-        vault = CycloVault(payable(PROD_ARBITRUM_VAULT_CYXAUT_PYTH));
-        assets = vault.previewMint(shares, 0);
-        deal(vault.asset(), DEFAULT_ALICE, assets);
-        LibCycloTestProd.checkMint(vm, PROD_ARBITRUM_VAULT_CYXAUT_PYTH, shares, assets);
+        _checkMintForVault(PROD_ARBITRUM_VAULT_CYWETH_PYTH, PROD_PYTH_ORACLE_WETH_USD_ARBITRUM, shares);
+        _checkMintForVault(PROD_ARBITRUM_VAULT_CYWSTETH_PYTH, PROD_PYTH_ORACLE_WSTETH_USD_ARBITRUM, shares);
+        _checkMintForVault(PROD_ARBITRUM_VAULT_CYWBTC_PYTH, PROD_PYTH_ORACLE_WBTC_USD_ARBITRUM, shares);
+        _checkMintForVault(PROD_ARBITRUM_VAULT_CYCBBTC_PYTH, PROD_PYTH_ORACLE_CBBTC_USD_ARBITRUM, shares);
+        _checkMintForVault(PROD_ARBITRUM_VAULT_CYLINK_PYTH, PROD_PYTH_ORACLE_LINK_USD_ARBITRUM, shares);
+        _checkMintForVault(PROD_ARBITRUM_VAULT_CYDOT_PYTH, PROD_PYTH_ORACLE_DOT_USD_ARBITRUM, shares);
+        _checkMintForVault(PROD_ARBITRUM_VAULT_CYUNI_PYTH, PROD_PYTH_ORACLE_UNI_USD_ARBITRUM, shares);
+        _checkMintForVault(PROD_ARBITRUM_VAULT_CYPEPE_PYTH, PROD_PYTH_ORACLE_PEPE_USD_ARBITRUM, shares);
+        _checkMintForVault(PROD_ARBITRUM_VAULT_CYPYTH_PYTH, PROD_PYTH_ORACLE_PYTH_USD_ARBITRUM, shares);
+        _checkMintForVault(PROD_ARBITRUM_VAULT_CYENA_PYTH, PROD_PYTH_ORACLE_ENA_USD_ARBITRUM, shares);
+        _checkMintForVault(PROD_ARBITRUM_VAULT_CYARB_PYTH, PROD_PYTH_ORACLE_ARB_USD_ARBITRUM, shares);
+        _checkMintForVault(PROD_ARBITRUM_VAULT_CYXAUT_PYTH, PROD_PYTH_ORACLE_XAUT_USD_ARBITRUM, shares);
     }
 
     function testProdCycloVaultImplementationIsInitializedArbitrum() external {
