@@ -18,6 +18,6 @@ contract CycloSiteTokensProdArbitrumTest is Test {
     }
 
     function testCycloSiteTokensArbitrum() external view {
-        LibCycloSiteTokens.assertOnChainMatchesJson(vm, ARBITRUM_CHAIN_ID);
+        LibCycloSiteTokens.assertOnChainMatchesJson(vm, ARBITRUM_CHAIN_ID, "Arbitrum One");
     }
 }

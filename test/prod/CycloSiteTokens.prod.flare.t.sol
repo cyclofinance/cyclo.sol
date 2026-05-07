@@ -18,6 +18,6 @@ contract CycloSiteTokensProdFlareTest is Test {
     }
 
     function testCycloSiteTokensFlare() external view {
-        LibCycloSiteTokens.assertOnChainMatchesJson(vm, FLARE_CHAIN_ID);
+        LibCycloSiteTokens.assertOnChainMatchesJson(vm, FLARE_CHAIN_ID, "Flare");
     }
 }

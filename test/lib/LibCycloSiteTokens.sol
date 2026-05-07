@@ -36,6 +36,9 @@ library LibCycloSiteTokens {
     }
 
     /// Asserts that for every entry on `expectedChainId`:
+    ///   - the on-chain `block.chainid` matches `expectedChainId` (catches
+    ///     mistakenly forking to the wrong chain)
+    ///   - the entry's `networkName` matches `expectedNetworkName`
     ///   - the vault's on-chain `decimals()` matches the JSON's `decimals`
     ///   - the underlying's on-chain `decimals()` matches `underlyingDecimals`
     ///   - the vault's on-chain `symbol()` matches `symbol`
@@ -46,13 +49,23 @@ library LibCycloSiteTokens {
     ///     `vault.name()` is a longer rendered string and is not asserted)
     /// Reverts with the entry's `name` in the failure message so the operator
     /// can locate the drift quickly.
-    function assertOnChainMatchesJson(Vm vm, uint256 expectedChainId) internal view {
+    function assertOnChainMatchesJson(Vm vm, uint256 expectedChainId, string memory expectedNetworkName)
+        internal
+        view
+    {
+        require(block.chainid == expectedChainId, "fork is on wrong chain");
+
         TokenEntry[] memory entries = loadAll(vm);
         uint256 verified = 0;
         for (uint256 i = 0; i < entries.length; i++) {
             TokenEntry memory entry = entries[i];
             if (entry.chainId != expectedChainId) continue;
             verified++;
+
+            require(
+                keccak256(bytes(entry.networkName)) == keccak256(bytes(expectedNetworkName)),
+                string.concat("networkName mismatch for ", entry.name)
+            );
 
             uint256 actualVaultDecimals = uint256(IERC20Metadata(entry.vaultAddress).decimals());
             require(actualVaultDecimals == entry.decimals, string.concat("vault decimals mismatch for ", entry.name));
