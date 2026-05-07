@@ -309,6 +309,21 @@ contract CycloVaultProdArbitrumTest is CycloVaultTest {
         }
     }
 
+    /// Pins the swallow chain in `ERC20PriceOracleReceiptVault._nextId()`
+    /// against the cyWETH vault, independently of whether its Pyth feed is
+    /// stale at the pinned block. Mocks the oracle's `price()` to revert
+    /// with `StalePrice()` and asserts `previewMint` surfaces `Panic(0x12)`.
+    function testProdCycloVaultMintRevertsOnStalePythSwallowArbitrum() external {
+        vm.mockCallRevert(
+            PROD_PYTH_ORACLE_WETH_USD_ARBITRUM,
+            abi.encodeWithSignature("price()"),
+            abi.encodeWithSignature("StalePrice()")
+        );
+
+        vm.expectRevert(abi.encodeWithSignature("Panic(uint256)", uint256(0x12)));
+        CycloVault(payable(PROD_ARBITRUM_VAULT_CYWETH_PYTH)).previewMint(1, 0);
+    }
+
     /// forge-config: default.fuzz.runs = 1
     function testProdCycloVaultCanMintArbitrum(uint256 sharesSeed) public {
         uint256 shares = bound(sharesSeed, 1, type(uint128).max);
