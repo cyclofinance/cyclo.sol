@@ -39,6 +39,7 @@ library LibCycloSiteTokens {
     ///   - the on-chain `block.chainid` matches `expectedChainId` (catches
     ///     mistakenly forking to the wrong chain)
     ///   - the entry's `networkName` matches `expectedNetworkName`
+    ///   - `vaultAddress` is non-zero and has bytecode
     ///   - the vault's on-chain `name()` matches `name`
     ///   - the vault's on-chain `decimals()` matches the JSON's `decimals`
     ///   - the underlying's on-chain `decimals()` matches `underlyingDecimals`
@@ -63,6 +64,12 @@ library LibCycloSiteTokens {
             require(
                 keccak256(bytes(entry.networkName)) == keccak256(bytes(expectedNetworkName)),
                 string.concat("networkName mismatch for ", entry.name)
+            );
+
+            require(entry.vaultAddress != address(0), string.concat("vaultAddress is zero for ", entry.name));
+            require(
+                entry.vaultAddress.code.length > 0,
+                string.concat("vaultAddress has no bytecode for ", entry.name)
             );
 
             uint256 actualVaultDecimals = uint256(IERC20Metadata(entry.vaultAddress).decimals());
