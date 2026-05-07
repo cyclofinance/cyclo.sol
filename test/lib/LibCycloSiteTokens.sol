@@ -39,14 +39,12 @@ library LibCycloSiteTokens {
     ///   - the on-chain `block.chainid` matches `expectedChainId` (catches
     ///     mistakenly forking to the wrong chain)
     ///   - the entry's `networkName` matches `expectedNetworkName`
+    ///   - the vault's on-chain `name()` matches `name`
     ///   - the vault's on-chain `decimals()` matches the JSON's `decimals`
     ///   - the underlying's on-chain `decimals()` matches `underlyingDecimals`
     ///   - the vault's on-chain `symbol()` matches `symbol`
     ///   - the underlying's on-chain `symbol()` matches `underlyingSymbol`
     ///   - the vault's on-chain `asset()` matches the declared `underlyingAddress`
-    ///   - the JSON's `name` mirrors the JSON's `symbol` (the site uses `name`
-    ///     as a display label and we keep the two in sync; the on-chain
-    ///     `vault.name()` is a longer rendered string and is not asserted)
     /// Reverts with the entry's `name` in the failure message so the operator
     /// can locate the drift quickly.
     function assertOnChainMatchesJson(Vm vm, uint256 expectedChainId, string memory expectedNetworkName)
@@ -88,13 +86,14 @@ library LibCycloSiteTokens {
                 string.concat("underlying symbol mismatch for ", entry.name)
             );
 
+            string memory actualVaultName = IERC20Metadata(entry.vaultAddress).name();
+            require(
+                keccak256(bytes(actualVaultName)) == keccak256(bytes(entry.name)),
+                string.concat("vault name mismatch for ", entry.name)
+            );
+
             address actualAsset = address(CycloVault(payable(entry.vaultAddress)).asset());
             require(actualAsset == entry.underlyingAddress, string.concat("vault.asset() mismatch for ", entry.name));
-
-            require(
-                keccak256(bytes(entry.name)) == keccak256(bytes(entry.symbol)),
-                string.concat("JSON name/symbol mismatch for ", entry.name)
-            );
         }
         require(verified > 0, "no JSON entries matched the requested chainId");
     }
