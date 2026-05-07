@@ -37,9 +37,9 @@ import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
 import {IPriceOracleV2} from "ethgild/interface/IPriceOracleV2.sol";
 
 contract PythOracleProdTest is Test {
-    /// At the pinned block, only WBTC and XAUT have fresh Pyth pushes; the
-    /// other 10 feeds are older than the 1800s stale threshold and revert
-    /// with `StalePrice()` (selector 0x19abf40e). The fresh prices are pinned
+    /// At the pinned block, WBTC, UNI and XAUT have fresh Pyth pushes; the
+    /// other 9 feeds are older than the 1800s stale threshold and revert with
+    /// `StalePrice()` (selector 0x19abf40e). The fresh prices are pinned
     /// exactly; the stale ones are pinned as `vm.expectRevert(StalePrice)`.
     function testProdCycloPythOraclePrice() external {
         LibCycloTestProd.createSelectForkArbitrum(vm);
@@ -53,7 +53,7 @@ contract PythOracleProdTest is Test {
         IPriceOracleV2(payable(PROD_PYTH_ORACLE_WSTETH_USD_ARBITRUM)).price();
 
         uint256 price = IPriceOracleV2(payable(PROD_PYTH_ORACLE_WBTC_USD_ARBITRUM)).price();
-        assertEq(price, 80830.6380941e18);
+        assertEq(price, 80906.60000001e18);
 
         vm.expectRevert(stalePrice);
         IPriceOracleV2(payable(PROD_PYTH_ORACLE_CBBTC_USD_ARBITRUM)).price();
@@ -64,8 +64,8 @@ contract PythOracleProdTest is Test {
         vm.expectRevert(stalePrice);
         IPriceOracleV2(payable(PROD_PYTH_ORACLE_DOT_USD_ARBITRUM)).price();
 
-        vm.expectRevert(stalePrice);
-        IPriceOracleV2(payable(PROD_PYTH_ORACLE_UNI_USD_ARBITRUM)).price();
+        price = IPriceOracleV2(payable(PROD_PYTH_ORACLE_UNI_USD_ARBITRUM)).price();
+        assertEq(price, 3.48202396e18);
 
         vm.expectRevert(stalePrice);
         IPriceOracleV2(payable(PROD_PYTH_ORACLE_PEPE_USD_ARBITRUM)).price();
@@ -80,7 +80,7 @@ contract PythOracleProdTest is Test {
         IPriceOracleV2(payable(PROD_PYTH_ORACLE_PYTH_USD_ARBITRUM)).price();
 
         price = IPriceOracleV2(payable(PROD_PYTH_ORACLE_XAUT_USD_ARBITRUM)).price();
-        assertEq(price, 4626.78794311e18);
+        assertEq(price, 4711.38445871e18);
     }
 
     function testProdCycloPythOracleBytecode() external {
