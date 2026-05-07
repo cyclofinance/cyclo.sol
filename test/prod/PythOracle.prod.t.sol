@@ -37,37 +37,50 @@ import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
 import {IPriceOracleV2} from "ethgild/interface/IPriceOracleV2.sol";
 
 contract PythOracleProdTest is Test {
-    /// Asserts the oracle either returns a positive price or reverts with
-    /// `StalePrice()` (selector 0x19abf40e). Pinning specific numeric prices
-    /// is fragile — the value depends on the exact block, and feeds may be
-    /// stale at any given pin. This loose assertion just confirms the oracle
-    /// is wired up and either current or known-stale.
-    function _assertOraclePriceFreshOrStale(address oracle) internal {
-        try IPriceOracleV2(payable(oracle)).price() returns (uint256 price) {
-            assertGt(price, 0);
-        } catch (bytes memory err) {
-            require(
-                keccak256(err) == keccak256(abi.encodeWithSignature("StalePrice()")),
-                "oracle reverted with non-StalePrice error"
-            );
-        }
-    }
-
+    /// At the pinned block, only WBTC and XAUT have fresh Pyth pushes; the
+    /// other 10 feeds are older than the 1800s stale threshold and revert
+    /// with `StalePrice()` (selector 0x19abf40e). The fresh prices are pinned
+    /// exactly; the stale ones are pinned as `vm.expectRevert(StalePrice)`.
     function testProdCycloPythOraclePrice() external {
         LibCycloTestProd.createSelectForkArbitrum(vm);
 
-        _assertOraclePriceFreshOrStale(PROD_PYTH_ORACLE_WETH_USD_ARBITRUM);
-        _assertOraclePriceFreshOrStale(PROD_PYTH_ORACLE_WSTETH_USD_ARBITRUM);
-        _assertOraclePriceFreshOrStale(PROD_PYTH_ORACLE_WBTC_USD_ARBITRUM);
-        _assertOraclePriceFreshOrStale(PROD_PYTH_ORACLE_CBBTC_USD_ARBITRUM);
-        _assertOraclePriceFreshOrStale(PROD_PYTH_ORACLE_LINK_USD_ARBITRUM);
-        _assertOraclePriceFreshOrStale(PROD_PYTH_ORACLE_DOT_USD_ARBITRUM);
-        _assertOraclePriceFreshOrStale(PROD_PYTH_ORACLE_UNI_USD_ARBITRUM);
-        _assertOraclePriceFreshOrStale(PROD_PYTH_ORACLE_PEPE_USD_ARBITRUM);
-        _assertOraclePriceFreshOrStale(PROD_PYTH_ORACLE_ENA_USD_ARBITRUM);
-        _assertOraclePriceFreshOrStale(PROD_PYTH_ORACLE_ARB_USD_ARBITRUM);
-        _assertOraclePriceFreshOrStale(PROD_PYTH_ORACLE_PYTH_USD_ARBITRUM);
-        _assertOraclePriceFreshOrStale(PROD_PYTH_ORACLE_XAUT_USD_ARBITRUM);
+        bytes memory stalePrice = abi.encodeWithSignature("StalePrice()");
+
+        vm.expectRevert(stalePrice);
+        IPriceOracleV2(payable(PROD_PYTH_ORACLE_WETH_USD_ARBITRUM)).price();
+
+        vm.expectRevert(stalePrice);
+        IPriceOracleV2(payable(PROD_PYTH_ORACLE_WSTETH_USD_ARBITRUM)).price();
+
+        uint256 price = IPriceOracleV2(payable(PROD_PYTH_ORACLE_WBTC_USD_ARBITRUM)).price();
+        assertEq(price, 80830.6380941e18);
+
+        vm.expectRevert(stalePrice);
+        IPriceOracleV2(payable(PROD_PYTH_ORACLE_CBBTC_USD_ARBITRUM)).price();
+
+        vm.expectRevert(stalePrice);
+        IPriceOracleV2(payable(PROD_PYTH_ORACLE_LINK_USD_ARBITRUM)).price();
+
+        vm.expectRevert(stalePrice);
+        IPriceOracleV2(payable(PROD_PYTH_ORACLE_DOT_USD_ARBITRUM)).price();
+
+        vm.expectRevert(stalePrice);
+        IPriceOracleV2(payable(PROD_PYTH_ORACLE_UNI_USD_ARBITRUM)).price();
+
+        vm.expectRevert(stalePrice);
+        IPriceOracleV2(payable(PROD_PYTH_ORACLE_PEPE_USD_ARBITRUM)).price();
+
+        vm.expectRevert(stalePrice);
+        IPriceOracleV2(payable(PROD_PYTH_ORACLE_ENA_USD_ARBITRUM)).price();
+
+        vm.expectRevert(stalePrice);
+        IPriceOracleV2(payable(PROD_PYTH_ORACLE_ARB_USD_ARBITRUM)).price();
+
+        vm.expectRevert(stalePrice);
+        IPriceOracleV2(payable(PROD_PYTH_ORACLE_PYTH_USD_ARBITRUM)).price();
+
+        price = IPriceOracleV2(payable(PROD_PYTH_ORACLE_XAUT_USD_ARBITRUM)).price();
+        assertEq(price, 4626.78794311e18);
     }
 
     function testProdCycloPythOracleBytecode() external {
