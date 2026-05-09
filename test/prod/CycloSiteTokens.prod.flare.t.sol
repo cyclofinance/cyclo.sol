@@ -4,6 +4,7 @@ pragma solidity =0.8.25;
 
 import {Test} from "forge-std/Test.sol";
 import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
+import {CycloVaultConfig} from "src/concrete/vault/CycloVault.sol";
 import {LibCycloSiteTokens, TokenEntry, FLARE_CHAIN_ID} from "test/lib/LibCycloSiteTokens.sol";
 import {CycloVault} from "src/concrete/vault/CycloVault.sol";
 import {
@@ -83,7 +84,7 @@ contract CycloSiteTokensProdFlareTest is Test {
         expectedReceiptCodehash[PROD_FLARE_RECEIPT_CYFXRP] = PROD_FLARE_CYCLO_RECEIPT_CODEHASH_V2;
     }
 
-    function testCycloSiteTokensFlare() external view {
+    function testCycloSiteTokensFlare() external {
         LibCycloSiteTokens.assertOnChainMatchesJson(vm, FLARE_CHAIN_ID, "Flare");
 
         TokenEntry[] memory entries = LibCycloSiteTokens.loadAll(vm);
@@ -119,6 +120,14 @@ contract CycloSiteTokensProdFlareTest is Test {
                 expectedReceiptImpl[entry.receiptAddress],
                 expectedReceiptCodehash[entry.receiptAddress]
             );
+
+            // Vaults take a `CycloVaultConfig` struct, receipts take an
+            // address (the manager). With well-formed data the OZ
+            // `initializer` modifier fires before the body decodes data,
+            // producing the canonical "already initialized" revert string.
+            CycloVaultConfig memory vaultConfig;
+            LibCycloTestProd.checkIsInitialized(vm, entry.vaultAddress, abi.encode(vaultConfig));
+            LibCycloTestProd.checkIsInitialized(vm, entry.receiptAddress, abi.encode(entry.vaultAddress));
         }
 
         // Reverse coverage: every prod vault constant must appear in the JSON,
