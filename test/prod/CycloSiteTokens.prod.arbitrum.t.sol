@@ -167,5 +167,26 @@ contract CycloSiteTokensProdArbitrumTest is Test {
                 expectedReceiptCodehash[entry.receiptAddress]
             );
         }
+
+        // Reverse coverage: every prod vault constant must appear in the JSON.
+        _assertProdConstantInJson(entries, PROD_ARBITRUM_VAULT_CYWETH_PYTH);
+        _assertProdConstantInJson(entries, PROD_ARBITRUM_VAULT_CYWSTETH_PYTH);
+        _assertProdConstantInJson(entries, PROD_ARBITRUM_VAULT_CYWBTC_PYTH);
+        _assertProdConstantInJson(entries, PROD_ARBITRUM_VAULT_CYCBBTC_PYTH);
+        _assertProdConstantInJson(entries, PROD_ARBITRUM_VAULT_CYLINK_PYTH);
+        _assertProdConstantInJson(entries, PROD_ARBITRUM_VAULT_CYDOT_PYTH);
+        _assertProdConstantInJson(entries, PROD_ARBITRUM_VAULT_CYUNI_PYTH);
+        _assertProdConstantInJson(entries, PROD_ARBITRUM_VAULT_CYPEPE_PYTH);
+        _assertProdConstantInJson(entries, PROD_ARBITRUM_VAULT_CYPYTH_PYTH);
+        _assertProdConstantInJson(entries, PROD_ARBITRUM_VAULT_CYENA_PYTH);
+        _assertProdConstantInJson(entries, PROD_ARBITRUM_VAULT_CYARB_PYTH);
+        _assertProdConstantInJson(entries, PROD_ARBITRUM_VAULT_CYXAUT_PYTH);
+    }
+
+    function _assertProdConstantInJson(TokenEntry[] memory entries, address vault) internal pure {
+        for (uint256 i = 0; i < entries.length; i++) {
+            if (entries[i].vaultAddress == vault) return;
+        }
+        revert("prod vault constant missing from JSON");
     }
 }

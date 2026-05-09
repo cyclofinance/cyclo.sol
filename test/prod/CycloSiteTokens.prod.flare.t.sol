@@ -120,5 +120,20 @@ contract CycloSiteTokensProdFlareTest is Test {
                 expectedReceiptCodehash[entry.receiptAddress]
             );
         }
+
+        // Reverse coverage: every prod vault constant must appear in the JSON,
+        // unless explicitly excluded. cyJOULE has been retired from the cyclo.site
+        // listing but its constant is kept for historical bytecode tests.
+        _assertProdConstantInJson(entries, PROD_FLARE_VAULT_CYSFLR);
+        _assertProdConstantInJson(entries, PROD_FLARE_VAULT_CYWETH);
+        _assertProdConstantInJson(entries, PROD_FLARE_VAULT_CYFXRP);
+        // PROD_FLARE_VAULT_CYJOULE — intentionally excluded from JSON.
+    }
+
+    function _assertProdConstantInJson(TokenEntry[] memory entries, address vault) internal pure {
+        for (uint256 i = 0; i < entries.length; i++) {
+            if (entries[i].vaultAddress == vault) return;
+        }
+        revert("prod vault constant missing from JSON");
     }
 }
