@@ -134,6 +134,12 @@ contract CycloSiteTokensProdArbitrumTest is Test {
         LibCycloSiteTokens.assertOnChainMatchesJson(vm, ARBITRUM_CHAIN_ID, "Arbitrum One");
 
         TokenEntry[] memory entries = LibCycloSiteTokens.loadAll(vm);
+        uint256 chainEntries = 0;
+        for (uint256 i = 0; i < entries.length; i++) {
+            if (entries[i].chainId == ARBITRUM_CHAIN_ID) chainEntries++;
+        }
+        require(chainEntries == 12, "expected exactly 12 Arbitrum entries in JSON");
+
         for (uint256 i = 0; i < entries.length; i++) {
             if (entries[i].chainId != ARBITRUM_CHAIN_ID) continue;
             TokenEntry memory entry = entries[i];

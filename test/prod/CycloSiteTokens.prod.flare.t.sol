@@ -88,6 +88,12 @@ contract CycloSiteTokensProdFlareTest is Test {
         LibCycloSiteTokens.assertOnChainMatchesJson(vm, FLARE_CHAIN_ID, "Flare");
 
         TokenEntry[] memory entries = LibCycloSiteTokens.loadAll(vm);
+        uint256 chainEntries = 0;
+        for (uint256 i = 0; i < entries.length; i++) {
+            if (entries[i].chainId == FLARE_CHAIN_ID) chainEntries++;
+        }
+        require(chainEntries == 3, "expected exactly 3 Flare entries in JSON");
+
         for (uint256 i = 0; i < entries.length; i++) {
             if (entries[i].chainId != FLARE_CHAIN_ID) continue;
             TokenEntry memory entry = entries[i];
