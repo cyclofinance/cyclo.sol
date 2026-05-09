@@ -5,6 +5,10 @@ pragma solidity =0.8.25;
 import {Vm} from "forge-std/Vm.sol";
 import {IERC20MetadataUpgradeable as IERC20Metadata} from
     "openzeppelin-contracts-upgradeable/contracts/token/ERC20/extensions/IERC20MetadataUpgradeable.sol";
+import {IERC165Upgradeable as IERC165} from
+    "openzeppelin-contracts-upgradeable/contracts/utils/introspection/IERC165Upgradeable.sol";
+import {IERC1155Upgradeable as IERC1155} from
+    "openzeppelin-contracts-upgradeable/contracts/token/ERC1155/IERC1155Upgradeable.sol";
 import {CycloVault} from "src/concrete/vault/CycloVault.sol";
 import {IReceiptV3} from "ethgild/interface/IReceiptV3.sol";
 import {PROD_FLARE_VAULT_CYSFLR} from "src/lib/LibCycloProdVault.sol";
@@ -40,6 +44,7 @@ library LibCycloSiteTokens {
     /// Asserts that for every entry on `expectedChainId`:
     ///   - the on-chain `block.chainid` matches `expectedChainId` (catches
     ///     mistakenly forking to the wrong chain)
+    ///   - no two entries share the same `vaultAddress` or `receiptAddress`
     ///   - the entry's `networkName` matches `expectedNetworkName`
     ///   - `vaultAddress` is non-zero and has bytecode
     ///   - the vault's on-chain `name()` matches `name`
@@ -48,6 +53,7 @@ library LibCycloSiteTokens {
     ///   - the vault's on-chain `symbol()` matches `symbol`
     ///   - the underlying's on-chain `symbol()` matches `underlyingSymbol`
     ///   - the vault's on-chain `asset()` matches the declared `underlyingAddress`
+    ///   - the receipt supports the ERC1155 interface
     ///   - `receiptAddress.manager()` points back at the vault (works for every
     ///     entry, including `cysFLR`)
     ///   - the vault's on-chain `receipt()` matches the declared `receiptAddress`,
@@ -67,6 +73,18 @@ library LibCycloSiteTokens {
             TokenEntry memory entry = entries[i];
             if (entry.chainId != expectedChainId) continue;
             verified++;
+
+            for (uint256 j = i + 1; j < entries.length; j++) {
+                if (entries[j].chainId != expectedChainId) continue;
+                require(
+                    entries[j].vaultAddress != entry.vaultAddress,
+                    string.concat("duplicate vaultAddress for ", entry.name)
+                );
+                require(
+                    entries[j].receiptAddress != entry.receiptAddress,
+                    string.concat("duplicate receiptAddress for ", entry.name)
+                );
+            }
 
             require(
                 keccak256(bytes(entry.networkName)) == keccak256(bytes(expectedNetworkName)),
@@ -108,6 +126,11 @@ library LibCycloSiteTokens {
 
             address actualAsset = address(CycloVault(payable(entry.vaultAddress)).asset());
             require(actualAsset == entry.underlyingAddress, string.concat("vault.asset() mismatch for ", entry.name));
+
+            require(
+                IERC165(entry.receiptAddress).supportsInterface(type(IERC1155).interfaceId),
+                string.concat("receipt does not support ERC1155 for ", entry.name)
+            );
 
             address receiptManager = IReceiptV3(entry.receiptAddress).manager();
             require(

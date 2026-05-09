@@ -5,26 +5,77 @@ pragma solidity =0.8.25;
 import {Test} from "forge-std/Test.sol";
 import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
 import {LibCycloSiteTokens, TokenEntry, FLARE_CHAIN_ID} from "test/lib/LibCycloSiteTokens.sol";
+import {CycloVault} from "src/concrete/vault/CycloVault.sol";
 import {
+    PROD_FLARE_VAULT_IMPLEMENTATION_CYSFLR,
+    PROD_FLARE_VAULT_IMPLEMENTATION_CYSFLR_CODEHASH,
+    PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1,
+    PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1_CODEHASH,
+    PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2,
+    PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH,
     PROD_FLARE_VAULT_CYSFLR,
     PROD_FLARE_VAULT_CYWETH,
     PROD_FLARE_VAULT_CYFXRP,
     PROD_FLARE_VAULT_CYJOULE
 } from "src/lib/LibCycloProdVault.sol";
+import {
+    PROD_FLARE_RECEIPT_IMPLEMENTATION_CYSFLR,
+    PROD_FLARE_RECEIPT_IMPLEMENTATION_CYSFLR_CODEHASH,
+    PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V1,
+    PROD_FLARE_CYCLO_RECEIPT_CODEHASH_V1,
+    PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V2,
+    PROD_FLARE_CYCLO_RECEIPT_CODEHASH_V2,
+    PROD_FLARE_RECEIPT_CYSFLR,
+    PROD_FLARE_RECEIPT_CYWETH,
+    PROD_FLARE_RECEIPT_CYFXRP
+} from "src/lib/LibCycloProdReceipt.sol";
+import {
+    PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2,
+    PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE,
+    PROD_FLARE_FTSO_V2_LTS_XRP_USD_FEED_ORACLE
+} from "src/lib/LibCycloProdOracle.sol";
 
 /// Reads `canonical/cyclo-site-tokens.json` and asserts every Flare entry's
-/// on-chain shape matches the JSON. Also pins each entry's `vaultAddress`
-/// to a known prod constant from `LibCycloProdVault.sol`, so a typo or
-/// stray address in the JSON fails loudly here.
+/// on-chain shape matches the JSON. Pins per-entry deployment details against
+/// the prod constants in `LibCycloProd*.sol`:
+///   - vaultAddress → expected vault impl + codehash (1167 proxy check)
+///   - vaultAddress → expected priceOracle
+///   - receiptAddress → expected receipt impl + codehash (1167 proxy check)
 contract CycloSiteTokensProdFlareTest is Test {
     mapping(address => bool) internal knownVaults;
+    mapping(address => address) internal expectedVaultImpl;
+    mapping(address => bytes32) internal expectedVaultCodehash;
+    mapping(address => address) internal expectedVaultOracle;
+    mapping(address => address) internal expectedReceiptImpl;
+    mapping(address => bytes32) internal expectedReceiptCodehash;
 
     function setUp() public {
         LibCycloTestProd.createSelectForkFlare(vm);
+
         knownVaults[PROD_FLARE_VAULT_CYSFLR] = true;
         knownVaults[PROD_FLARE_VAULT_CYWETH] = true;
         knownVaults[PROD_FLARE_VAULT_CYFXRP] = true;
         knownVaults[PROD_FLARE_VAULT_CYJOULE] = true;
+
+        expectedVaultImpl[PROD_FLARE_VAULT_CYSFLR] = PROD_FLARE_VAULT_IMPLEMENTATION_CYSFLR;
+        expectedVaultCodehash[PROD_FLARE_VAULT_CYSFLR] = PROD_FLARE_VAULT_IMPLEMENTATION_CYSFLR_CODEHASH;
+        expectedVaultImpl[PROD_FLARE_VAULT_CYWETH] = PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1;
+        expectedVaultCodehash[PROD_FLARE_VAULT_CYWETH] = PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1_CODEHASH;
+        expectedVaultImpl[PROD_FLARE_VAULT_CYFXRP] = PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2;
+        expectedVaultCodehash[PROD_FLARE_VAULT_CYFXRP] = PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH;
+        expectedVaultImpl[PROD_FLARE_VAULT_CYJOULE] = PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2;
+        expectedVaultCodehash[PROD_FLARE_VAULT_CYJOULE] = PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH;
+
+        expectedVaultOracle[PROD_FLARE_VAULT_CYSFLR] = PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2;
+        expectedVaultOracle[PROD_FLARE_VAULT_CYWETH] = PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE;
+        expectedVaultOracle[PROD_FLARE_VAULT_CYFXRP] = PROD_FLARE_FTSO_V2_LTS_XRP_USD_FEED_ORACLE;
+
+        expectedReceiptImpl[PROD_FLARE_RECEIPT_CYSFLR] = PROD_FLARE_RECEIPT_IMPLEMENTATION_CYSFLR;
+        expectedReceiptCodehash[PROD_FLARE_RECEIPT_CYSFLR] = PROD_FLARE_RECEIPT_IMPLEMENTATION_CYSFLR_CODEHASH;
+        expectedReceiptImpl[PROD_FLARE_RECEIPT_CYWETH] = PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V1;
+        expectedReceiptCodehash[PROD_FLARE_RECEIPT_CYWETH] = PROD_FLARE_CYCLO_RECEIPT_CODEHASH_V1;
+        expectedReceiptImpl[PROD_FLARE_RECEIPT_CYFXRP] = PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V2;
+        expectedReceiptCodehash[PROD_FLARE_RECEIPT_CYFXRP] = PROD_FLARE_CYCLO_RECEIPT_CODEHASH_V2;
     }
 
     function testCycloSiteTokensFlare() external view {
@@ -33,9 +84,30 @@ contract CycloSiteTokensProdFlareTest is Test {
         TokenEntry[] memory entries = LibCycloSiteTokens.loadAll(vm);
         for (uint256 i = 0; i < entries.length; i++) {
             if (entries[i].chainId != FLARE_CHAIN_ID) continue;
+            TokenEntry memory entry = entries[i];
+
             require(
-                knownVaults[entries[i].vaultAddress],
-                string.concat("JSON vaultAddress not a known Flare prod constant for ", entries[i].name)
+                knownVaults[entry.vaultAddress],
+                string.concat("JSON vaultAddress not a known Flare prod constant for ", entry.name)
+            );
+
+            LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
+                entry.vaultAddress, expectedVaultImpl[entry.vaultAddress], expectedVaultCodehash[entry.vaultAddress]
+            );
+
+            require(
+                address(CycloVault(payable(entry.vaultAddress)).priceOracle()) == expectedVaultOracle[entry.vaultAddress],
+                string.concat("priceOracle mismatch for ", entry.name)
+            );
+
+            require(
+                expectedReceiptImpl[entry.receiptAddress] != address(0),
+                string.concat("receiptAddress not a known Flare prod constant for ", entry.name)
+            );
+            LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
+                entry.receiptAddress,
+                expectedReceiptImpl[entry.receiptAddress],
+                expectedReceiptCodehash[entry.receiptAddress]
             );
         }
     }
