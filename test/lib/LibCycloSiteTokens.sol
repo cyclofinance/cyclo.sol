@@ -6,6 +6,7 @@ import {Vm} from "forge-std/Vm.sol";
 import {IERC20MetadataUpgradeable as IERC20Metadata} from
     "openzeppelin-contracts-upgradeable/contracts/token/ERC20/extensions/IERC20MetadataUpgradeable.sol";
 import {CycloVault} from "src/concrete/vault/CycloVault.sol";
+import {PROD_FLARE_VAULT_CYSFLR} from "src/lib/LibCycloProdVault.sol";
 
 uint256 constant FLARE_CHAIN_ID = 14;
 uint256 constant ARBITRUM_CHAIN_ID = 42161;
@@ -46,6 +47,9 @@ library LibCycloSiteTokens {
     ///   - the vault's on-chain `symbol()` matches `symbol`
     ///   - the underlying's on-chain `symbol()` matches `underlyingSymbol`
     ///   - the vault's on-chain `asset()` matches the declared `underlyingAddress`
+    ///   - the vault's on-chain `receipt()` matches the declared `receiptAddress`,
+    ///     except for `cysFLR` whose older impl does not expose the getter
+    ///     (tracked at cyclo.sol#43)
     /// Reverts with the entry's `name` in the failure message so the operator
     /// can locate the drift quickly.
     function assertOnChainMatchesJson(Vm vm, uint256 expectedChainId, string memory expectedNetworkName)
@@ -101,6 +105,14 @@ library LibCycloSiteTokens {
 
             address actualAsset = address(CycloVault(payable(entry.vaultAddress)).asset());
             require(actualAsset == entry.underlyingAddress, string.concat("vault.asset() mismatch for ", entry.name));
+
+            if (entry.vaultAddress != PROD_FLARE_VAULT_CYSFLR) {
+                address actualReceipt = address(CycloVault(payable(entry.vaultAddress)).receipt());
+                require(
+                    actualReceipt == entry.receiptAddress,
+                    string.concat("vault.receipt() mismatch for ", entry.name)
+                );
+            }
         }
         require(verified > 0, "no JSON entries matched the requested chainId");
     }
