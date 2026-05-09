@@ -294,18 +294,18 @@ contract CycloVaultProdArbitrumTest is CycloVaultTest {
     /// try/catch and returns id=0, then `_calculateMint` divides by zero. The
     /// underlying cause is pinned by calling the oracle directly and asserting
     /// `StalePrice()` (Pyth selector 0x19abf40e).
-    function _checkMintForVault(address vault_, address oracle_, uint256 shares) internal {
-        CycloVault vault = CycloVault(payable(vault_));
+    function _checkMintForVault(address vaultAddress, address oracleAddress, uint256 shares) internal {
+        CycloVault vault = CycloVault(payable(vaultAddress));
         try vault.previewMint(shares, 0) returns (uint256 expectedAssets) {
             deal(vault.asset(), DEFAULT_ALICE, expectedAssets);
-            LibCycloTestProd.checkMint(vm, vault_, shares, expectedAssets);
+            LibCycloTestProd.checkMint(vm, vaultAddress, shares, expectedAssets);
         } catch (bytes memory err) {
             require(
                 keccak256(err) == keccak256(abi.encodeWithSignature("Panic(uint256)", uint256(0x12))),
                 "previewMint reverted with something other than divide-by-zero"
             );
             vm.expectRevert(abi.encodeWithSignature("StalePrice()"));
-            IPriceOracleV2(payable(oracle_)).price();
+            IPriceOracleV2(payable(oracleAddress)).price();
         }
     }
 
