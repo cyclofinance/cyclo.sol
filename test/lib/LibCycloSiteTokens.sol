@@ -6,6 +6,7 @@ import {Vm} from "forge-std/Vm.sol";
 import {IERC20MetadataUpgradeable as IERC20Metadata} from
     "openzeppelin-contracts-upgradeable/contracts/token/ERC20/extensions/IERC20MetadataUpgradeable.sol";
 import {CycloVault} from "src/concrete/vault/CycloVault.sol";
+import {IReceiptV3} from "ethgild/interface/IReceiptV3.sol";
 import {PROD_FLARE_VAULT_CYSFLR} from "src/lib/LibCycloProdVault.sol";
 
 uint256 constant FLARE_CHAIN_ID = 14;
@@ -47,6 +48,8 @@ library LibCycloSiteTokens {
     ///   - the vault's on-chain `symbol()` matches `symbol`
     ///   - the underlying's on-chain `symbol()` matches `underlyingSymbol`
     ///   - the vault's on-chain `asset()` matches the declared `underlyingAddress`
+    ///   - `receiptAddress.manager()` points back at the vault (works for every
+    ///     entry, including `cysFLR`)
     ///   - the vault's on-chain `receipt()` matches the declared `receiptAddress`,
     ///     except for `cysFLR` whose older impl does not expose the getter
     ///     (tracked at cyclo.sol#43)
@@ -105,6 +108,12 @@ library LibCycloSiteTokens {
 
             address actualAsset = address(CycloVault(payable(entry.vaultAddress)).asset());
             require(actualAsset == entry.underlyingAddress, string.concat("vault.asset() mismatch for ", entry.name));
+
+            address receiptManager = IReceiptV3(entry.receiptAddress).manager();
+            require(
+                receiptManager == entry.vaultAddress,
+                string.concat("receipt.manager() does not point at vault for ", entry.name)
+            );
 
             if (entry.vaultAddress != PROD_FLARE_VAULT_CYSFLR) {
                 address actualReceipt = address(CycloVault(payable(entry.vaultAddress)).receipt());
