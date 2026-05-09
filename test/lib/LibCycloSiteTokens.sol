@@ -53,6 +53,9 @@ library LibCycloSiteTokens {
     ///   - the underlying's on-chain `decimals()` matches `underlyingDecimals`
     ///   - the vault's on-chain `symbol()` matches `symbol`
     ///   - the underlying's on-chain `symbol()` matches `underlyingSymbol`
+    ///   - `symbol` starts with `"cy" + underlyingSymbol` (the on-chain
+    ///     `vault.symbol()` formula already enforces this transitively;
+    ///     the explicit check guards the JSON-internal pairing)
     ///   - the vault's on-chain `asset()` matches the declared `underlyingAddress`
     ///   - the receipt supports the ERC1155 interface
     ///   - `receiptAddress.manager()` points back at the vault (works for every
@@ -133,6 +136,19 @@ library LibCycloSiteTokens {
                 keccak256(bytes(actualUnderlyingSymbol)) == keccak256(bytes(entry.underlyingSymbol)),
                 string.concat("underlying symbol mismatch for ", entry.name)
             );
+
+            bytes memory symbolBytes = bytes(entry.symbol);
+            bytes memory expectedPrefix = bytes(string.concat("cy", entry.underlyingSymbol));
+            require(
+                symbolBytes.length >= expectedPrefix.length,
+                string.concat("symbol shorter than 'cy<underlyingSymbol>' for ", entry.name)
+            );
+            for (uint256 b = 0; b < expectedPrefix.length; b++) {
+                require(
+                    symbolBytes[b] == expectedPrefix[b],
+                    string.concat("symbol does not start with 'cy<underlyingSymbol>' for ", entry.name)
+                );
+            }
 
             string memory actualVaultName = IERC20Metadata(entry.vaultAddress).name();
             require(
