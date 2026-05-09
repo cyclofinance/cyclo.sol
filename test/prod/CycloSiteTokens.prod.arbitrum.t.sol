@@ -61,6 +61,7 @@ import {
 ///   - receiptAddress → expected receipt impl + codehash (1167 proxy check)
 contract CycloSiteTokensProdArbitrumTest is Test {
     mapping(address => bool) internal knownVaults;
+    mapping(address => bool) internal expectedActive;
     mapping(address => address) internal expectedVaultImpl;
     mapping(address => bytes32) internal expectedVaultCodehash;
     mapping(address => address) internal expectedVaultOracle;
@@ -90,6 +91,10 @@ contract CycloSiteTokensProdArbitrumTest is Test {
             expectedVaultImpl[vaults[i]] = PROD_ARBITRUM_CYCLO_VAULT_IMPLEMENTATION_V2;
             expectedVaultCodehash[vaults[i]] = PROD_ARBITRUM_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH;
         }
+
+        expectedActive[PROD_ARBITRUM_VAULT_CYWETH_PYTH] = true;
+        expectedActive[PROD_ARBITRUM_VAULT_CYWBTC_PYTH] = true;
+        expectedActive[PROD_ARBITRUM_VAULT_CYARB_PYTH] = true;
 
         expectedVaultOracle[PROD_ARBITRUM_VAULT_CYWETH_PYTH] = PROD_PYTH_ORACLE_WETH_USD_ARBITRUM;
         expectedVaultOracle[PROD_ARBITRUM_VAULT_CYWSTETH_PYTH] = PROD_PYTH_ORACLE_WSTETH_USD_ARBITRUM;
@@ -136,6 +141,11 @@ contract CycloSiteTokensProdArbitrumTest is Test {
             require(
                 knownVaults[entry.vaultAddress],
                 string.concat("JSON vaultAddress not a known Arbitrum prod constant for ", entry.name)
+            );
+
+            require(
+                entry.active == expectedActive[entry.vaultAddress],
+                string.concat("active flag mismatch for ", entry.name)
             );
 
             LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(

@@ -43,6 +43,7 @@ import {
 ///   - receiptAddress → expected receipt impl + codehash (1167 proxy check)
 contract CycloSiteTokensProdFlareTest is Test {
     mapping(address => bool) internal knownVaults;
+    mapping(address => bool) internal expectedActive;
     mapping(address => address) internal expectedVaultImpl;
     mapping(address => bytes32) internal expectedVaultCodehash;
     mapping(address => address) internal expectedVaultOracle;
@@ -56,6 +57,10 @@ contract CycloSiteTokensProdFlareTest is Test {
         knownVaults[PROD_FLARE_VAULT_CYWETH] = true;
         knownVaults[PROD_FLARE_VAULT_CYFXRP] = true;
         knownVaults[PROD_FLARE_VAULT_CYJOULE] = true;
+
+        expectedActive[PROD_FLARE_VAULT_CYSFLR] = true;
+        expectedActive[PROD_FLARE_VAULT_CYWETH] = true;
+        expectedActive[PROD_FLARE_VAULT_CYFXRP] = true;
 
         expectedVaultImpl[PROD_FLARE_VAULT_CYSFLR] = PROD_FLARE_VAULT_IMPLEMENTATION_CYSFLR;
         expectedVaultCodehash[PROD_FLARE_VAULT_CYSFLR] = PROD_FLARE_VAULT_IMPLEMENTATION_CYSFLR_CODEHASH;
@@ -89,6 +94,11 @@ contract CycloSiteTokensProdFlareTest is Test {
             require(
                 knownVaults[entry.vaultAddress],
                 string.concat("JSON vaultAddress not a known Flare prod constant for ", entry.name)
+            );
+
+            require(
+                entry.active == expectedActive[entry.vaultAddress],
+                string.concat("active flag mismatch for ", entry.name)
             );
 
             LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
