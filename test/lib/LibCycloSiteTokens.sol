@@ -46,7 +46,8 @@ library LibCycloSiteTokens {
     ///     mistakenly forking to the wrong chain)
     ///   - no two entries share the same `vaultAddress` or `receiptAddress`
     ///   - the entry's `networkName` matches `expectedNetworkName`
-    ///   - `vaultAddress` is non-zero and has bytecode
+    ///   - `vaultAddress`, `underlyingAddress` and `receiptAddress` are each
+    ///     non-zero and have bytecode
     ///   - the vault's on-chain `name()` matches `name`
     ///   - the vault's on-chain `decimals()` matches the JSON's `decimals`
     ///   - the underlying's on-chain `decimals()` matches `underlyingDecimals`
@@ -95,6 +96,21 @@ library LibCycloSiteTokens {
             require(
                 entry.vaultAddress.code.length > 0,
                 string.concat("vaultAddress has no bytecode for ", entry.name)
+            );
+
+            require(
+                entry.underlyingAddress != address(0),
+                string.concat("underlyingAddress is zero for ", entry.name)
+            );
+            require(
+                entry.underlyingAddress.code.length > 0,
+                string.concat("underlyingAddress has no bytecode for ", entry.name)
+            );
+
+            require(entry.receiptAddress != address(0), string.concat("receiptAddress is zero for ", entry.name));
+            require(
+                entry.receiptAddress.code.length > 0,
+                string.concat("receiptAddress has no bytecode for ", entry.name)
             );
 
             uint256 actualVaultDecimals = uint256(IERC20Metadata(entry.vaultAddress).decimals());
