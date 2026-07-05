@@ -113,7 +113,8 @@ contract CycloSiteTokensProdFlareTest is Test {
             );
 
             require(
-                address(CycloVault(payable(entry.vaultAddress)).priceOracle()) == expectedVaultOracle[entry.vaultAddress],
+                address(CycloVault(payable(entry.vaultAddress)).priceOracle())
+                    == expectedVaultOracle[entry.vaultAddress],
                 string.concat("priceOracle mismatch for ", entry.name)
             );
 
