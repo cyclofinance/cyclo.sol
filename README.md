@@ -17,6 +17,19 @@ as git submodules here.
 
 See the Cyclo website, and rep dependencies for in depth documentation.
 
+## Audits
+
+External audit reports live under `audit/<vendor>/`, named
+`cyclo.sol.<audited commit>.<month>-<year>.pdf` so each report names the exact
+commit of this repo that was reviewed.
+
+- `audit/protofire/cyclo.sol.2ee2b15fa8daa81e6eb432822f570f363c111415.nov-2024.pdf`
+  — Protofire, report version 1.0 dated November 2024, reviewed through commit
+  `2ee2b15fa8daa81e6eb432822f570f363c111415` (the report's third update).
+- `audit/protofire/cyclo.sol.63d11553006bf24421c033b19f6dab0ba1bc4573.dec-2025.pdf`
+  — Protofire, December 2025, reviewed at commit
+  `63d11553006bf24421c033b19f6dab0ba1bc4573`.
+
 ## Immutability
 
 Note that Cyclo once deployed has no admin keys and so is immutable onchain.
