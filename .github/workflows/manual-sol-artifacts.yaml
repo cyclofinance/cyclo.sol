@@ -11,10 +11,10 @@ on:
           - cyclo-receipt
           - cyclo-vault
           - sceptre-staked-flr-oracle
-          - ftso-v2-lts-feed-oracle-flr-usd
-          - ftso-v2-lts-feed-oracle-eth-usd
-          - ftso-v2-lts-feed-oracle-xrp-usd
-          - ftso-v2-lts-feed-oracle-joule-usd
+          - ftso-lts-feed-oracle-flr-usd
+          - ftso-lts-feed-oracle-eth-usd
+          - ftso-lts-feed-oracle-xrp-usd
+          - ftso-lts-feed-oracle-joule-usd
           - pyth-oracle-weth-usd
           - pyth-oracle-wsteth-usd
           - pyth-oracle-wbtc-usd

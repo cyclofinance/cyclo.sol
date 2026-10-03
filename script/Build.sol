@@ -28,36 +28,56 @@ struct GeneratedContract {
 /// `src/generated/<tag>/` first.
 contract Build is BuildScript, CycloDeploySuites {
     function generatedContracts() internal pure returns (GeneratedContract[] memory) {
-        GeneratedContract[] memory contracts = new GeneratedContract[](20);
-        contracts[0] = GeneratedContract("CloneFactory", "CLONE_FACTORY", cloneFactoryCandidate());
-        contracts[1] = GeneratedContract("CycloReceipt", "CYCLO_RECEIPT", cycloReceiptCandidate());
-        contracts[2] = GeneratedContract("CycloVault", "CYCLO_VAULT", cycloVaultCandidate());
-        contracts[3] =
-            GeneratedContract("SceptreStakedFlrOracle", "SCEPTRE_STAKED_FLR_ORACLE", sceptreStakedFlrOracleCandidate());
-        contracts[4] = GeneratedContract(
-            "FtsoV2LTSFeedOracleFlrUsd", "FTSO_V2_LTS_FEED_ORACLE_FLR_USD", ftsoV2LTSFeedOracleFlrUsdCandidate()
-        );
-        contracts[5] = GeneratedContract(
-            "FtsoV2LTSFeedOracleEthUsd", "FTSO_V2_LTS_FEED_ORACLE_ETH_USD", ftsoV2LTSFeedOracleEthUsdCandidate()
-        );
-        contracts[6] = GeneratedContract(
-            "FtsoV2LTSFeedOracleXrpUsd", "FTSO_V2_LTS_FEED_ORACLE_XRP_USD", ftsoV2LTSFeedOracleXrpUsdCandidate()
-        );
-        contracts[7] = GeneratedContract(
-            "FtsoV2LTSFeedOracleJouleUsd", "FTSO_V2_LTS_FEED_ORACLE_JOULE_USD", ftsoV2LTSFeedOracleJouleUsdCandidate()
-        );
-        contracts[8] = GeneratedContract("PythOracleWethUsd", "PYTH_ORACLE_WETH_USD", pythOracleWethUsdCandidate());
-        contracts[9] = GeneratedContract("PythOracleWstethUsd", "PYTH_ORACLE_WSTETH_USD", pythOracleWstethUsdCandidate());
-        contracts[10] = GeneratedContract("PythOracleWbtcUsd", "PYTH_ORACLE_WBTC_USD", pythOracleWbtcUsdCandidate());
-        contracts[11] = GeneratedContract("PythOracleCbbtcUsd", "PYTH_ORACLE_CBBTC_USD", pythOracleCbbtcUsdCandidate());
-        contracts[12] = GeneratedContract("PythOracleLinkUsd", "PYTH_ORACLE_LINK_USD", pythOracleLinkUsdCandidate());
-        contracts[13] = GeneratedContract("PythOracleDotUsd", "PYTH_ORACLE_DOT_USD", pythOracleDotUsdCandidate());
-        contracts[14] = GeneratedContract("PythOracleUniUsd", "PYTH_ORACLE_UNI_USD", pythOracleUniUsdCandidate());
-        contracts[15] = GeneratedContract("PythOraclePepeUsd", "PYTH_ORACLE_PEPE_USD", pythOraclePepeUsdCandidate());
-        contracts[16] = GeneratedContract("PythOraclePythUsd", "PYTH_ORACLE_PYTH_USD", pythOraclePythUsdCandidate());
-        contracts[17] = GeneratedContract("PythOracleEnaUsd", "PYTH_ORACLE_ENA_USD", pythOracleEnaUsdCandidate());
-        contracts[18] = GeneratedContract("PythOracleArbUsd", "PYTH_ORACLE_ARB_USD", pythOracleArbUsdCandidate());
-        contracts[19] = GeneratedContract("PythOracleXautUsd", "PYTH_ORACLE_XAUT_USD", pythOracleXautUsdCandidate());
+        string[20] memory names = [
+            "CloneFactory",
+            "CycloReceipt",
+            "CycloVault",
+            "SceptreStakedFlrOracle",
+            "FtsoV2LTSFeedOracleFlrUsd",
+            "FtsoV2LTSFeedOracleEthUsd",
+            "FtsoV2LTSFeedOracleXrpUsd",
+            "FtsoV2LTSFeedOracleJouleUsd",
+            "PythOracleWethUsd",
+            "PythOracleWstethUsd",
+            "PythOracleWbtcUsd",
+            "PythOracleCbbtcUsd",
+            "PythOracleLinkUsd",
+            "PythOracleDotUsd",
+            "PythOracleUniUsd",
+            "PythOraclePepeUsd",
+            "PythOraclePythUsd",
+            "PythOracleEnaUsd",
+            "PythOracleArbUsd",
+            "PythOracleXautUsd"
+        ];
+        string[20] memory prefixes = [
+            "CLONE_FACTORY",
+            "CYCLO_RECEIPT",
+            "CYCLO_VAULT",
+            "SCEPTRE_STAKED_FLR_ORACLE",
+            "FTSO_V2_LTS_FEED_ORACLE_FLR_USD",
+            "FTSO_V2_LTS_FEED_ORACLE_ETH_USD",
+            "FTSO_V2_LTS_FEED_ORACLE_XRP_USD",
+            "FTSO_V2_LTS_FEED_ORACLE_JOULE_USD",
+            "PYTH_ORACLE_WETH_USD",
+            "PYTH_ORACLE_WSTETH_USD",
+            "PYTH_ORACLE_WBTC_USD",
+            "PYTH_ORACLE_CBBTC_USD",
+            "PYTH_ORACLE_LINK_USD",
+            "PYTH_ORACLE_DOT_USD",
+            "PYTH_ORACLE_UNI_USD",
+            "PYTH_ORACLE_PEPE_USD",
+            "PYTH_ORACLE_PYTH_USD",
+            "PYTH_ORACLE_ENA_USD",
+            "PYTH_ORACLE_ARB_USD",
+            "PYTH_ORACLE_XAUT_USD"
+        ];
+        // Same order as `candidateSuites()`, which is the one list of candidates.
+        DeployCandidate[] memory candidates = candidateSuites();
+        GeneratedContract[] memory contracts = new GeneratedContract[](candidates.length);
+        for (uint256 i = 0; i < candidates.length; i++) {
+            contracts[i] = GeneratedContract({contractName: names[i], constantPrefix: prefixes[i], candidate: candidates[i]});
+        }
         return contracts;
     }
 

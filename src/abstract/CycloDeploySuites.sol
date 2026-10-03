@@ -274,7 +274,7 @@ abstract contract CycloDeploySuites is RainDeploySuitesBase {
 
     function ftsoV2LTSFeedOracleFlrUsdCandidate() internal pure returns (DeployCandidate memory) {
         return candidate(
-            "ftso-v2-lts-feed-oracle-flr-usd",
+            "ftso-lts-feed-oracle-flr-usd",
             FTSO_V2_LTS_FEED_ORACLE_FLR_USD_CREATION_CODE_CANDIDATE,
             LibFtsoV2LTSFeedOracleFlrUsdDeploy.FTSO_V2_LTS_FEED_ORACLE_FLR_USD_DEPLOYED_ADDRESS,
             LibFtsoV2LTSFeedOracleFlrUsdDeploy.FTSO_V2_LTS_FEED_ORACLE_FLR_USD_DEPLOYED_CODEHASH,
@@ -287,7 +287,7 @@ abstract contract CycloDeploySuites is RainDeploySuitesBase {
 
     function ftsoV2LTSFeedOracleEthUsdCandidate() internal pure returns (DeployCandidate memory) {
         return candidate(
-            "ftso-v2-lts-feed-oracle-eth-usd",
+            "ftso-lts-feed-oracle-eth-usd",
             FTSO_V2_LTS_FEED_ORACLE_ETH_USD_CREATION_CODE_CANDIDATE,
             LibFtsoV2LTSFeedOracleEthUsdDeploy.FTSO_V2_LTS_FEED_ORACLE_ETH_USD_DEPLOYED_ADDRESS,
             LibFtsoV2LTSFeedOracleEthUsdDeploy.FTSO_V2_LTS_FEED_ORACLE_ETH_USD_DEPLOYED_CODEHASH,
@@ -300,7 +300,7 @@ abstract contract CycloDeploySuites is RainDeploySuitesBase {
 
     function ftsoV2LTSFeedOracleXrpUsdCandidate() internal pure returns (DeployCandidate memory) {
         return candidate(
-            "ftso-v2-lts-feed-oracle-xrp-usd",
+            "ftso-lts-feed-oracle-xrp-usd",
             FTSO_V2_LTS_FEED_ORACLE_XRP_USD_CREATION_CODE_CANDIDATE,
             LibFtsoV2LTSFeedOracleXrpUsdDeploy.FTSO_V2_LTS_FEED_ORACLE_XRP_USD_DEPLOYED_ADDRESS,
             LibFtsoV2LTSFeedOracleXrpUsdDeploy.FTSO_V2_LTS_FEED_ORACLE_XRP_USD_DEPLOYED_CODEHASH,
@@ -313,7 +313,7 @@ abstract contract CycloDeploySuites is RainDeploySuitesBase {
 
     function ftsoV2LTSFeedOracleJouleUsdCandidate() internal pure returns (DeployCandidate memory) {
         return candidate(
-            "ftso-v2-lts-feed-oracle-joule-usd",
+            "ftso-lts-feed-oracle-joule-usd",
             FTSO_V2_LTS_FEED_ORACLE_JOULE_USD_CREATION_CODE_CANDIDATE,
             LibFtsoV2LTSFeedOracleJouleUsdDeploy.FTSO_V2_LTS_FEED_ORACLE_JOULE_USD_DEPLOYED_ADDRESS,
             LibFtsoV2LTSFeedOracleJouleUsdDeploy.FTSO_V2_LTS_FEED_ORACLE_JOULE_USD_DEPLOYED_CODEHASH,
