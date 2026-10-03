@@ -13,7 +13,9 @@ import {CycloVault} from "../concrete/vault/CycloVault.sol";
 import {SceptreStakedFlrOracle} from "ethgild/concrete/oracle/SceptreStakedFlrOracle.sol";
 import {FtsoV2LTSFeedOracle, FtsoV2LTSFeedOracleConfig} from "ethgild/concrete/oracle/FtsoV2LTSFeedOracle.sol";
 import {PythOracle, PythOracleConfig} from "ethgild/concrete/oracle/PythOracle.sol";
-import {FLR_USD_FEED_ID, ETH_USD_FEED_ID, XRP_USD_FEED_ID, JOULE_USD_FEED_ID} from "rain.flare/lib/lts/LibFtsoV2LTS.sol";
+import {
+    FLR_USD_FEED_ID, ETH_USD_FEED_ID, XRP_USD_FEED_ID, JOULE_USD_FEED_ID
+} from "rain.flare/lib/lts/LibFtsoV2LTS.sol";
 import {LibPyth} from "rain.pyth/lib/pyth/LibPyth.sol";
 import {PROD_ORACLE_DEFAULT_STALE_AFTER} from "../lib/LibCycloProdOracle.sol";
 import {LibCloneFactoryDeploy} from "../lib/LibCloneFactoryDeploy.sol";

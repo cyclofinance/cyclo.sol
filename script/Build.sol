@@ -76,7 +76,8 @@ contract Build is BuildScript, CycloDeploySuites {
         DeployCandidate[] memory candidates = candidateSuites();
         GeneratedContract[] memory contracts = new GeneratedContract[](candidates.length);
         for (uint256 i = 0; i < candidates.length; i++) {
-            contracts[i] = GeneratedContract({contractName: names[i], constantPrefix: prefixes[i], candidate: candidates[i]});
+            contracts[i] =
+                GeneratedContract({contractName: names[i], constantPrefix: prefixes[i], candidate: candidates[i]});
         }
         return contracts;
     }
@@ -91,24 +92,26 @@ contract Build is BuildScript, CycloDeploySuites {
         return names;
     }
 
+    /// One contract's alias lib and released-suites lib. Its own frame, so the
+    /// loop below stays within the stack.
+    function writeLibs(GeneratedContract memory generated) internal {
+        LibRainDeploySnapshot.writeAliasLib(
+            vm,
+            LibRainDeploySnapshot.LIB_DIR,
+            generated.contractName,
+            generated.constantPrefix,
+            LibRainDeploySnapshot.CANDIDATE
+        );
+        LibRainDeploySnapshot.writeReleasedSuitesLib(
+            vm, LibRainDeploySnapshot.LIB_DIR, recordRoot(), generated.contractName, generated.candidate.snapshot
+        );
+    }
+
     /// @inheritdoc BuildScript
     function regenerateLibs() internal override {
         GeneratedContract[] memory contracts = generatedContracts();
         for (uint256 i = 0; i < contracts.length; i++) {
-            LibRainDeploySnapshot.writeAliasLib(
-                vm,
-                LibRainDeploySnapshot.LIB_DIR,
-                contracts[i].contractName,
-                contracts[i].constantPrefix,
-                LibRainDeploySnapshot.CANDIDATE
-            );
-            LibRainDeploySnapshot.writeReleasedSuitesLib(
-                vm,
-                LibRainDeploySnapshot.LIB_DIR,
-                recordRoot(),
-                contracts[i].contractName,
-                contracts[i].candidate.snapshot
-            );
+            writeLibs(contracts[i]);
         }
         LibRainDeploySnapshot.writeReleasedSuitesAggregate(vm, LibRainDeploySnapshot.LIB_DIR, snapshotContractNames());
     }

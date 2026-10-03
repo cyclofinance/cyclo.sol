@@ -13,7 +13,9 @@ import {ICloneableFactoryV2} from "rain.factory/interface/ICloneableFactoryV2.so
 import {SceptreStakedFlrOracle} from "ethgild/concrete/oracle/SceptreStakedFlrOracle.sol";
 import {FtsoV2LTSFeedOracle, FtsoV2LTSFeedOracleConfig} from "ethgild/concrete/oracle/FtsoV2LTSFeedOracle.sol";
 import {PythOracle, PythOracleConfig} from "ethgild/concrete/oracle/PythOracle.sol";
-import {FLR_USD_FEED_ID, ETH_USD_FEED_ID, XRP_USD_FEED_ID, JOULE_USD_FEED_ID} from "rain.flare/lib/lts/LibFtsoV2LTS.sol";
+import {
+    FLR_USD_FEED_ID, ETH_USD_FEED_ID, XRP_USD_FEED_ID, JOULE_USD_FEED_ID
+} from "rain.flare/lib/lts/LibFtsoV2LTS.sol";
 import {LibPyth} from "rain.pyth/lib/pyth/LibPyth.sol";
 import {
     PROD_FLARE_CLONE_FACTORY_ADDRESS_V1,

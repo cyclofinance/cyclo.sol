@@ -1,0 +1,13 @@
+// SPDX-License-Identifier: LicenseRef-DCL-1.0
+// SPDX-FileCopyrightText: Copyright (c) 2020 Rain Open Source Software Ltd
+pragma solidity ^0.8.25;
+
+import {
+    DEPLOYED_ADDRESS as SCEPTRE_STAKED_FLR_ORACLE_ADDR,
+    BYTECODE_HASH as SCEPTRE_STAKED_FLR_ORACLE_HASH
+} from "../generated/candidate/SceptreStakedFlrOracle.sol";
+
+library LibSceptreStakedFlrOracleDeploy {
+    address constant SCEPTRE_STAKED_FLR_ORACLE_DEPLOYED_ADDRESS = SCEPTRE_STAKED_FLR_ORACLE_ADDR;
+    bytes32 constant SCEPTRE_STAKED_FLR_ORACLE_DEPLOYED_CODEHASH = SCEPTRE_STAKED_FLR_ORACLE_HASH;
+}
