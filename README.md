@@ -13,7 +13,7 @@ It is a standalone repo so that it can easily serve as a snapshot for audit and
 production deployment of Cyclo that won't get buried in git history.
 
 The relevant dependencies are IN SCOPE of the audit, as at the commits included
-as git submodules here.
+vendored under `lib/` here (the files the deployed bytecode compiles from).
 
 See the Cyclo website, and rep dependencies for in depth documentation.
 

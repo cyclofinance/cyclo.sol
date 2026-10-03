@@ -58,11 +58,15 @@ import {
 /// them. A pin this cannot reproduce is a pin the sources no longer describe.
 contract LibCycloProdReproductionTest is Test {
     function testReproduceCloneFactory() external {
-        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(new CloneFactory()), PROD_FLARE_CLONE_FACTORY_CODEHASH_V1);
+        LibCycloTestProd.checkSolcOnlyCBORTrimmedBytecodeHash(
+            address(new CloneFactory()), PROD_FLARE_CLONE_FACTORY_CODEHASH_V1
+        );
     }
 
     function testReproduceCycloReceipt() external {
-        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(new CycloReceipt()), PROD_FLARE_CYCLO_RECEIPT_CODEHASH_V2);
+        LibCycloTestProd.checkSolcOnlyCBORTrimmedBytecodeHash(
+            address(new CycloReceipt()), PROD_FLARE_CYCLO_RECEIPT_CODEHASH_V2
+        );
     }
 
     function testReproduceCycloVaultFlare() external {
@@ -72,7 +76,9 @@ contract LibCycloProdReproductionTest is Test {
                 receiptImplementation: IReceiptV3(PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V2)
             })
         );
-        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(vault), PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH);
+        LibCycloTestProd.checkSolcOnlyCBORTrimmedBytecodeHash(
+            address(vault), PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH
+        );
     }
 
     function testReproduceCycloVaultArbitrum() external {
@@ -82,13 +88,13 @@ contract LibCycloProdReproductionTest is Test {
                 receiptImplementation: IReceiptV3(PROD_ARBITRUM_CYCLO_RECEIPT_IMPLEMENTATION_V2)
             })
         );
-        LibCycloTestProd.checkCBORTrimmedBytecodeHash(
+        LibCycloTestProd.checkSolcOnlyCBORTrimmedBytecodeHash(
             address(vault), PROD_ARBITRUM_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH
         );
     }
 
     function testReproduceSceptreStakedFlrOracle() external {
-        LibCycloTestProd.checkCBORTrimmedBytecodeHash(
+        LibCycloTestProd.checkSolcOnlyCBORTrimmedBytecodeHash(
             address(new SceptreStakedFlrOracle()), PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE_CODEHASH
         );
     }
@@ -97,7 +103,7 @@ contract LibCycloProdReproductionTest is Test {
         FtsoV2LTSFeedOracle oracle = new FtsoV2LTSFeedOracle(
             FtsoV2LTSFeedOracleConfig({feedId: feedId, staleAfter: PROD_ORACLE_DEFAULT_STALE_AFTER})
         );
-        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(oracle), codehash);
+        LibCycloTestProd.checkSolcOnlyCBORTrimmedBytecodeHash(address(oracle), codehash);
     }
 
     function testReproduceFtsoV2LTSFeedOracleFlrUsd() external {
@@ -124,7 +130,7 @@ contract LibCycloProdReproductionTest is Test {
                 pythContract: LibPyth.PRICE_FEED_CONTRACT_ARBITRUM
             })
         );
-        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(oracle), codehash);
+        LibCycloTestProd.checkSolcOnlyCBORTrimmedBytecodeHash(address(oracle), codehash);
     }
 
     function testReproducePythOracles() external {

@@ -29,17 +29,35 @@ library LibCycloTestProd {
         vm.createSelectFork(vm.envString("RPC_URL_ARBITRUM_FORK"), PROD_TEST_BLOCK_NUMBER_ARBITRUM);
     }
 
+    /// Same comparison for code this repo compiles itself: `bytecode_hash =
+    /// "none"` leaves a 12-byte solc-only appendix in place of the 53-byte one
+    /// the deployments carry, so the trim is 12 bytes.
     //forge-lint: disable-next-line(mixed-case-function)
-    function checkCBORTrimmedBytecodeHash(address account, bytes32 expected) internal view {
+    function checkSolcOnlyCBORTrimmedBytecodeHash(address account, bytes32 expected) internal view {
         bytes memory bytecode = account.code;
-        bool didTrim = LibExtrospectBytecode.trimSolidityCBORMetadata(bytecode);
-        require(didTrim, "metadata not trimmed");
+        uint256 length = bytecode.length;
+        require(length >= 12 && bytecode[length - 12] == 0xa1 && bytecode[length - 1] == 0x0a, "metadata not trimmed");
+        assembly ("memory-safe") {
+            mstore(bytecode, sub(length, 12))
+        }
+        checkBytecodeHash(bytecode, expected);
+    }
+
+    function checkBytecodeHash(bytes memory bytecode, bytes32 expected) internal pure {
         bytes32 actual = keccak256(bytecode);
         if (expected != actual) {
             console2.logBytes32(expected);
             console2.logBytes32(actual);
             revert("bytecode hash mismatch");
         }
+    }
+
+    //forge-lint: disable-next-line(mixed-case-function)
+    function checkCBORTrimmedBytecodeHash(address account, bytes32 expected) internal view {
+        bytes memory bytecode = account.code;
+        bool didTrim = LibExtrospectBytecode.trimSolidityCBORMetadata(bytecode);
+        require(didTrim, "metadata not trimmed");
+        checkBytecodeHash(bytecode, expected);
     }
 
     //forge-lint: disable-next-line(mixed-case-function)

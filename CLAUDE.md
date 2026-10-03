@@ -6,8 +6,10 @@ Only what a capable agent would get wrong from this repo alone.
 
 cyclo.sol is the deploy repo for Cyclo: `CycloVault` and `CycloReceipt`
 (thin concretes over the pinned `ethgild` vault), the oracles they price
-through, and the deploy pins. The vault logic is not here; it arrives as the
-`lib/ethgild` submodule (`rainlanguage/rain.vats`, still under its old name).
+through, and the deploy pins. The vault logic is not authored here: `lib/` is
+the vendored compile closure of the legacy `ethgild` (`rainlanguage/rain.vats`)
+submodule tree, kept at the submodule paths so remappings and bytecode are
+unchanged; it goes away with the rain-vats 0.2.x upgrade (#54).
 
 ## Conventions an agent would get wrong
 
@@ -23,8 +25,9 @@ through, and the deploy pins. The vault logic is not here; it arrives as the
   moves it, in lockstep with a new frozen `<tag>/`.
 - Pragma: concretes, scripts and tests pin `=0.8.25`; libraries and generated
   files float `^0.8.25`.
-- `evm_version = "paris"` and compiler metadata are kept so the record is the
-  bytes the legacy deployments were built from.
+- `evm_version = "paris"` is kept so the record is the bytes the legacy
+  deployments were built from; `bytecode_hash = "none"` leaves the CBOR appendix
+  carrying only the solc version, so the record does not move with build config.
 - `src/lib/LibCycloProd*.sol` and `test/prod/` are the record of the
   pre-registry per-chain deployments; `test/src/lib/LibCycloProdReproduction.t.sol`
   re-derives every code hash offline.
