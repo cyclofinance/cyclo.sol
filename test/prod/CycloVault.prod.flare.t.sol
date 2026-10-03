@@ -29,8 +29,9 @@ import {
 import {PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V2} from "src/lib/LibCycloProdReceipt.sol";
 import {CycloVaultConfig, CycloVault} from "src/concrete/vault/CycloVault.sol";
 import {PROD_FLARE_CLONE_FACTORY_ADDRESS_V1} from "src/lib/LibCycloProdCloneFactory.sol";
-import {IERC20MetadataUpgradeable as IERC20Metadata} from
-    "openzeppelin-contracts-upgradeable/contracts/token/ERC20/extensions/IERC20MetadataUpgradeable.sol";
+import {
+    IERC20MetadataUpgradeable as IERC20Metadata
+} from "openzeppelin-contracts-upgradeable/contracts/token/ERC20/extensions/IERC20MetadataUpgradeable.sol";
 import {IReceiptV3} from "ethgild/abstract/ReceiptVault.sol";
 
 contract CycloVaultProdFlareTest is CycloVaultTest {

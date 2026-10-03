@@ -16,7 +16,10 @@ import {SceptreStakedFlrOracle} from "ethgild/concrete/oracle/SceptreStakedFlrOr
 import {TwoPriceOracleV2, TwoPriceOracleConfigV2} from "ethgild/concrete/oracle/TwoPriceOracleV2.sol";
 import {FtsoV2LTSFeedOracle, FtsoV2LTSFeedOracleConfig} from "ethgild/concrete/oracle/FtsoV2LTSFeedOracle.sol";
 import {
-    FLR_USD_FEED_ID, ETH_USD_FEED_ID, XRP_USD_FEED_ID, JOULE_USD_FEED_ID
+    FLR_USD_FEED_ID,
+    ETH_USD_FEED_ID,
+    XRP_USD_FEED_ID,
+    JOULE_USD_FEED_ID
 } from "rain.flare/lib/lts/LibFtsoV2LTS.sol";
 import {IPriceOracleV2} from "ethgild/abstract/PriceOracleV2.sol";
 import {SFLR_CONTRACT} from "rain.flare/lib/sflr/LibSceptreStakedFlare.sol";
@@ -110,7 +113,8 @@ bytes32 constant DEPLOYMENT_SUITE_CYCLO_RECEIPT_IMPLEMENTATION = keccak256("cycl
 bytes32 constant DEPLOYMENT_SUITE_CYCLO_RECEIPT_IMPLEMENTATION_ARBITRUM =
     keccak256("cyclo-receipt-implementation-arbitrum");
 bytes32 constant DEPLOYMENT_SUITE_CYCLO_VAULT_IMPLEMENTATION = keccak256("cyclo-vault-implementation");
-bytes32 constant DEPLOYMENT_SUITE_CYCLO_VAULT_IMPLEMENTATION_ARBITRUM = keccak256("cyclo-vault-implementation-arbitrum");
+bytes32 constant DEPLOYMENT_SUITE_CYCLO_VAULT_IMPLEMENTATION_ARBITRUM =
+    keccak256("cyclo-vault-implementation-arbitrum");
 bytes32 constant DEPLOYMENT_SUITE_STAKED_FLR_ORACLE_1 = keccak256("sceptre-staked-flare-oracle-1");
 bytes32 constant DEPLOYMENT_SUITE_STAKED_FLR_ORACLE_2 = keccak256("sceptre-staked-flare-oracle-2");
 bytes32 constant DEPLOYMENT_SUITE_STAKED_FLR_PRICE_VAULT = keccak256("sceptre-staked-flare-price-vault");
@@ -253,15 +257,16 @@ contract CreateVault is Script {
     function deployStakedFlrPriceVault(uint256 deploymentKey) internal {
         vm.startBroadcast(deploymentKey);
 
-        address cysflr = ICloneableFactoryV2(PROD_FLARE_CLONE_FACTORY_ADDRESS_V1).clone(
-            PROD_FLARE_VAULT_IMPLEMENTATION_CYSFLR,
-            abi.encode(
-                ERC20PriceOracleVaultConfig({
+        address cysflr = ICloneableFactoryV2(PROD_FLARE_CLONE_FACTORY_ADDRESS_V1)
+            .clone(
+                PROD_FLARE_VAULT_IMPLEMENTATION_CYSFLR,
+                abi.encode(
+                    ERC20PriceOracleVaultConfig({
                     priceOracle: IPriceOracleV2(payable(PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2)),
                     vaultConfig: VaultConfig({asset: address(SFLR_CONTRACT), name: "cysFLR", symbol: "cysFLR"})
                 })
-            )
-        );
+                )
+            );
         LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
             cysflr, PROD_FLARE_VAULT_IMPLEMENTATION_CYSFLR, PROD_FLARE_VAULT_IMPLEMENTATION_CYSFLR_CODEHASH
         );
@@ -406,17 +411,18 @@ contract CreateVault is Script {
     function deployStargateWethPriceVault(uint256 deploymentKey) internal {
         vm.startBroadcast(deploymentKey);
 
-        address cyweth = ICloneableFactoryV2(PROD_FLARE_CLONE_FACTORY_ADDRESS_V1).clone(
-            PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1,
-            abi.encode(
-                CycloVaultConfig({
+        address cyweth = ICloneableFactoryV2(PROD_FLARE_CLONE_FACTORY_ADDRESS_V1)
+            .clone(
+                PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1,
+                abi.encode(
+                    CycloVaultConfig({
                     priceOracle: IPriceOracleV2(payable(PROD_FLARE_FTSO_V2_LTS_ETH_USD_FEED_ORACLE)),
                     asset: FLARE_STARGATE_WETH,
                     oracleName: "",
                     oracleSymbol: ""
                 })
-            )
-        );
+                )
+            );
 
         LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
             cyweth, PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V1, PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH
@@ -427,17 +433,18 @@ contract CreateVault is Script {
     function deployPythXPriceVault(uint256 deploymentKey, address pythOracle, address asset) internal {
         vm.startBroadcast(deploymentKey);
 
-        address vault = ICloneableFactoryV2(PROD_ARBITRUM_CLONE_FACTORY_ADDRESS_V1).clone(
-            PROD_ARBITRUM_CYCLO_VAULT_IMPLEMENTATION_V2,
-            abi.encode(
-                CycloVaultConfig({
+        address vault = ICloneableFactoryV2(PROD_ARBITRUM_CLONE_FACTORY_ADDRESS_V1)
+            .clone(
+                PROD_ARBITRUM_CYCLO_VAULT_IMPLEMENTATION_V2,
+                abi.encode(
+                    CycloVaultConfig({
                     priceOracle: IPriceOracleV2(payable(pythOracle)),
                     asset: asset,
                     oracleName: PYTH_ORACLE_NAME,
                     oracleSymbol: PYTH_ORACLE_SYMBOL
                 })
-            )
-        );
+                )
+            );
 
         LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
             vault, PROD_ARBITRUM_CYCLO_VAULT_IMPLEMENTATION_V2, PROD_ARBITRUM_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH
@@ -498,17 +505,15 @@ contract CreateVault is Script {
     function deployFlareFTSOV2LTSPriceVault(uint256 deploymentKey, address ftso, address asset) internal {
         vm.startBroadcast(deploymentKey);
 
-        address vault = ICloneableFactoryV2(PROD_FLARE_CLONE_FACTORY_ADDRESS_V1).clone(
-            PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2,
-            abi.encode(
-                CycloVaultConfig({
-                    priceOracle: IPriceOracleV2(payable(ftso)),
-                    asset: asset,
-                    oracleName: "FTSO",
-                    oracleSymbol: "ftso"
+        address vault = ICloneableFactoryV2(PROD_FLARE_CLONE_FACTORY_ADDRESS_V1)
+            .clone(
+                PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2,
+                abi.encode(
+                    CycloVaultConfig({
+                    priceOracle: IPriceOracleV2(payable(ftso)), asset: asset, oracleName: "FTSO", oracleSymbol: "ftso"
                 })
-            )
-        );
+                )
+            );
 
         LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
             vault, PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2, PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH

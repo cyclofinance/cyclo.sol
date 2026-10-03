@@ -14,7 +14,10 @@ import {SceptreStakedFlrOracle} from "ethgild/concrete/oracle/SceptreStakedFlrOr
 import {FtsoV2LTSFeedOracle, FtsoV2LTSFeedOracleConfig} from "ethgild/concrete/oracle/FtsoV2LTSFeedOracle.sol";
 import {PythOracle, PythOracleConfig} from "ethgild/concrete/oracle/PythOracle.sol";
 import {
-    FLR_USD_FEED_ID, ETH_USD_FEED_ID, XRP_USD_FEED_ID, JOULE_USD_FEED_ID
+    FLR_USD_FEED_ID,
+    ETH_USD_FEED_ID,
+    XRP_USD_FEED_ID,
+    JOULE_USD_FEED_ID
 } from "rain.flare/lib/lts/LibFtsoV2LTS.sol";
 import {LibPyth} from "rain.pyth/lib/pyth/LibPyth.sol";
 import {
@@ -58,15 +61,11 @@ import {
 /// them. A pin this cannot reproduce is a pin the sources no longer describe.
 contract LibCycloProdReproductionTest is Test {
     function testReproduceCloneFactory() external {
-        LibCycloTestProd.checkSolcOnlyCBORTrimmedBytecodeHash(
-            address(new CloneFactory()), PROD_FLARE_CLONE_FACTORY_CODEHASH_V1
-        );
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(new CloneFactory()), PROD_FLARE_CLONE_FACTORY_CODEHASH_V1);
     }
 
     function testReproduceCycloReceipt() external {
-        LibCycloTestProd.checkSolcOnlyCBORTrimmedBytecodeHash(
-            address(new CycloReceipt()), PROD_FLARE_CYCLO_RECEIPT_CODEHASH_V2
-        );
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(new CycloReceipt()), PROD_FLARE_CYCLO_RECEIPT_CODEHASH_V2);
     }
 
     function testReproduceCycloVaultFlare() external {
@@ -76,9 +75,7 @@ contract LibCycloProdReproductionTest is Test {
                 receiptImplementation: IReceiptV3(PROD_FLARE_CYCLO_RECEIPT_IMPLEMENTATION_V2)
             })
         );
-        LibCycloTestProd.checkSolcOnlyCBORTrimmedBytecodeHash(
-            address(vault), PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH
-        );
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(vault), PROD_FLARE_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH);
     }
 
     function testReproduceCycloVaultArbitrum() external {
@@ -88,13 +85,13 @@ contract LibCycloProdReproductionTest is Test {
                 receiptImplementation: IReceiptV3(PROD_ARBITRUM_CYCLO_RECEIPT_IMPLEMENTATION_V2)
             })
         );
-        LibCycloTestProd.checkSolcOnlyCBORTrimmedBytecodeHash(
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(
             address(vault), PROD_ARBITRUM_CYCLO_VAULT_IMPLEMENTATION_V2_CODEHASH
         );
     }
 
     function testReproduceSceptreStakedFlrOracle() external {
-        LibCycloTestProd.checkSolcOnlyCBORTrimmedBytecodeHash(
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(
             address(new SceptreStakedFlrOracle()), PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE_CODEHASH
         );
     }
@@ -103,7 +100,7 @@ contract LibCycloProdReproductionTest is Test {
         FtsoV2LTSFeedOracle oracle = new FtsoV2LTSFeedOracle(
             FtsoV2LTSFeedOracleConfig({feedId: feedId, staleAfter: PROD_ORACLE_DEFAULT_STALE_AFTER})
         );
-        LibCycloTestProd.checkSolcOnlyCBORTrimmedBytecodeHash(address(oracle), codehash);
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(oracle), codehash);
     }
 
     function testReproduceFtsoV2LTSFeedOracleFlrUsd() external {
@@ -130,7 +127,7 @@ contract LibCycloProdReproductionTest is Test {
                 pythContract: LibPyth.PRICE_FEED_CONTRACT_ARBITRUM
             })
         );
-        LibCycloTestProd.checkSolcOnlyCBORTrimmedBytecodeHash(address(oracle), codehash);
+        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(oracle), codehash);
     }
 
     function testReproducePythOracles() external {

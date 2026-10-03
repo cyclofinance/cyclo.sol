@@ -1,4 +1,4 @@
 {
   "detectors_to_exclude": "solc-version,unused-imports",
-  "filter_paths": "lib/ethgild"
+  "filter_paths": "lib/ethgild,dependencies,src/abstract/(CycloDeploySuites|RainDeploySuitesBase)\\.sol"
 }

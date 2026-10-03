@@ -37,24 +37,19 @@ abstract contract CycloVaultTest is Test {
         vm.createSelectFork(vm.envString(_rpcEnvName()), _blockNumber());
 
         ReceiptVaultConstructionConfigV2 memory receiptVaultConstructionConfig = ReceiptVaultConstructionConfigV2({
-            factory: _cloneFactory(),
-            receiptImplementation: _receiptImplementation()
+            factory: _cloneFactory(), receiptImplementation: _receiptImplementation()
         });
         sCycloVaultImplementation = new CycloVault(receiptVaultConstructionConfig);
         sCycloVault = CycloVault(
-            payable(
-                _cloneFactory().clone(
-                    address(sCycloVaultImplementation),
-                    abi.encode(
-                        CycloVaultConfig({
-                            priceOracle: ORACLE,
-                            asset: ASSET,
-                            oracleName: ORACLE_NAME,
-                            oracleSymbol: ORACLE_SYMBOL
+            payable(_cloneFactory()
+                    .clone(
+                        address(sCycloVaultImplementation),
+                        abi.encode(
+                            CycloVaultConfig({
+                            priceOracle: ORACLE, asset: ASSET, oracleName: ORACLE_NAME, oracleSymbol: ORACLE_SYMBOL
                         })
-                    )
-                )
-            )
+                        )
+                    ))
         );
         assertEq(sCycloVault.asset(), ASSET);
     }

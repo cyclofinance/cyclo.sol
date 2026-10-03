@@ -24,7 +24,10 @@ import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
 import {IPriceOracleV2} from "ethgild/interface/IPriceOracleV2.sol";
 import {FtsoV2LTSFeedOracle, FtsoV2LTSFeedOracleConfig} from "ethgild/concrete/oracle/FtsoV2LTSFeedOracle.sol";
 import {
-    FLR_USD_FEED_ID, ETH_USD_FEED_ID, XRP_USD_FEED_ID, JOULE_USD_FEED_ID
+    FLR_USD_FEED_ID,
+    ETH_USD_FEED_ID,
+    XRP_USD_FEED_ID,
+    JOULE_USD_FEED_ID
 } from "rain.flare/lib/lts/LibFtsoV2LTS.sol";
 
 contract FtsoV2LTSFeedOracleProdTest is Test {

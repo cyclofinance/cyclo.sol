@@ -13,7 +13,9 @@ contract CycloReceiptFactoryTest is ReceiptFactoryTest {
     constructor() {
         I_CYCLO_RECEIPT_IMPLEMENTATION = new CycloReceipt();
         I_CYCLO_VAULT_IMPLEMENTATION = new CycloVault(
-            ReceiptVaultConstructionConfigV2({factory: I_FACTORY, receiptImplementation: I_CYCLO_RECEIPT_IMPLEMENTATION})
+            ReceiptVaultConstructionConfigV2({
+                factory: I_FACTORY, receiptImplementation: I_CYCLO_RECEIPT_IMPLEMENTATION
+            })
         );
     }
 }

@@ -8,8 +8,9 @@ import {LibExtrospectBytecode} from "rain.extrospection/lib/LibExtrospectBytecod
 import {LibExtrospectERC1167Proxy} from "rain.extrospection/lib/LibExtrospectERC1167Proxy.sol";
 import {ICloneableV2} from "rain.factory/interface/ICloneableV2.sol";
 import {CycloVault} from "src/concrete/vault/CycloVault.sol";
-import {IERC20Upgradeable as IERC20} from
-    "openzeppelin-contracts-upgradeable/contracts/token/ERC20/IERC20Upgradeable.sol";
+import {
+    IERC20Upgradeable as IERC20
+} from "openzeppelin-contracts-upgradeable/contracts/token/ERC20/IERC20Upgradeable.sol";
 
 uint256 constant PROD_TEST_BLOCK_NUMBER_FLARE = 51262162;
 
@@ -29,20 +30,6 @@ library LibCycloTestProd {
         vm.createSelectFork(vm.envString("RPC_URL_ARBITRUM_FORK"), PROD_TEST_BLOCK_NUMBER_ARBITRUM);
     }
 
-    /// Same comparison for code this repo compiles itself: `bytecode_hash =
-    /// "none"` leaves a 12-byte solc-only appendix in place of the 53-byte one
-    /// the deployments carry, so the trim is 12 bytes.
-    //forge-lint: disable-next-line(mixed-case-function)
-    function checkSolcOnlyCBORTrimmedBytecodeHash(address account, bytes32 expected) internal view {
-        bytes memory bytecode = account.code;
-        uint256 length = bytecode.length;
-        require(length >= 12 && bytecode[length - 12] == 0xa1 && bytecode[length - 1] == 0x0a, "metadata not trimmed");
-        assembly ("memory-safe") {
-            mstore(bytecode, sub(length, 12))
-        }
-        checkBytecodeHash(bytecode, expected);
-    }
-
     function checkBytecodeHash(bytes memory bytecode, bytes32 expected) internal pure {
         bytes32 actual = keccak256(bytecode);
         if (expected != actual) {
@@ -52,11 +39,21 @@ library LibCycloTestProd {
         }
     }
 
+    /// Deployed code carries the 53-byte ipfs+solc appendix; code this repo
+    /// compiles with `bytecode_hash = "none"` carries the 12-byte solc-only
+    /// one. Either is trimmed, so a fresh deployment compares with a live one.
     //forge-lint: disable-next-line(mixed-case-function)
     function checkCBORTrimmedBytecodeHash(address account, bytes32 expected) internal view {
         bytes memory bytecode = account.code;
-        bool didTrim = LibExtrospectBytecode.trimSolidityCBORMetadata(bytecode);
-        require(didTrim, "metadata not trimmed");
+        if (!LibExtrospectBytecode.trimSolidityCBORMetadata(bytecode)) {
+            uint256 length = bytecode.length;
+            require(
+                length >= 12 && bytecode[length - 12] == 0xa1 && bytecode[length - 1] == 0x0a, "metadata not trimmed"
+            );
+            assembly ("memory-safe") {
+                mstore(bytecode, sub(length, 12))
+            }
+        }
         checkBytecodeHash(bytecode, expected);
     }
 

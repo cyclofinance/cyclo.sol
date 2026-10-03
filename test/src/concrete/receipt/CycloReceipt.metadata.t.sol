@@ -9,8 +9,9 @@ import {ZeroReceiptId} from "ethgild/error/ErrReceipt.sol";
 import {CycloReceiptFactoryTest} from "test/abstract/CycloReceiptFactoryTest.sol";
 import {CycloVault, CycloVaultConfig, IPriceOracleV2} from "src/concrete/vault/CycloVault.sol";
 import {SFLR_CONTRACT} from "rain.flare/lib/sflr/LibSceptreStakedFlare.sol";
-import {IERC20MetadataUpgradeable as IERC20Metadata} from
-    "openzeppelin-contracts-upgradeable/contracts/token/ERC20/extensions/IERC20MetadataUpgradeable.sol";
+import {
+    IERC20MetadataUpgradeable as IERC20Metadata
+} from "openzeppelin-contracts-upgradeable/contracts/token/ERC20/extensions/IERC20MetadataUpgradeable.sol";
 
 contract CycloReceiptMetadataTest is CycloReceiptFactoryTest {
     function checkCycloReceiptURIZeroId(address cycloReceipt) internal {
@@ -99,8 +100,7 @@ contract CycloReceiptMetadataTest is CycloReceiptFactoryTest {
 
     function testCycloReceiptURI() external {
         CycloVault vault = CycloVault(
-            payable(
-                I_FACTORY.clone(
+            payable(I_FACTORY.clone(
                     address(I_CYCLO_VAULT_IMPLEMENTATION),
                     abi.encode(
                         CycloVaultConfig({
@@ -110,8 +110,7 @@ contract CycloReceiptMetadataTest is CycloReceiptFactoryTest {
                             oracleSymbol: ""
                         })
                     )
-                )
-            )
+                ))
         );
 
         vm.mockCall(address(SFLR_CONTRACT), abi.encodeWithSelector(IERC20Metadata.symbol.selector), abi.encode("sFLR"));
@@ -121,8 +120,7 @@ contract CycloReceiptMetadataTest is CycloReceiptFactoryTest {
 
     function testCycloReceiptName() external {
         CycloVault vault = CycloVault(
-            payable(
-                I_FACTORY.clone(
+            payable(I_FACTORY.clone(
                     address(I_CYCLO_VAULT_IMPLEMENTATION),
                     abi.encode(
                         CycloVaultConfig({
@@ -132,8 +130,7 @@ contract CycloReceiptMetadataTest is CycloReceiptFactoryTest {
                             oracleSymbol: ""
                         })
                     )
-                )
-            )
+                ))
         );
 
         vm.mockCall(address(SFLR_CONTRACT), abi.encodeWithSelector(IERC20Metadata.symbol.selector), abi.encode("sFLR"));
@@ -143,8 +140,7 @@ contract CycloReceiptMetadataTest is CycloReceiptFactoryTest {
 
     function testCycloReceiptSymbol() external {
         CycloVault vault = CycloVault(
-            payable(
-                I_FACTORY.clone(
+            payable(I_FACTORY.clone(
                     address(I_CYCLO_VAULT_IMPLEMENTATION),
                     abi.encode(
                         CycloVaultConfig({
@@ -154,8 +150,7 @@ contract CycloReceiptMetadataTest is CycloReceiptFactoryTest {
                             oracleSymbol: ""
                         })
                     )
-                )
-            )
+                ))
         );
 
         vm.mockCall(address(SFLR_CONTRACT), abi.encodeWithSelector(IERC20Metadata.symbol.selector), abi.encode("sFLR"));
