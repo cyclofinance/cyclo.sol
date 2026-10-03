@@ -5,3 +5,6 @@ venv
 bin
 out
 forge-cache
+dependencies
+remappings.txt
+.pre-commit-config.yaml
