@@ -4,6 +4,7 @@ pragma solidity =0.8.25;
 
 import {BuildScript} from "rain-deploy-0.1.11/src/abstract/BuildScript.sol";
 import {LibRainDeploySnapshot} from "rain-deploy-0.1.11/src/lib/LibRainDeploySnapshot.sol";
+import {LibReleasedSuitesLibParis} from "./LibReleasedSuitesLibParis.sol";
 import {DeployCandidate} from "../src/abstract/RainDeploySuitesBase.sol";
 import {CycloDeploySuites} from "../src/abstract/CycloDeploySuites.sol";
 
@@ -102,7 +103,7 @@ contract Build is BuildScript, CycloDeploySuites {
             generated.constantPrefix,
             LibRainDeploySnapshot.CANDIDATE
         );
-        LibRainDeploySnapshot.writeReleasedSuitesLib(
+        LibReleasedSuitesLibParis.writeReleasedSuitesLib(
             vm, LibRainDeploySnapshot.LIB_DIR, recordRoot(), generated.contractName, generated.candidate.snapshot
         );
     }
