@@ -2,8 +2,8 @@
 // SPDX-FileCopyrightText: Copyright (c) 2020 Rain Open Source Software Ltd
 pragma solidity ^0.8.25;
 
-import {Vm} from "forge-std/StdCheats.sol";
-import {console2} from "forge-std/Test.sol";
+import {Vm} from "forge-std-1.16.2/src/StdCheats.sol";
+import {console2} from "forge-std-1.16.2/src/Test.sol";
 import {LibExtrospectBytecode} from "rain.extrospection/lib/LibExtrospectBytecode.sol";
 import {LibExtrospectERC1167Proxy} from "rain.extrospection/lib/LibExtrospectERC1167Proxy.sol";
 import {ICloneableV2} from "rain.factory/interface/ICloneableV2.sol";

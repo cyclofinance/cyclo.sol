@@ -2,7 +2,7 @@
 // SPDX-FileCopyrightText: Copyright (c) 2020 Rain Open Source Software Ltd
 pragma solidity =0.8.25;
 
-import {Test} from "forge-std/Test.sol";
+import {Test} from "forge-std-1.16.2/src/Test.sol";
 
 import {
     PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE,

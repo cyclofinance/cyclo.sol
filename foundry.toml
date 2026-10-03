@@ -43,7 +43,6 @@ remappings = [
   "rain.math.float/=lib/ethgild/lib/rain.pyth/lib/rain.interpreter/lib/rain.interpreter.interface/lib/rain.math.float/src/",
   "rain.math.fixedpoint/=lib/ethgild/lib/rain.math.fixedpoint/src/",
   "rain.solmem/=lib/rain.extrospection/lib/rain.solmem/src/",
-  "forge-std/=lib/ethgild/lib/forge-std/src/",
   "openzeppelin-contracts/=lib/ethgild/lib/rain.factory/lib/openzeppelin-contracts/",
   "openzeppelin-contracts-upgradeable/=lib/ethgild/lib/openzeppelin-contracts-upgradeable/",
   "@openzeppelin/contracts/token/ERC20/=lib/ethgild/lib/rain.flare/lib/rain.interpreter/lib/rain.interpreter.interface/lib/forge-std/src/interfaces/",

@@ -2,7 +2,7 @@
 // SPDX-FileCopyrightText: Copyright (c) 2020 Rain Open Source Software Ltd
 pragma solidity =0.8.25;
 
-import {Script} from "forge-std/Script.sol";
+import {Script} from "forge-std-1.16.2/src/Script.sol";
 import {CycloReceipt} from "src/concrete/receipt/CycloReceipt.sol";
 import {
     ERC20PriceOracleVaultConfig,

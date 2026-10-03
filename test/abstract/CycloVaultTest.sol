@@ -2,7 +2,7 @@
 // SPDX-FileCopyrightText: Copyright (c) 2020 Rain Open Source Software Ltd
 pragma solidity ^0.8.25;
 
-import {Test} from "forge-std/Test.sol";
+import {Test} from "forge-std-1.16.2/src/Test.sol";
 import {CycloVaultConfig, CycloVault, IPriceOracleV2} from "src/concrete/vault/CycloVault.sol";
 import {ReceiptVaultConstructionConfigV2} from "ethgild/concrete/vault/ERC20PriceOracleReceiptVault.sol";
 import {ICloneableFactoryV2} from "rain.factory/interface/ICloneableFactoryV2.sol";
