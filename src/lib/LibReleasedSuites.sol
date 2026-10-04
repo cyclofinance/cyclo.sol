@@ -6,46 +6,6 @@ pragma solidity ^0.8.25;
 
 import {DeploySuite} from "../abstract/RainDeploySuitesBase.sol";
 
-import {LibCloneFactoryReleased} from "./LibCloneFactoryReleased.sol";
-
-import {LibCycloReceiptReleased} from "./LibCycloReceiptReleased.sol";
-
-import {LibCycloVaultReleased} from "./LibCycloVaultReleased.sol";
-
-import {LibSceptreStakedFlrOracleReleased} from "./LibSceptreStakedFlrOracleReleased.sol";
-
-import {LibFtsoV2LTSFeedOracleFlrUsdReleased} from "./LibFtsoV2LTSFeedOracleFlrUsdReleased.sol";
-
-import {LibFtsoV2LTSFeedOracleEthUsdReleased} from "./LibFtsoV2LTSFeedOracleEthUsdReleased.sol";
-
-import {LibFtsoV2LTSFeedOracleXrpUsdReleased} from "./LibFtsoV2LTSFeedOracleXrpUsdReleased.sol";
-
-import {LibFtsoV2LTSFeedOracleJouleUsdReleased} from "./LibFtsoV2LTSFeedOracleJouleUsdReleased.sol";
-
-import {LibPythOracleWethUsdReleased} from "./LibPythOracleWethUsdReleased.sol";
-
-import {LibPythOracleWstethUsdReleased} from "./LibPythOracleWstethUsdReleased.sol";
-
-import {LibPythOracleWbtcUsdReleased} from "./LibPythOracleWbtcUsdReleased.sol";
-
-import {LibPythOracleCbbtcUsdReleased} from "./LibPythOracleCbbtcUsdReleased.sol";
-
-import {LibPythOracleLinkUsdReleased} from "./LibPythOracleLinkUsdReleased.sol";
-
-import {LibPythOracleDotUsdReleased} from "./LibPythOracleDotUsdReleased.sol";
-
-import {LibPythOracleUniUsdReleased} from "./LibPythOracleUniUsdReleased.sol";
-
-import {LibPythOraclePepeUsdReleased} from "./LibPythOraclePepeUsdReleased.sol";
-
-import {LibPythOraclePythUsdReleased} from "./LibPythOraclePythUsdReleased.sol";
-
-import {LibPythOracleEnaUsdReleased} from "./LibPythOracleEnaUsdReleased.sol";
-
-import {LibPythOracleArbUsdReleased} from "./LibPythOracleArbUsdReleased.sol";
-
-import {LibPythOracleXautUsdReleased} from "./LibPythOracleXautUsdReleased.sol";
-
 /// @title LibReleasedSuites
 /// @notice Every frozen release this repo has cut, of every contract it
 /// deploys: the per-contract released libs concatenated, in declaration
@@ -63,43 +23,6 @@ library LibReleasedSuites {
     /// Every released suite, in declaration order.
     /// @return The released suites.
     function releasedSuites() internal pure returns (DeploySuite[] memory) {
-        DeploySuite[][] memory released = new DeploySuite[][](20);
-        released[0] = LibCloneFactoryReleased.releasedSuites();
-        released[1] = LibCycloReceiptReleased.releasedSuites();
-        released[2] = LibCycloVaultReleased.releasedSuites();
-        released[3] = LibSceptreStakedFlrOracleReleased.releasedSuites();
-        released[4] = LibFtsoV2LTSFeedOracleFlrUsdReleased.releasedSuites();
-        released[5] = LibFtsoV2LTSFeedOracleEthUsdReleased.releasedSuites();
-        released[6] = LibFtsoV2LTSFeedOracleXrpUsdReleased.releasedSuites();
-        released[7] = LibFtsoV2LTSFeedOracleJouleUsdReleased.releasedSuites();
-        released[8] = LibPythOracleWethUsdReleased.releasedSuites();
-        released[9] = LibPythOracleWstethUsdReleased.releasedSuites();
-        released[10] = LibPythOracleWbtcUsdReleased.releasedSuites();
-        released[11] = LibPythOracleCbbtcUsdReleased.releasedSuites();
-        released[12] = LibPythOracleLinkUsdReleased.releasedSuites();
-        released[13] = LibPythOracleDotUsdReleased.releasedSuites();
-        released[14] = LibPythOracleUniUsdReleased.releasedSuites();
-        released[15] = LibPythOraclePepeUsdReleased.releasedSuites();
-        released[16] = LibPythOraclePythUsdReleased.releasedSuites();
-        released[17] = LibPythOracleEnaUsdReleased.releasedSuites();
-        released[18] = LibPythOracleArbUsdReleased.releasedSuites();
-        released[19] = LibPythOracleXautUsdReleased.releasedSuites();
-
-        uint256 total = 0;
-        for (uint256 i = 0; i < released.length; i++) {
-            total += released[i].length;
-        }
-
-        DeploySuite[] memory suites = new DeploySuite[](total);
-
-        uint256 offset = 0;
-        for (uint256 i = 0; i < released.length; i++) {
-            for (uint256 j = 0; j < released[i].length; j++) {
-                suites[offset + j] = released[i][j];
-            }
-            offset += released[i].length;
-        }
-
-        return suites;
+        return new DeploySuite[](0);
     }
 }

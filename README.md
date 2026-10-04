@@ -12,8 +12,8 @@ The bulk of the implementation is dependencies, but this repo implements
 It is a standalone repo so that it can easily serve as a snapshot for audit and
 production deployment of Cyclo that won't get buried in git history.
 
-The relevant dependencies are IN SCOPE of the audit, as at the commits included
-vendored under `lib/` here (the files the deployed bytecode compiles from).
+The audited contract bytecode is recorded under `src/legacy/` and matched to the
+live deployments by the tests here.
 
 See the Cyclo website, and rep dependencies for in depth documentation.
 

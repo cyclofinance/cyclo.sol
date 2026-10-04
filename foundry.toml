@@ -14,13 +14,10 @@ solc = "0.8.25"
 optimizer = true
 optimizer_runs = 100000
 bytecode_hash = "none"
+cbor_metadata = false
+evm_version = "cancun"
 
-# pre push0 for maximum compatibility
-evm_version = "paris"
-
-# Vendored legacy contract sources (`lib/`) plus soldeer packages
-# (`dependencies/`) for the deploy tooling.
-libs = ["lib", "dependencies"]
+libs = ["dependencies"]
 
 # `script/Build.sol` writes the generated candidate snapshot and the alias libs
 # under `src/`, and reads the release version from this file when
@@ -30,30 +27,14 @@ fs_permissions = [
   { access = "read-write", path = "./src" },
 ]
 
-# The lib/ tree is the vendored compile closure of the legacy submodules, so
-# every remapping is spelled here rather than derived from nested configs.
 auto_detect_remappings = false
 remappings = [
-  "ethgild/=lib/ethgild/src/",
-  "rain.factory/=lib/ethgild/lib/rain.factory/src/",
-  "rain.flare/=lib/ethgild/lib/rain.flare/src/",
-  "rain.extrospection/=lib/rain.extrospection/src/",
-  "rain.pyth/=lib/ethgild/lib/rain.pyth/src/",
-  "rain.intorastring/=lib/ethgild/lib/rain.pyth/lib/rain.interpreter/lib/rain.interpreter.interface/lib/rain.intorastring/src/",
-  "rain.math.float/=lib/ethgild/lib/rain.pyth/lib/rain.interpreter/lib/rain.interpreter.interface/lib/rain.math.float/src/",
-  "rain.math.fixedpoint/=lib/ethgild/lib/rain.math.fixedpoint/src/",
-  "rain.solmem/=lib/rain.extrospection/lib/rain.solmem/src/",
-  "openzeppelin-contracts/=lib/ethgild/lib/rain.factory/lib/openzeppelin-contracts/",
-  "openzeppelin-contracts-upgradeable/=lib/ethgild/lib/openzeppelin-contracts-upgradeable/",
-  "@openzeppelin/contracts/token/ERC20/=lib/ethgild/lib/rain.flare/lib/rain.interpreter/lib/rain.interpreter.interface/lib/forge-std/src/interfaces/",
-  "flare-smart-contracts/=lib/ethgild/lib/rain.flare/lib/flare-smart-contracts/contracts/",
-  "flare-smart-contracts-v2/=lib/ethgild/lib/rain.flare/lib/flare-smart-contracts-v2/contracts/",
-  "pyth-sdk/=lib/ethgild/lib/rain.pyth/lib/pyth-crosschain/target_chains/ethereum/sdk/solidity/",
-  "solady/=lib/ethgild/lib/solady/src/",
   "forge-std-1.16.2/=dependencies/forge-std-1.16.2/",
   "rain-sol-codegen-0.1.37/=dependencies/rain-sol-codegen-0.1.37/",
   "rain-deploy-0.1.11/=dependencies/rain-deploy-0.1.11/",
   "rain-lib-memkv-0.2.0/=dependencies/rain-lib-memkv-0.2.0/",
+  "rain-extrospection-0.1.14/=dependencies/rain-extrospection-0.1.14/",
+  "rain-solmem-0.1.28/=dependencies/rain-solmem-0.1.28/",
 ]
 
 [dependencies]
@@ -61,6 +42,8 @@ forge-std = "1.16.2"
 rain-sol-codegen = "0.1.37"
 rain-deploy = "0.1.11"
 rain-lib-memkv = "0.2.0"
+rain-extrospection = "0.1.14"
+rain-solmem = "0.1.28"
 
 [soldeer]
 recursive_deps = false
