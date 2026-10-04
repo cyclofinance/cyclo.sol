@@ -8,11 +8,12 @@ cyclo.sol is the deploy repo for Cyclo. Today it holds the record of the
 production deployments and the rain-deploy machinery the next ones go through;
 the contract sources arrive with the rain-vats 0.2.x upgrade (#54).
 
-- `src/legacy/` is the creation bytecode the production contracts were created
-  from, as bytes. The sources it was compiled from are not here and are not
-  needed: `test/src/legacy/` constructs each one from those bytes and matches it
-  to the production code hash, and `test/prod/` matches every live deployment to
-  the same hash on a fork.
+- `src/legacy/` is the creation bytecode the cyclo contracts and oracles were
+  created from, as bytes (the V2 `CloneFactory` record lives in
+  rain.factory.deploy). The sources it was compiled from are not here and are
+  not needed: `test/src/legacy/` constructs each one from those bytes and
+  matches it to the production code hash, and `test/prod/` matches every live
+  deployment to the same hash on a fork.
 - `src/lib/LibCycloProd*.sol` are the per-chain addresses, code hashes and
   constructor arguments of those deployments.
 

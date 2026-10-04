@@ -4,7 +4,6 @@ pragma solidity =0.8.25;
 
 import {Test} from "forge-std-1.16.2/src/Test.sol";
 import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
-import {CLONE_FACTORY_CREATION_CODE} from "src/legacy/CloneFactory.sol";
 import {CYCLO_RECEIPT_CREATION_CODE} from "src/legacy/CycloReceipt.sol";
 import {CYCLO_VAULT_CREATION_CODE} from "src/legacy/CycloVault.sol";
 import {SCEPTRE_STAKED_FLR_ORACLE_CREATION_CODE} from "src/legacy/SceptreStakedFlrOracle.sol";
@@ -12,7 +11,6 @@ import {FTSO_V2_LTS_FEED_ORACLE_CREATION_CODE} from "src/legacy/FtsoV2LTSFeedOra
 import {PYTH_ORACLE_CREATION_CODE} from "src/legacy/PythOracle.sol";
 import {
     PROD_FLARE_CLONE_FACTORY_ADDRESS_V1,
-    PROD_FLARE_CLONE_FACTORY_CODEHASH_V1,
     PROD_ARBITRUM_CLONE_FACTORY_ADDRESS_V1
 } from "src/lib/LibCycloProdCloneFactory.sol";
 import {
@@ -68,12 +66,6 @@ import {
 /// constructed with. `TwoPriceOracleV2` reads Flare at construction, so its
 /// reproduction is in `test/prod`.
 contract LibCycloLegacyReproductionTest is Test {
-    function testReproduceCloneFactory() external {
-        LibCycloTestProd.checkCBORTrimmedBytecodeHash(
-            LibCycloTestProd.deployLegacy(CLONE_FACTORY_CREATION_CODE, ""), PROD_FLARE_CLONE_FACTORY_CODEHASH_V1
-        );
-    }
-
     function testReproduceCycloReceipt() external {
         LibCycloTestProd.checkCBORTrimmedBytecodeHash(
             LibCycloTestProd.deployLegacy(CYCLO_RECEIPT_CREATION_CODE, ""), PROD_FLARE_CYCLO_RECEIPT_CODEHASH_V2
