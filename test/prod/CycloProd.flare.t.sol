@@ -135,5 +135,5 @@ contract CycloProdFlareTest is Test {
         );
     }
 
-    fallback() external payable {}
+    receive() external payable {}
 }
