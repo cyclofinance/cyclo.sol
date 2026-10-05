@@ -20,18 +20,6 @@ library LibCycloTestProd {
         vm.createSelectFork(vm.envString("RPC_URL_ARBITRUM_FORK"), PROD_TEST_BLOCK_NUMBER_ARBITRUM);
     }
 
-    /// `CREATE` the recorded creation code with its constructor arguments,
-    /// exactly as the production deployments were created.
-    function deployLegacy(bytes memory creationCode, bytes memory constructorArgs) internal returns (address) {
-        bytes memory initCode = abi.encodePacked(creationCode, constructorArgs);
-        address deployed;
-        assembly ("memory-safe") {
-            deployed := create(0, add(initCode, 0x20), mload(initCode))
-        }
-        require(deployed != address(0), "legacy create failed");
-        return deployed;
-    }
-
     function checkBytecodeHash(bytes memory bytecode, bytes32 expected) internal pure {
         bytes32 actual = keccak256(bytecode);
         if (expected != actual) {
@@ -46,7 +34,11 @@ library LibCycloTestProd {
     /// the 12-byte solc-only one. Either is trimmed before hashing.
     //forge-lint: disable-next-line(mixed-case-function)
     function checkCBORTrimmedBytecodeHash(address account, bytes32 expected) internal view {
-        bytes memory bytecode = account.code;
+        checkCBORTrimmedBytecodeHash(account.code, expected);
+    }
+
+    //forge-lint: disable-next-line(mixed-case-function)
+    function checkCBORTrimmedBytecodeHash(bytes memory bytecode, bytes32 expected) internal pure {
         if (!LibExtrospectBytecode.tryTrimSolidityCBORMetadata(bytecode)) {
             uint256 length = bytecode.length;
             require(

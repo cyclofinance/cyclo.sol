@@ -4,7 +4,6 @@ pragma solidity =0.8.25;
 
 import {Test} from "forge-std-1.16.2/src/Test.sol";
 import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
-import {TWO_PRICE_ORACLE_V2_CREATION_CODE} from "src/legacy/TwoPriceOracleV2.sol";
 import {
     PROD_FLARE_CLONE_FACTORY_ADDRESS_V1,
     PROD_FLARE_CLONE_FACTORY_CODEHASH_V1
@@ -45,8 +44,7 @@ import {
     PROD_FLARE_FTSO_V2_LTS_JOULE_USD_FEED_ORACLE,
     PROD_FLARE_FTSO_V2_LTS_JOULE_USD_FEED_ORACLE_CODEHASH,
     PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2,
-    PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2_CODEHASH,
-    PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2_CODEHASH2
+    PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2_CODEHASH
 } from "src/lib/LibCycloProdOracle.sol";
 
 /// @title CycloProdFlareTest
@@ -122,18 +120,4 @@ contract CycloProdFlareTest is Test {
             PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2, PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2_CODEHASH
         );
     }
-
-    /// `TwoPriceOracleV2` prices itself in its constructor, so it only
-    /// constructs on a Flare fork.
-    function testReproduceTwoPriceOracleV2() external {
-        LibCycloTestProd.checkCBORTrimmedBytecodeHash(
-            LibCycloTestProd.deployLegacy(
-                TWO_PRICE_ORACLE_V2_CREATION_CODE,
-                abi.encode(PROD_FLARE_FTSO_V2_LTS_FLR_USD_FEED_ORACLE, PROD_FLARE_SCEPTRE_STAKED_FLR_ORACLE)
-            ),
-            PROD_FLARE_TWO_PRICE_ORACLE_FLR_USD__SFLR_V2_CODEHASH2
-        );
-    }
-
-    receive() external payable {}
 }
