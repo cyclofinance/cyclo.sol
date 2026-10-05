@@ -35,6 +35,7 @@ remappings = [
   "rain-lib-memkv-0.2.0/=dependencies/rain-lib-memkv-0.2.0/",
   "rain-extrospection-0.1.14/=dependencies/rain-extrospection-0.1.14/",
   "rain-solmem-0.1.28/=dependencies/rain-solmem-0.1.28/",
+  "solady-0.1.26/=dependencies/solady-0.1.26/",
 ]
 
 [dependencies]
@@ -44,6 +45,7 @@ rain-deploy = "0.1.11"
 rain-lib-memkv = "0.2.0"
 rain-extrospection = "0.1.14"
 rain-solmem = "0.1.28"
+solady = "0.1.26"
 
 [soldeer]
 recursive_deps = false
