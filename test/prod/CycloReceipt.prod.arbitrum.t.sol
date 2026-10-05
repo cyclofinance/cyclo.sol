@@ -2,9 +2,8 @@
 // SPDX-FileCopyrightText: Copyright (c) 2020 Rain Open Source Software Ltd
 pragma solidity =0.8.25;
 
-import {Test} from "forge-std/Test.sol";
+import {Test} from "forge-std-1.16.2/src/Test.sol";
 
-import {CycloReceipt} from "src/concrete/receipt/CycloReceipt.sol";
 import {
     PROD_ARBITRUM_RECEIPT_CYWETH_PYTH,
     PROD_ARBITRUM_RECEIPT_CYWBTC_PYTH,
@@ -24,75 +23,6 @@ import {
 import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
 
 contract CycloReceiptProdArbitrumTest is Test {
-    function testProdCycloReceiptBytecodeArbitrum() external {
-        CycloReceipt fresh = new CycloReceipt();
-
-        LibCycloTestProd.checkCBORTrimmedBytecodeHash(address(fresh), PROD_ARBITRUM_CYCLO_RECEIPT_CODEHASH_V2);
-
-        LibCycloTestProd.createSelectForkArbitrum(vm);
-
-        LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
-            PROD_ARBITRUM_RECEIPT_CYWETH_PYTH,
-            PROD_ARBITRUM_CYCLO_RECEIPT_IMPLEMENTATION_V2,
-            PROD_ARBITRUM_CYCLO_RECEIPT_CODEHASH_V2
-        );
-        LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
-            PROD_ARBITRUM_RECEIPT_CYWSTETH_PYTH,
-            PROD_ARBITRUM_CYCLO_RECEIPT_IMPLEMENTATION_V2,
-            PROD_ARBITRUM_CYCLO_RECEIPT_CODEHASH_V2
-        );
-        LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
-            PROD_ARBITRUM_RECEIPT_CYWBTC_PYTH,
-            PROD_ARBITRUM_CYCLO_RECEIPT_IMPLEMENTATION_V2,
-            PROD_ARBITRUM_CYCLO_RECEIPT_CODEHASH_V2
-        );
-        LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
-            PROD_ARBITRUM_RECEIPT_CYCBBTC_PYTH,
-            PROD_ARBITRUM_CYCLO_RECEIPT_IMPLEMENTATION_V2,
-            PROD_ARBITRUM_CYCLO_RECEIPT_CODEHASH_V2
-        );
-        LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
-            PROD_ARBITRUM_RECEIPT_CYLINK_PYTH,
-            PROD_ARBITRUM_CYCLO_RECEIPT_IMPLEMENTATION_V2,
-            PROD_ARBITRUM_CYCLO_RECEIPT_CODEHASH_V2
-        );
-        LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
-            PROD_ARBITRUM_RECEIPT_CYDOT_PYTH,
-            PROD_ARBITRUM_CYCLO_RECEIPT_IMPLEMENTATION_V2,
-            PROD_ARBITRUM_CYCLO_RECEIPT_CODEHASH_V2
-        );
-        LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
-            PROD_ARBITRUM_RECEIPT_CYUNI_PYTH,
-            PROD_ARBITRUM_CYCLO_RECEIPT_IMPLEMENTATION_V2,
-            PROD_ARBITRUM_CYCLO_RECEIPT_CODEHASH_V2
-        );
-        LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
-            PROD_ARBITRUM_RECEIPT_CYPEPE_PYTH,
-            PROD_ARBITRUM_CYCLO_RECEIPT_IMPLEMENTATION_V2,
-            PROD_ARBITRUM_CYCLO_RECEIPT_CODEHASH_V2
-        );
-        LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
-            PROD_ARBITRUM_RECEIPT_CYPYTH_PYTH,
-            PROD_ARBITRUM_CYCLO_RECEIPT_IMPLEMENTATION_V2,
-            PROD_ARBITRUM_CYCLO_RECEIPT_CODEHASH_V2
-        );
-        LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
-            PROD_ARBITRUM_RECEIPT_CYENA_PYTH,
-            PROD_ARBITRUM_CYCLO_RECEIPT_IMPLEMENTATION_V2,
-            PROD_ARBITRUM_CYCLO_RECEIPT_CODEHASH_V2
-        );
-        LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
-            PROD_ARBITRUM_RECEIPT_CYARB_PYTH,
-            PROD_ARBITRUM_CYCLO_RECEIPT_IMPLEMENTATION_V2,
-            PROD_ARBITRUM_CYCLO_RECEIPT_CODEHASH_V2
-        );
-        LibCycloTestProd.checkCBORTrimmedBytecodeHashBy1167Proxy(
-            PROD_ARBITRUM_RECEIPT_CYXAUT_PYTH,
-            PROD_ARBITRUM_CYCLO_RECEIPT_IMPLEMENTATION_V2,
-            PROD_ARBITRUM_CYCLO_RECEIPT_CODEHASH_V2
-        );
-    }
-
     function testProdCyImplementationIsInitializedArbitrum() external {
         LibCycloTestProd.createSelectForkArbitrum(vm);
         LibCycloTestProd.checkIsInitialized(vm, PROD_ARBITRUM_CYCLO_RECEIPT_IMPLEMENTATION_V2);

@@ -2,14 +2,13 @@
 // SPDX-FileCopyrightText: Copyright (c) 2020 Rain Open Source Software Ltd
 pragma solidity ^0.8.25;
 
-import {Vm} from "forge-std/StdCheats.sol";
-import {console2} from "forge-std/Test.sol";
-import {LibExtrospectBytecode} from "rain.extrospection/lib/LibExtrospectBytecode.sol";
-import {LibExtrospectERC1167Proxy} from "rain.extrospection/lib/LibExtrospectERC1167Proxy.sol";
-import {ICloneableV2} from "rain.factory/interface/ICloneableV2.sol";
-import {CycloVault} from "src/concrete/vault/CycloVault.sol";
-import {IERC20Upgradeable as IERC20} from
-    "openzeppelin-contracts-upgradeable/contracts/token/ERC20/IERC20Upgradeable.sol";
+import {Vm} from "forge-std-1.16.2/src/Vm.sol";
+import {console2} from "forge-std-1.16.2/src/console2.sol";
+import {IERC20} from "forge-std-1.16.2/src/interfaces/IERC20.sol";
+import {LibExtrospectBytecode} from "rain-extrospection-0.1.14/src/lib/LibExtrospectBytecode.sol";
+import {LibExtrospectERC1167Proxy} from "rain-extrospection-0.1.14/src/lib/LibExtrospectERC1167Proxy.sol";
+import {ICloneableV2} from "test/interface/ICloneableV2.sol";
+import {ICycloVault} from "test/interface/ICycloVault.sol";
 
 uint256 constant PROD_TEST_BLOCK_NUMBER_FLARE = 51262162;
 
@@ -29,17 +28,43 @@ library LibCycloTestProd {
         vm.createSelectFork(vm.envString("RPC_URL_ARBITRUM_FORK"), PROD_TEST_BLOCK_NUMBER_ARBITRUM);
     }
 
-    //forge-lint: disable-next-line(mixed-case-function)
-    function checkCBORTrimmedBytecodeHash(address account, bytes32 expected) internal view {
-        bytes memory bytecode = account.code;
-        bool didTrim = LibExtrospectBytecode.trimSolidityCBORMetadata(bytecode);
-        require(didTrim, "metadata not trimmed");
+    /// `CREATE` a recorded creation code, constructor arguments included.
+    function deploy(bytes memory creationCode) internal returns (address deployed) {
+        assembly ("memory-safe") {
+            deployed := create(0, add(creationCode, 0x20), mload(creationCode))
+        }
+        require(deployed != address(0), "create failed");
+    }
+
+    function checkBytecodeHash(bytes memory bytecode, bytes32 expected) internal pure {
         bytes32 actual = keccak256(bytecode);
         if (expected != actual) {
             console2.logBytes32(expected);
             console2.logBytes32(actual);
             revert("bytecode hash mismatch");
         }
+    }
+
+    //forge-lint: disable-next-line(mixed-case-function)
+    function checkCBORTrimmedBytecodeHash(address account, bytes32 expected) internal view {
+        checkCBORTrimmedBytecodeHash(account.code, expected);
+    }
+
+    /// Deployed code carries the 53-byte ipfs+solc appendix; the recorded
+    /// code carries the 12-byte solc-only one. Either is trimmed before
+    /// hashing.
+    //forge-lint: disable-next-line(mixed-case-function)
+    function checkCBORTrimmedBytecodeHash(bytes memory bytecode, bytes32 expected) internal pure {
+        if (!LibExtrospectBytecode.tryTrimSolidityCBORMetadata(bytecode)) {
+            uint256 length = bytecode.length;
+            require(
+                length >= 12 && bytecode[length - 12] == 0xa1 && bytecode[length - 1] == 0x0a, "metadata not trimmed"
+            );
+            assembly ("memory-safe") {
+                mstore(bytecode, sub(length, 12))
+            }
+        }
+        checkBytecodeHash(bytecode, expected);
     }
 
     //forge-lint: disable-next-line(mixed-case-function)
@@ -64,7 +89,7 @@ library LibCycloTestProd {
     }
 
     function checkDeposit(Vm vm, address proxy, uint256 deposit, address alice) internal {
-        CycloVault vault = CycloVault(payable(proxy));
+        ICycloVault vault = ICycloVault(proxy);
         IERC20 asset = IERC20(vault.asset());
         vm.startPrank(alice);
         asset.approve(proxy, deposit);
@@ -84,10 +109,8 @@ library LibCycloTestProd {
     }
 
     function checkMint(Vm vm, address proxy, uint256 shares, uint256 expectedAssets, address alice) internal {
-        CycloVault vault = CycloVault(payable(proxy));
-
+        ICycloVault vault = ICycloVault(proxy);
         IERC20 asset = IERC20(vault.asset());
-
         vm.startPrank(alice);
         asset.approve(proxy, expectedAssets);
         uint256 assetBalanceBefore = asset.balanceOf(proxy);

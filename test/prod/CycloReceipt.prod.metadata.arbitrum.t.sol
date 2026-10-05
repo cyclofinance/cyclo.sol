@@ -16,8 +16,8 @@ import {
     PROD_ARBITRUM_RECEIPT_CYARB_PYTH,
     PROD_ARBITRUM_RECEIPT_CYXAUT_PYTH
 } from "src/lib/LibCycloProdReceipt.sol";
+import {CycloReceiptMetadataTest} from "test/abstract/CycloReceiptMetadataTest.sol";
 import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
-import {CycloReceiptMetadataTest} from "test/src/concrete/receipt/CycloReceipt.metadata.t.sol";
 
 contract CycloReceiptProdMetadataArbitrumTest is CycloReceiptMetadataTest {
     function testProdCycloReceiptURI() external {

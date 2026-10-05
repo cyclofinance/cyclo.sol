@@ -1,3 +1,11 @@
+# Release metadata, not foundry config. `[external.*]` is the namespace foundry
+# reserves for other tools. `version` is the last-published Soldeer release;
+# only a manual `sol-v*` tag moves it, in lockstep with the frozen
+# `src/generated/<tag>/` snapshot `script/Build.sol`'s `cutRelease()` freezes.
+[external.package]
+name = "cyclo-sol"
+version = "0.1.0"
+
 [profile.default]
 
 # See more config options https://github.com/foundry-rs/foundry/tree/master/config
@@ -5,16 +13,63 @@
 solc = "0.8.25"
 optimizer = true
 optimizer_runs = 100000
+bytecode_hash = "none"
+cbor_metadata = false
+evm_version = "cancun"
 
-# pre push0 for maximum compatibility
-evm_version = "paris"
+libs = ["dependencies"]
 
-remappings = [
-    "ethgild/=lib/ethgild/src/",
-    "rain.factory/=lib/ethgild/lib/rain.factory/src/",
-    "rain.flare/=lib/ethgild/lib/rain.flare/src/",
-    "rain.extrospection/=lib/rain.extrospection/src/",
-    "rain.pyth/=lib/ethgild/lib/rain.pyth/src/",
-    "rain.intorastring/=lib/ethgild/lib/rain.pyth/lib/rain.interpreter/lib/rain.interpreter.interface/lib/rain.intorastring/src/",
-    "rain.math.float/=lib/ethgild/lib/rain.pyth/lib/rain.interpreter/lib/rain.interpreter.interface/lib/rain.math.float/src/",
+# `script/Build.sol` writes the generated candidate snapshot and the alias libs
+# under `src/`, and reads the release version from this file when
+# `cutRelease()` runs.
+fs_permissions = [
+  { access = "read", path = "./foundry.toml" },
+  { access = "read-write", path = "./src" },
 ]
+
+auto_detect_remappings = false
+remappings = [
+  "forge-std-1.16.2/=dependencies/forge-std-1.16.2/",
+  "rain-sol-codegen-0.1.37/=dependencies/rain-sol-codegen-0.1.37/",
+  "rain-deploy-0.1.11/=dependencies/rain-deploy-0.1.11/",
+  "rain-lib-memkv-0.2.0/=dependencies/rain-lib-memkv-0.2.0/",
+  "rain-extrospection-0.1.14/=dependencies/rain-extrospection-0.1.14/",
+  "rain-solmem-0.1.28/=dependencies/rain-solmem-0.1.28/",
+  "solady-0.1.26/=dependencies/solady-0.1.26/",
+]
+
+[dependencies]
+forge-std = "1.16.2"
+rain-sol-codegen = "0.1.37"
+rain-deploy = "0.1.11"
+rain-lib-memkv = "0.2.0"
+rain-extrospection = "0.1.14"
+rain-solmem = "0.1.28"
+solady = "0.1.26"
+
+[soldeer]
+recursive_deps = false
+remappings_generate = false
+remappings_regenerate = false
+
+[rpc_endpoints]
+arbitrum = "${ARBITRUM_RPC_URL}"
+base = "${BASE_RPC_URL}"
+base_sepolia = "${BASE_SEPOLIA_RPC_URL}"
+ethereum = "${ETHEREUM_RPC_URL}"
+flare = "${FLARE_RPC_URL}"
+hyperevm = "${HYPEREVM_RPC_URL}"
+robinhood = "${ROBINHOOD_RPC_URL}"
+bsc = "${BSC_RPC_URL}"
+polygon = "${POLYGON_RPC_URL}"
+
+[etherscan]
+arbitrum = { key = "${CI_DEPLOY_ARBITRUM_ETHERSCAN_API_KEY}", chain = 42161 }
+base = { key = "${CI_DEPLOY_BASE_ETHERSCAN_API_KEY}", chain = 8453 }
+base_sepolia = { key = "${CI_DEPLOY_BASE_SEPOLIA_ETHERSCAN_API_KEY}", chain = 84532 }
+ethereum = { key = "${CI_DEPLOY_ETHEREUM_ETHERSCAN_API_KEY}", chain = 1 }
+flare = { key = "${CI_DEPLOY_FLARE_ETHERSCAN_API_KEY}", chain = 14 }
+hyperevm = { key = "${CI_DEPLOY_HYPEREVM_ETHERSCAN_API_KEY}", chain = 999 }
+robinhood = { key = "${CI_DEPLOY_ROBINHOOD_ETHERSCAN_API_KEY}", chain = 4663, url = "https://robinhoodchain.blockscout.com/api" }
+bsc = { key = "${CI_DEPLOY_BSC_ETHERSCAN_API_KEY}", chain = 56 }
+polygon = { key = "${CI_DEPLOY_POLYGON_ETHERSCAN_API_KEY}", chain = 137 }

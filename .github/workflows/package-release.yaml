@@ -1,0 +1,12 @@
+name: Package Release
+# Deploy repo: released by a manual `sol-v*` tag via rainix-tag-release.
+on:
+  push:
+    tags:
+      - sol-v*
+jobs:
+  release:
+    uses: rainlanguage/rainix/.github/workflows/rainix-tag-release.yaml@main
+    with:
+      soldeer-package: cyclo-sol
+    secrets: inherit

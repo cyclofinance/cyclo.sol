@@ -2,7 +2,7 @@
 // SPDX-FileCopyrightText: Copyright (c) 2020 Rain Open Source Software Ltd
 pragma solidity =0.8.25;
 
-import {Test} from "forge-std/Test.sol";
+import {Test} from "forge-std-1.16.2/src/Test.sol";
 import {
     PROD_ARBITRUM_VAULT_CYWETH_PYTH,
     PROD_ARBITRUM_VAULT_CYCBBTC_PYTH,
@@ -32,11 +32,12 @@ import {
     PROD_ARBITRUM_RECEIPT_CYXAUT_PYTH
 } from "src/lib/LibCycloProdReceipt.sol";
 import {LibCycloTestProd} from "test/lib/LibCycloTestProd.sol";
-import {IReceiptV2} from "ethgild/interface/deprecated/IReceiptV2.sol";
+
+import {ICycloReceipt} from "test/interface/ICycloReceipt.sol";
 
 contract CycloReceiptProdAccessArbitrumTest is Test {
     function checkAccess(address receiptAddress, address vaultAddress, string memory asset) internal view {
-        address manager = IReceiptV2(receiptAddress).manager();
+        address manager = ICycloReceipt(receiptAddress).manager();
         assertEq(manager, vaultAddress, string.concat(asset, " manager should be vault"));
     }
 
